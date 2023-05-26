@@ -1,14 +1,18 @@
 <?php
 session_start();
+require_once '../conexao.php';
+require_once '../vendor/autoload.php';
 
-if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
+if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     header('Location: ../index.php?login=erro2');
-  } else {
-    include("../conexao.php");
+    exit;
+} else {
     $id = $_SESSION['id'];
-    $query = mysqli_query($con,"SELECT * FROM contaUsuario WHERE idUsuario = '$id'");
-    $dados = mysqli_fetch_array($query);
-  }
+    $objectId = new \MongoDB\BSON\ObjectID($id);
+    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
+    $registroContribuicao = $colecaoContribuicao->findOne(['idContribuidor' => $id]);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -225,7 +229,7 @@ if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
                 <div class="welcome">
                     <img src="../assets/imgs/hand-welcome.png" alt="">
                     <div class="welcome-user">
-                        <h4>Olá <span class="user-name"><?php echo $dados[3] ?></span>, Bem Vindo(a) de volta!</h4>
+                        <h4>Olá <span class="user-name"><?php echo $registroUsuario['nomeUsuario']; ?></span>, Bem Vindo(a) de volta!</h4>
                         <p>Continue a colaborar com as suas comunidades</p>
                     </div>
                 </div>
@@ -236,20 +240,20 @@ if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
                         <div class="dandelion-coins">
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_blue.png" alt="">
-                                <span class="amout-coins__blue"><?php echo $dados[17] ?></span>
+                                <span class="amout-coins__blue"><!-- saldo blue coins -->0</span>
                             </div>
 
                             <span class="divisory-coins"></span>
 
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_green.png" alt="">
-                                <span class="amout-coins__green"><?php echo $dados[16] ?></span>
+                                <span class="amout-coins__green"><!-- saldo green coin -->0</span>
                             </div>
                         </div>
 
                         <div class="photo-user">
                             <div class="photo-user__user">
-                                <img src="../img/avatars/<?php echo $dados[15] ?>" alt="user photo" />
+                                <img src="../img/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="user photo" />
                                 <div class="people-status__user"></div>
                             </div>
                         </div>
@@ -324,19 +328,18 @@ if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
                             <div class="main-services__container">
 
                             <?php
-                                $query = mysqli_query($con, "SELECT * FROM contribuicaoUsuario inner join contaUsuario on idUsuario = idContribuidor and idUsuario = $id");
-                                while ($exibe = mysqli_fetch_array($query)) { 
+                                while ($registroContribuicao) { 
 			                ?>
                                 <div class="card-service">
                                     <div class="card-info">
                                         <div class="photo-info">
                                             <div class="photo-info__user">
-                                                <img src="../img/avatars/<?php echo $exibe[24] ?>" alt="user photo" />
+                                                <img src="../img/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="user photo" />
                                                 <div class="people-status online"></div>
                                             </div>
 
                                             <div class="name-user__time-online">
-                                                <span><?php echo $exibe[12] ?></span>
+                                                <span><?php echo $registroUsuario['nomeUsuario']; ?></span>
                                                 <p>2h</p>
                                             </div>
                                         </div>
@@ -346,7 +349,7 @@ if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
                                                 <i class="fa-solid fa-ellipsis" data-bs-toggle="dropdown" aria-expanded="false"></i>
                                                 <ul class="dropdown-menu">
                                                     <li class="dropdown-item">
-                                                        <a href="alterar.php?idc=<?php echo $exibe[0] ?>">Alterar</a>
+                                                        <a href="alterar.php?idc=<?php echo $registroContribuicao['_id']; ?>">Alterar</a>
                                                     </li>
                                                     <li class="dropdown-item">
                                                         <a href="">Denunciar</a>
@@ -358,20 +361,20 @@ if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
                                     </div>
 
                                     <div class="card-title-service">
-                                        <p><?php echo $exibe[1] ?></p>
+                                        <p><?php echo $registroContribuicao['atividadeContribuicao']; ?></p>
                                     </div>
 
                                     <div class="service-img">
-                                        <img src="../img/contribuicoes/<?php echo $exibe[2] ?>" alt="imagem do serviço">
+                                        <img src="../img/contribuicoes/<?php echo $registroContribuicao['imagemContribuicao']; ?>" alt="imagem do serviço">
                                     </div>
 
                                     <div class="service-details">
                                         <div class="dropdown" ata-bs-toggle="dropdown" aria-expanded="false">
                                             <button class="dropdown-toggle drop" type="button" data-bs-toggle="dropdown" aria-expanded="false">Detalhes</button>
                                             <div class="dropdown-menu">
-                                            <span>Dia: <?php echo $exibe[5] ?></span><br>
-                                                <span>Horário: Das <?php echo $exibe[6] ?> | Até <?php echo $exibe[7] ?></span><br>
-                                                <span><?php echo $exibe[3] ?></span>
+                                            <span>Dia: <?php echo $registroContribuicao['diaContribuicao']; ?></span><br>
+                                                <span>Horário: Das <?php echo $registroContribuicao['dasContribuicao']; ?> | Até <?php echo $registroContribuicao['ateContribuicao']; ?></span><br>
+                                                <span><?php echo $registroContribuicao['categoriaContribuicao']; ?></span>
                                             </div>
                                         </div>
 
