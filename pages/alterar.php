@@ -1,17 +1,14 @@
 <?php
 session_start();
-require_once '../conexao.php';
-require_once '../vendor/autoload.php';
 
-if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
+if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
     header('Location: ../index.php?login=erro2');
-    exit;
-} else {
+  } else {
+    include("../conexao.php");
     $id = $_SESSION['id'];
-    $objectId = new \MongoDB\BSON\ObjectID($id);
-    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
-}
-
+    $query = mysqli_query($con,"SELECT * FROM contaUsuario WHERE idUsuario = '$id'");
+    $dados = mysqli_fetch_array($query);
+  }
 ?>
 
 <!DOCTYPE html>
@@ -26,18 +23,16 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
-       <!-- FONT AWESOME -->
+        <!-- FONT AWESOME -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/brands.min.js" integrity="sha512-1e+6G7fuQ5RdPcZcRTnR3++VY2mjeh0+zFdrD580Ell/XcUw/DQLgad5XSCX+y2p/dmJwboZYBPoiNn77YAL5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     </head>
 <body class="body">
         <?php
             $idc = $_GET["idc"];
-            $objectId = new \MongoDB\BSON\ObjectID($idc);
             $_SESSION['i'] = $idc;
-            $resultado = $colecaoContribuicao->find(array('_id' => $objectId, 'idContribuidor' => $id));
-             ?> 
+            $query = mysqli_query($con, "SELECT * FROM contribuicaoUsuario where idContribuicao = $idc and idContribuidor = $id"); 
+            $exibe = mysqli_fetch_array($query); ?> 
     <main class="dandelion-full-space">
         <div class="background__form" id="background-form">
             <form class="form-delete-contribution" id="delete-contribution-form">
@@ -254,7 +249,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                 <div class="welcome">
                     <img src="../assets/imgs/hand-welcome.png" alt="">
                     <div class="welcome-user">
-                        <h4>Olá <span class="user-name"><?php echo $registroUsuario['nomeUsuario']; ?></span>, Bem Vindo(a) de volta!</h4>
+                        <h4>Olá <span class="user-name"><?php echo $dados[3] ?></span>, Bem Vindo(a) de volta!</h4>
                         <p>Continue a colaborar com as suas comunidades</p>
                     </div>
                 </div>
@@ -265,20 +260,20 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                         <div class="dandelion-coins">
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_blue.png" alt="">
-                                <span class="amout-coins__blue"><!-- MOEDA AZUL USUARIO -->0</span>
+                                <span class="amout-coins__blue"><?php echo $dados[17] ?></span>
                             </div>
 
                             <span class="divisory-coins"></span>
 
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_green.png" alt="">
-                                <span class="amout-coins__green"><!-- moeda verde usuario -->0</span>
+                                <span class="amout-coins__green"><?php echo $dados[16] ?></span>
                             </div>
                         </div>
 
                         <div class="photo-user">
                             <div class="photo-user__user">
-                                <img src="../img/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="user photo" />
+                                <img src="../img/avatars/<?php echo $dados[15] ?>" alt="user photo" />
                                 <div class="people-status__user"></div>
                             </div>
                         </div>
@@ -363,7 +358,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                                 </div>                    
                                 <div class="col-12 mb-4">
                                     <label class="form-label">Atividade</label>
-                                    <input type="text" class="form-control" value="<?php echo $resultado['atividadeContribuicao']; ?>" name="atividade"required>
+                                    <input type="text" class="form-control" value="<?php echo $exibe[1] ?>" name="atividade"required>
                                 </div>
 
                                 <div class="row mb-4">
@@ -374,7 +369,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                                     <div class="col-6">
                                         <label class="form-label">Categoria</label>
                                         <select id="inputState" class="form-select" name="categoria" required>
-                                            <option selected><?php echo $resultado['categoriaContribuicao']; ?></option>
+                                            <option selected><?php echo $exibe[4] ?></option>
                                             <option>#Livros</option>
                                             <option>#Serviços Gerais</option>
                                             <option>#Serviços Domésticos</option>
@@ -384,7 +379,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 
                                 <div class="mb-3">
                                     <label class="form-label">Descrição</label>
-                                    <textarea class="form-control field-textarea" name="descricao" required><?php echo $resultado['descricaoContribuicao']; ?></textarea>
+                                    <textarea class="form-control field-textarea" name="descricao" required><?php echo $exibe[3] ?></textarea>
                                 </div>
 
                                 <span class="date-progress__divisory"></span>
@@ -395,7 +390,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                                         <div class="option">
                                             <label class="form-label">Dia da semana</label>
                                             <select id="inputState" class="form-select"name="dia" required>
-                                                <option selected class="option-neuter"><?php echo $resultado['diaContribuicao'] ?></option>
+                                                <option selected class="option-neuter"><?php echo $exibe[5] ?></option>
                                                 <option>Segunda-feira</option>
                                                 <option>Terça-feira</option>
                                                 <option>Quarta-feira</option>
@@ -409,12 +404,12 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                                         <div class="container-hours">
                                             <div class="option">
                                                 <label class="form-label">Das</label>
-                                                <input type="time" class="service-hours" name="das" value="<?php echo $resultado['dasContribuicao']; ?>"/>
+                                                <input type="time" class="service-hours" name="das" value="<?php echo $exibe[6] ?>"/>
                                             </div>
 
                                             <div class="option">
                                                 <label class="form-label">Até</label>
-                                                <input type="time" class="service-hours" name="ate" value="<?php echo $resultado['ateContribuicao']; ?>"/>
+                                                <input type="time" class="service-hours" name="ate" value="<?php echo $exibe[7] ?>"/>
                                             </div>
                                         </div>
                                     </div>

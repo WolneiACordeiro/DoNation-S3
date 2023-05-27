@@ -1,18 +1,14 @@
 <?php
 session_start();
-require_once '../conexao.php';
-require_once '../vendor/autoload.php';
 
-if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
+if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
     header('Location: ../index.php?login=erro2');
-    exit;
-} else {
+  } else {
+    include("../conexao.php");
     $id = $_SESSION['id'];
-    $objectId = new \MongoDB\BSON\ObjectID($id);
-    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
-    $registroContribuicao = $colecaoContribuicao->findOne(['idContribuidor' => $id]);
-}
-
+    $query = mysqli_query($con,"SELECT * FROM contaUsuario WHERE idUsuario = '$id'");
+    $dados = mysqli_fetch_array($query);
+  }
 ?>
 
 <!DOCTYPE html>
@@ -228,7 +224,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                 <div class="welcome">
                     <img src="../assets/imgs/hand-welcome.png" alt="">
                     <div class="welcome-user">
-                        <h4>Olá <span class="user-name"><?php echo $registroUsuario['nomeUsuario']; ?></span>, Bem Vindo(a) de volta!</h4>
+                        <h4>Olá <span class="user-name"><?php echo $dados[3] ?></span>, Bem Vindo(a) de volta!</h4>
                         <p>Continue a colaborar com as suas comunidades</p>
                     </div>
                 </div>
@@ -239,20 +235,20 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
                         <div class="dandelion-coins">
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_blue.png" alt="">
-                                <span class="amout-coins__blue"><!-- saldo blue coin -->0</span>
+                                <span class="amout-coins__blue"><?php echo $dados[16] ?></span>
                             </div>
 
                             <span class="divisory-coins"></span>
 
                             <div class="coin">
                                 <img src="../assets/imgs/dandelion_coin_green.png" alt="">
-                                <span class="amout-coins__green"><!-- saldo green coin -->0</span>
+                                <span class="amout-coins__green"><?php echo $dados[17] ?></span>
                             </div>
                         </div>
 
                         <div class="photo-user">
                             <div class="photo-user__user">
-                                <img src="../img/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="user photo" />
+                                <img src="../img/avatars/<?php echo $dados[15] ?>" alt="user photo" />
                                 <div class="people-status__user"></div>
                             </div>
                         </div>

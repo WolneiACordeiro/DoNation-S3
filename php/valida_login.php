@@ -1,25 +1,27 @@
 <?php
 session_start();
-require_once '../conexao.php';
-require_once '../vendor/autoload.php';
+include("../conexao.php");
 
 $senha = $_POST["senha"];
 $email = $_POST["email"];
 
+$query = mysqli_query($con,"SELECT * FROM contaUsuario WHERE emailUsuario = '$email' AND senhaUsuario = '$senha'");
+$dados = mysqli_fetch_array($query);
+$queryMatch = mysqli_num_rows($query);
+
 $usuario_autenticado = false;
 
-$usuario = $colecaoUsuario->findOne([
-  'emailUsuario' => $email,
-  'senhaUsuario' => $senha,
-]);
+  if($queryMatch == 1){
+    $usuario_autenticado = true;
+  }
 
-if ($usuario !== null) {
-  $usuario_autenticado = true;
+if ($usuario_autenticado == true) {
   $_SESSION['autenticado'] = 'SIM';
-  $_SESSION['id'] = (string) $usuario['_id'];
+  $_SESSION['id'] = $dados[0];
   header('Location: ../pages/dandelion.php');
 } else {
   $_SESSION['autenticado'] = 'NAO';
   header('Location: ../index.php?login=erro');
 }
+
 ?>

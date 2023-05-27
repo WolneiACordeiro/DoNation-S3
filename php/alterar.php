@@ -1,7 +1,7 @@
 <?php
+
 session_start();
-require_once '../conexao.php'; // conexão com o banco MongoDB
-require_once '../vendor/autoload.php';
+include("../conexao.php");
 
     $atividade = $_POST['atividade'];
     $descricao = $_POST["descricao"]; 
