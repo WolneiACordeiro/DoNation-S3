@@ -1,0 +1,27 @@
+@media (min-width: 768px) {
+    .login-container {
+        margin: 0 auto;
+    }
+
+    .login-form__title,
+    .login-form__login {
+        padding: 48px 64px;
+    }
+
+    .login-form__submit {
+        flex-direction: row;
+    }
+
+    .login-divisory {
+        width: 1px;
+        height: 46px;
+    }
+
+    .total-comunity {
+        justify-content: flex-end;
+    }
+
+    .register-form {
+        width: 515px;
+    }
+}
