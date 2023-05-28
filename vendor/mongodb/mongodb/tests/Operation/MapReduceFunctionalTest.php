@@ -4,32 +4,22 @@ namespace MongoDB\Tests\Operation;
 
 use MongoDB\BSON\Javascript;
 use MongoDB\Driver\BulkWrite;
-use MongoDB\MapReduceResult;
+use MongoDB\Operation\CreateCollection;
 use MongoDB\Operation\DropCollection;
 use MongoDB\Operation\Find;
 use MongoDB\Operation\MapReduce;
 use MongoDB\Tests\CommandObserver;
+use stdClass;
 
-use function is_object;
-use function iterator_to_array;
-use function usort;
-use function version_compare;
-
-/**
- * @group matrix-testing-exclude-server-4.4-driver-4.0
- * @group matrix-testing-exclude-server-4.4-driver-4.2
- * @group matrix-testing-exclude-server-5.0-driver-4.0
- * @group matrix-testing-exclude-server-5.0-driver-4.2
- */
 class MapReduceFunctionalTest extends FunctionalTestCase
 {
-    public function testDefaultReadConcernIsOmitted(): void
+    public function testDefaultReadConcernIsOmitted()
     {
-        // Collection must exist for mapReduce command
-        $this->createCollection();
+        $operation = new CreateCollection($this->getDatabaseName(), $this->getCollectionName());
+        $operation->execute($this->getPrimaryServer());
 
-        (new CommandObserver())->observe(
-            function (): void {
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new MapReduce(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -41,19 +31,19 @@ class MapReduceFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectNotHasAttribute('readConcern', $event['started']->getCommand());
             }
         );
     }
 
-    public function testDefaultWriteConcernIsOmitted(): void
+    public function testDefaultWriteConcernIsOmitted()
     {
-        // Collection must exist for mapReduce command
-        $this->createCollection();
+        $operation = new CreateCollection($this->getDatabaseName(), $this->getCollectionName());
+        $operation->execute($this->getPrimaryServer());
 
-        (new CommandObserver())->observe(
-            function (): void {
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new MapReduce(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -65,7 +55,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectNotHasAttribute('writeConcern', $event['started']->getCommand());
             }
         );
@@ -74,7 +64,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation->execute($this->getPrimaryServer());
     }
 
-    public function testFinalize(): void
+    public function testFinalize()
     {
         $this->createFixtures(3);
 
@@ -89,7 +79,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $this->assertNotNull($result);
     }
 
-    public function testResult(): void
+    public function testResult()
     {
         $this->createFixtures(3);
 
@@ -100,20 +90,13 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation = new MapReduce($this->getDatabaseName(), $this->getCollectionName(), $map, $reduce, $out);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(MapReduceResult::class, $result);
-
-        if (version_compare($this->getServerVersion(), '4.3.0', '<')) {
-            $this->assertGreaterThanOrEqual(0, $result->getExecutionTimeMS());
-            $this->assertNotEmpty($result->getCounts());
-        }
+        $this->assertInstanceOf('MongoDB\MapReduceResult', $result);
+        $this->assertGreaterThanOrEqual(0, $result->getExecutionTimeMS());
+        $this->assertNotEmpty($result->getCounts());
     }
 
-    public function testResultIncludesTimingWithVerboseOption(): void
+    public function testResultIncludesTimingWithVerboseOption()
     {
-        if (version_compare($this->getServerVersion(), '4.3.0', '>=')) {
-            $this->markTestSkipped('mapReduce statistics are no longer exposed');
-        }
-
         $this->createFixtures(3);
 
         $map = new Javascript('function() { emit(this.x, this.y); }');
@@ -123,18 +106,14 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation = new MapReduce($this->getDatabaseName(), $this->getCollectionName(), $map, $reduce, $out, ['verbose' => true]);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(MapReduceResult::class, $result);
+        $this->assertInstanceOf('MongoDB\MapReduceResult', $result);
         $this->assertGreaterThanOrEqual(0, $result->getExecutionTimeMS());
         $this->assertNotEmpty($result->getCounts());
         $this->assertNotEmpty($result->getTiming());
     }
 
-    public function testResultDoesNotIncludeTimingWithoutVerboseOption(): void
+    public function testResultDoesNotIncludeTimingWithoutVerboseOption()
     {
-        if (version_compare($this->getServerVersion(), '4.3.0', '>=')) {
-            $this->markTestSkipped('mapReduce statistics are no longer exposed');
-        }
-
         $this->createFixtures(3);
 
         $map = new Javascript('function() { emit(this.x, this.y); }');
@@ -144,18 +123,22 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation = new MapReduce($this->getDatabaseName(), $this->getCollectionName(), $map, $reduce, $out, ['verbose' => false]);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(MapReduceResult::class, $result);
+        $this->assertInstanceOf('MongoDB\MapReduceResult', $result);
         $this->assertGreaterThanOrEqual(0, $result->getExecutionTimeMS());
         $this->assertNotEmpty($result->getCounts());
         $this->assertEmpty($result->getTiming());
     }
 
-    public function testSessionOption(): void
+    public function testSessionOption()
     {
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('Sessions are not supported');
+        }
+
         $this->createFixtures(3);
 
-        (new CommandObserver())->observe(
-            function (): void {
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new MapReduce(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -167,55 +150,8 @@ class MapReduceFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationSetWhenTrue(): void
-    {
-        $this->createFixtures(1);
-
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new MapReduce(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    new Javascript('function() { emit(this.x, this.y); }'),
-                    new Javascript('function(key, values) { return Array.sum(values); }'),
-                    ['inline' => 1],
-                    ['bypassDocumentValidation' => true]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-                $this->assertEquals(true, $event['started']->getCommand()->bypassDocumentValidation);
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationUnsetWhenFalse(): void
-    {
-        $this->createFixtures(1);
-
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new MapReduce(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    new Javascript('function() { emit(this.x, this.y); }'),
-                    new Javascript('function(key, values) { return Array.sum(values); }'),
-                    ['inline' => 1],
-                    ['bypassDocumentValidation' => false]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
             }
         );
     }
@@ -223,7 +159,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideTypeMapOptionsAndExpectedDocuments
      */
-    public function testTypeMapOptionWithInlineResults(?array $typeMap, array $expectedDocuments): void
+    public function testTypeMapOptionWithInlineResults(array $typeMap = null, array $expectedDocuments)
     {
         $this->createFixtures(3);
 
@@ -234,7 +170,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation = new MapReduce($this->getDatabaseName(), $this->getCollectionName(), $map, $reduce, $out, ['typeMap' => $typeMap]);
         $results = iterator_to_array($operation->execute($this->getPrimaryServer()));
 
-        $this->assertEquals($this->sortResults($expectedDocuments), $this->sortResults($results));
+        $this->assertEquals($expectedDocuments, $results);
     }
 
     public function provideTypeMapOptionsAndExpectedDocuments()
@@ -270,7 +206,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideTypeMapOptionsAndExpectedDocuments
      */
-    public function testTypeMapOptionWithOutputCollection(?array $typeMap, array $expectedDocuments): void
+    public function testTypeMapOptionWithOutputCollection(array $typeMap = null, array $expectedDocuments)
     {
         $this->createFixtures(3);
 
@@ -281,12 +217,12 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $operation = new MapReduce($this->getDatabaseName(), $this->getCollectionName(), $map, $reduce, $out, ['typeMap' => $typeMap]);
         $results = iterator_to_array($operation->execute($this->getPrimaryServer()));
 
-        $this->assertEquals($this->sortResults($expectedDocuments), $this->sortResults($results));
+        $this->assertEquals($expectedDocuments, $results);
 
         $operation = new Find($this->getDatabaseName(), $out, [], ['typeMap' => $typeMap]);
         $cursor = $operation->execute($this->getPrimaryServer());
 
-        $this->assertEquals($this->sortResults($expectedDocuments), $this->sortResults(iterator_to_array($cursor)));
+        $this->assertEquals($expectedDocuments, iterator_to_array($cursor));
 
         $operation = new DropCollection($this->getDatabaseName(), $out);
         $operation->execute($this->getPrimaryServer());
@@ -297,7 +233,7 @@ class MapReduceFunctionalTest extends FunctionalTestCase
      *
      * @param integer $n
      */
-    private function createFixtures(int $n): void
+    private function createFixtures($n)
     {
         $bulkWrite = new BulkWrite(['ordered' => true]);
 
@@ -309,20 +245,5 @@ class MapReduceFunctionalTest extends FunctionalTestCase
         $result = $this->manager->executeBulkWrite($this->getNamespace(), $bulkWrite);
 
         $this->assertEquals($n * 2, $result->getInsertedCount());
-    }
-
-    private function sortResults(array $results): array
-    {
-        $sortFunction = static function ($resultA, $resultB): int {
-            $idA = is_object($resultA) ? $resultA->_id : $resultA['_id'];
-            $idB = is_object($resultB) ? $resultB->_id : $resultB['_id'];
-
-            return $idA <=> $idB;
-        };
-
-        $sortedResults = $results;
-        usort($sortedResults, $sortFunction);
-
-        return $sortedResults;
     }
 }

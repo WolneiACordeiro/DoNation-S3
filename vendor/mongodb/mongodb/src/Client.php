@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,62 +17,35 @@
 
 namespace MongoDB;
 
-use Iterator;
-use Jean85\PrettyVersions;
-use MongoDB\Driver\ClientEncryption;
-use MongoDB\Driver\Exception\InvalidArgumentException as DriverInvalidArgumentException;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
-use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Exception\InvalidArgumentException as DriverInvalidArgumentException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-use MongoDB\Model\BSONArray;
-use MongoDB\Model\BSONDocument;
 use MongoDB\Model\DatabaseInfoIterator;
 use MongoDB\Operation\DropDatabase;
-use MongoDB\Operation\ListDatabaseNames;
 use MongoDB\Operation\ListDatabases;
 use MongoDB\Operation\Watch;
-use Throwable;
-
-use function is_array;
-use function is_string;
 
 class Client
 {
-    /** @var array */
     private static $defaultTypeMap = [
-        'array' => BSONArray::class,
-        'document' => BSONDocument::class,
-        'root' => BSONDocument::class,
+        'array' => 'MongoDB\Model\BSONArray',
+        'document' => 'MongoDB\Model\BSONDocument',
+        'root' => 'MongoDB\Model\BSONDocument',
     ];
+    private static $wireVersionForReadConcern = 4;
+    private static $wireVersionForWritableCommandWriteConcern = 5;
 
-    /** @var string */
-    private static $handshakeSeparator = ' / ';
-
-    /** @var string|null */
-    private static $version;
-
-    /** @var Manager */
     private $manager;
-
-    /** @var ReadConcern */
     private $readConcern;
-
-    /** @var ReadPreference */
     private $readPreference;
-
-    /** @var string */
     private $uri;
-
-    /** @var array */
     private $typeMap;
-
-    /** @var WriteConcern */
     private $writeConcern;
 
     /**
@@ -102,22 +75,12 @@ class Client
     {
         $driverOptions += ['typeMap' => self::$defaultTypeMap];
 
-        if (! is_array($driverOptions['typeMap'])) {
+        if (isset($driverOptions['typeMap']) && ! is_array($driverOptions['typeMap'])) {
             throw InvalidArgumentException::invalidType('"typeMap" driver option', $driverOptions['typeMap'], 'array');
         }
 
-        if (isset($driverOptions['autoEncryption']['keyVaultClient'])) {
-            if ($driverOptions['autoEncryption']['keyVaultClient'] instanceof self) {
-                $driverOptions['autoEncryption']['keyVaultClient'] = $driverOptions['autoEncryption']['keyVaultClient']->manager;
-            } elseif (! $driverOptions['autoEncryption']['keyVaultClient'] instanceof Manager) {
-                throw InvalidArgumentException::invalidType('"keyVaultClient" autoEncryption option', $driverOptions['autoEncryption']['keyVaultClient'], [self::class, Manager::class]);
-            }
-        }
-
-        $driverOptions['driver'] = $this->mergeDriverInfo($driverOptions['driver'] ?? []);
-
         $this->uri = (string) $uri;
-        $this->typeMap = $driverOptions['typeMap'] ?? null;
+        $this->typeMap = isset($driverOptions['typeMap']) ? $driverOptions['typeMap'] : null;
 
         unset($driverOptions['typeMap']);
 
@@ -171,26 +134,6 @@ class Client
     }
 
     /**
-     * Returns a ClientEncryption instance for explicit encryption and decryption
-     *
-     * @param array $options Encryption options
-     *
-     * @return ClientEncryption
-     */
-    public function createClientEncryption(array $options)
-    {
-        if (isset($options['keyVaultClient'])) {
-            if ($options['keyVaultClient'] instanceof self) {
-                $options['keyVaultClient'] = $options['keyVaultClient']->manager;
-            } elseif (! $options['keyVaultClient'] instanceof Manager) {
-                throw InvalidArgumentException::invalidType('"keyVaultClient" option', $options['keyVaultClient'], [self::class, Manager::class]);
-            }
-        }
-
-        return $this->manager->createClientEncryption($options);
-    }
-
-    /**
      * Drop a database.
      *
      * @see DropDatabase::__construct() for supported options
@@ -203,13 +146,13 @@ class Client
      */
     public function dropDatabase($databaseName, array $options = [])
     {
-        if (! isset($options['typeMap'])) {
+        if ( ! isset($options['typeMap'])) {
             $options['typeMap'] = $this->typeMap;
         }
 
-        $server = select_server($this->manager, $options);
+        $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
 
-        if (! isset($options['writeConcern']) && ! is_in_transaction($options)) {
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 
@@ -271,26 +214,9 @@ class Client
     }
 
     /**
-     * List database names.
-     *
-     * @see ListDatabaseNames::__construct() for supported options
-     * @throws UnexpectedValueException if the command response was malformed
-     * @throws InvalidArgumentException for parameter/option parsing errors
-     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
-     */
-    public function listDatabaseNames(array $options = []): Iterator
-    {
-        $operation = new ListDatabaseNames($options);
-        $server = select_server($this->manager, $options);
-
-        return $operation->execute($server);
-    }
-
-    /**
      * List databases.
      *
      * @see ListDatabases::__construct() for supported options
-     * @param array $options
      * @return DatabaseInfoIterator
      * @throws UnexpectedValueException if the command response was malformed
      * @throws InvalidArgumentException for parameter/option parsing errors
@@ -299,7 +225,7 @@ class Client
     public function listDatabases(array $options = [])
     {
         $operation = new ListDatabases($options);
-        $server = select_server($this->manager, $options);
+        $server = $this->manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
 
         return $operation->execute($server);
     }
@@ -341,8 +267,8 @@ class Client
      * Start a new client session.
      *
      * @see http://php.net/manual/en/mongodb-driver-manager.startsession.php
-     * @param array $options Session options
-     * @return Session
+     * @param array  $options      Session options
+     * @return MongoDB\Driver\Session
      */
     public function startSession(array $options = [])
     {
@@ -360,65 +286,22 @@ class Client
      */
     public function watch(array $pipeline = [], array $options = [])
     {
-        if (! isset($options['readPreference']) && ! is_in_transaction($options)) {
+        if ( ! isset($options['readPreference'])) {
             $options['readPreference'] = $this->readPreference;
         }
 
-        $server = select_server($this->manager, $options);
+        $server = $this->manager->selectServer($options['readPreference']);
 
-        if (! isset($options['readConcern']) && ! is_in_transaction($options)) {
+        if ( ! isset($options['readConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
             $options['readConcern'] = $this->readConcern;
         }
 
-        if (! isset($options['typeMap'])) {
+        if ( ! isset($options['typeMap'])) {
             $options['typeMap'] = $this->typeMap;
         }
 
         $operation = new Watch($this->manager, null, null, $pipeline, $options);
 
         return $operation->execute($server);
-    }
-
-    private static function getVersion(): string
-    {
-        if (self::$version === null) {
-            try {
-                self::$version = PrettyVersions::getVersion('mongodb/mongodb')->getPrettyVersion();
-            } catch (Throwable $t) {
-                return 'unknown';
-            }
-        }
-
-        return self::$version;
-    }
-
-    private function mergeDriverInfo(array $driver): array
-    {
-        $mergedDriver = [
-            'name' => 'PHPLIB',
-            'version' => self::getVersion(),
-        ];
-
-        if (isset($driver['name'])) {
-            if (! is_string($driver['name'])) {
-                throw InvalidArgumentException::invalidType('"name" handshake option', $driver['name'], 'string');
-            }
-
-            $mergedDriver['name'] .= self::$handshakeSeparator . $driver['name'];
-        }
-
-        if (isset($driver['version'])) {
-            if (! is_string($driver['version'])) {
-                throw InvalidArgumentException::invalidType('"version" handshake option', $driver['version'], 'string');
-            }
-
-            $mergedDriver['version'] .= self::$handshakeSeparator . $driver['version'];
-        }
-
-        if (isset($driver['platform'])) {
-            $mergedDriver['platform'] = $driver['platform'];
-        }
-
-        return $mergedDriver;
     }
 }

@@ -62,8 +62,7 @@
       "outcome": {
         "result": {
           "matchedCount": 1,
-          "modifiedCount": 0,
-          "upsertedCount": 0
+          "modifiedCount": 0
         },
         "collection": {
           "data": [
@@ -130,8 +129,7 @@
       "outcome": {
         "result": {
           "matchedCount": 1,
-          "modifiedCount": 1,
-          "upsertedCount": 0
+          "modifiedCount": 1
         },
         "collection": {
           "data": [
@@ -198,8 +196,7 @@
       "outcome": {
         "result": {
           "matchedCount": 1,
-          "modifiedCount": 1,
-          "upsertedCount": 0
+          "modifiedCount": 1
         },
         "collection": {
           "data": [
@@ -271,8 +268,7 @@
       "outcome": {
         "result": {
           "matchedCount": 1,
-          "modifiedCount": 0,
-          "upsertedCount": 0
+          "modifiedCount": 0
         },
         "collection": {
           "data": [
@@ -344,8 +340,7 @@
       "outcome": {
         "result": {
           "matchedCount": 1,
-          "modifiedCount": 1,
-          "upsertedCount": 0
+          "modifiedCount": 1
         },
         "collection": {
           "data": [

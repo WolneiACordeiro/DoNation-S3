@@ -2,8 +2,11 @@
 
 namespace MongoDB\Tests\Operation;
 
+use MongoDB\Collection;
 use MongoDB\Driver\ReadConcern;
+use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Operation\DropCollection;
 use MongoDB\Tests\FunctionalTestCase as BaseFunctionalTestCase;
 
 /**
@@ -11,27 +14,25 @@ use MongoDB\Tests\FunctionalTestCase as BaseFunctionalTestCase;
  */
 abstract class FunctionalTestCase extends BaseFunctionalTestCase
 {
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
         $this->dropCollection();
     }
 
-    public function tearDown(): void
+    public function tearDown()
     {
         if ($this->hasFailed()) {
             return;
         }
 
         $this->dropCollection();
-
-        parent::tearDown();
     }
 
     protected function createDefaultReadConcern()
     {
-        return new ReadConcern();
+        return new ReadConcern;
     }
 
     protected function createDefaultWriteConcern()
@@ -42,5 +43,15 @@ abstract class FunctionalTestCase extends BaseFunctionalTestCase
     protected function createSession()
     {
         return $this->manager->startSession();
+    }
+
+    private function dropCollection()
+    {
+        $options = version_compare($this->getServerVersion(), '3.4.0', '>=')
+            ? ['writeConcern' => new WriteConcern(WriteConcern::MAJORITY)]
+            : [];
+
+        $operation = new DropCollection($this->getDatabaseName(), $this->getCollectionName(), $options);
+        $operation->execute($this->getPrimaryServer());
     }
 }

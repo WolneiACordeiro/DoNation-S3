@@ -2,31 +2,29 @@
 
 namespace MongoDB\Tests\Operation;
 
-use MongoDB\BSON\ObjectId;
 use MongoDB\BulkWriteResult;
 use MongoDB\Collection;
 use MongoDB\Driver\BulkWrite as Bulk;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\BadMethodCallException;
+use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Model\BSONDocument;
 use MongoDB\Operation\BulkWrite;
 use MongoDB\Tests\CommandObserver;
-
-use function version_compare;
+use stdClass;
 
 class BulkWriteFunctionalTest extends FunctionalTestCase
 {
-    /** @var Collection */
     private $collection;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
         $this->collection = new Collection($this->manager, $this->getDatabaseName(), $this->getCollectionName());
     }
 
-    public function testInserts(): void
+    public function testInserts()
     {
         $ops = [
             ['insertOne' => [['_id' => 1, 'x' => 11]]],
@@ -38,12 +36,12 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $operation = new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(BulkWriteResult::class, $result);
+        $this->assertInstanceOf('MongoDB\BulkWriteResult', $result);
         $this->assertSame(4, $result->getInsertedCount());
 
         $insertedIds = $result->getInsertedIds();
         $this->assertSame(1, $insertedIds[0]);
-        $this->assertInstanceOf(ObjectId::class, $insertedIds[1]);
+        $this->assertInstanceOf('MongoDB\BSON\ObjectId', $insertedIds[1]);
         $this->assertSame('foo', $insertedIds[2]);
         $this->assertSame('bar', $insertedIds[3]);
 
@@ -57,7 +55,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testUpdates(): void
+    public function testUpdates()
     {
         $this->createFixtures(4);
 
@@ -72,14 +70,14 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $operation = new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(BulkWriteResult::class, $result);
+        $this->assertInstanceOf('MongoDB\BulkWriteResult', $result);
         $this->assertSame(5, $result->getMatchedCount());
         $this->assertSame(5, $result->getModifiedCount());
         $this->assertSame(2, $result->getUpsertedCount());
 
         $upsertedIds = $result->getUpsertedIds();
         $this->assertSame(5, $upsertedIds[2]);
-        $this->assertInstanceOf(ObjectId::class, $upsertedIds[3]);
+        $this->assertInstanceOf('MongoDB\BSON\ObjectId', $upsertedIds[3]);
 
         $expected = [
             ['_id' => 1, 'x' => 11],
@@ -93,7 +91,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testDeletes(): void
+    public function testDeletes()
     {
         $this->createFixtures(4);
 
@@ -105,7 +103,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $operation = new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(BulkWriteResult::class, $result);
+        $this->assertInstanceOf('MongoDB\BulkWriteResult', $result);
         $this->assertSame(3, $result->getDeletedCount());
 
         $expected = [
@@ -115,7 +113,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testMixedOrderedOperations(): void
+    public function testMixedOrderedOperations()
     {
         $this->createFixtures(3);
 
@@ -130,7 +128,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
         $operation = new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(BulkWriteResult::class, $result);
+        $this->assertInstanceOf('MongoDB\BulkWriteResult', $result);
 
         $this->assertSame(1, $result->getInsertedCount());
         $this->assertSame([2 => 4], $result->getInsertedIds());
@@ -166,67 +164,132 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesDeletedCount(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesDeletedCount(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getDeletedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesInsertCount(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesInsertCount(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getInsertedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesMatchedCount(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesMatchedCount(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getMatchedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesModifiedCount(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesModifiedCount(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getModifiedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesUpsertedCount(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesUpsertedCount(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getUpsertedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesUpsertedIds(BulkWriteResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesUpsertedIds(BulkWriteResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getUpsertedIds();
     }
 
-    public function testSessionOption(): void
+    public function testUnknownOperation()
     {
-        (new CommandObserver())->observe(
-            function (): void {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown operation type "foo" in $operations[0]');
+        new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), [
+            ['foo' => [['_id' => 1]]],
+        ]);
+    }
+
+    /**
+     * @dataProvider provideOpsWithMissingArguments
+     */
+    public function testMissingArguments(array $ops)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/Missing (first|second) argument for \$operations\[\d+\]\["\w+\"]/');
+        new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
+    }
+
+    public function provideOpsWithMissingArguments()
+    {
+        return [
+            [[['insertOne' => []]]],
+            [[['updateOne' => []]]],
+            [[['updateOne' => [['_id' => 1]]]]],
+            [[['updateMany' => []]]],
+            [[['updateMany' => [['_id' => 1]]]]],
+            [[['replaceOne' => []]]],
+            [[['replaceOne' => [['_id' => 1]]]]],
+            [[['deleteOne' => []]]],
+            [[['deleteMany' => []]]],
+        ];
+    }
+
+    public function testUpdateOneRequiresUpdateOperators()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('First key in $operations[0]["updateOne"][1] is not an update operator');
+        new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), [
+            ['updateOne' => [['_id' => 1], ['x' => 1]]],
+        ]);
+    }
+
+    public function testUpdateManyRequiresUpdateOperators()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('First key in $operations[0]["updateMany"][1] is not an update operator');
+        new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), [
+            ['updateMany' => [['_id' => ['$gt' => 1]], ['x' => 1]]],
+        ]);
+    }
+
+    public function testReplaceOneRequiresReplacementDocument()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('First key in $operations[0]["replaceOne"][1] is an update operator');
+        new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), [
+            ['replaceOne' => [['_id' => 1], ['$inc' => ['x' => 1]]]],
+        ]);
+    }
+
+    public function testSessionOption()
+    {
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('Sessions are not supported');
+        }
+
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new BulkWrite(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -236,79 +299,10 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
             }
         );
-    }
-
-    public function testBypassDocumentValidationSetWhenTrue(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new BulkWrite(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    [['insertOne' => [['_id' => 1]]]],
-                    ['bypassDocumentValidation' => true]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-                $this->assertEquals(true, $event['started']->getCommand()->bypassDocumentValidation);
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationUnsetWhenFalse(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new BulkWrite(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    [['insertOne' => [['_id' => 1]]]],
-                    ['bypassDocumentValidation' => false]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-            }
-        );
-    }
-
-    public function testBulkWriteWithPipelineUpdates(): void
-    {
-        if (version_compare($this->getServerVersion(), '4.2.0', '<')) {
-            $this->markTestSkipped('Pipeline-style updates are not supported');
-        }
-
-        $this->createFixtures(4);
-
-        $ops = [
-            ['updateOne' => [['_id' => 2], [['$addFields' => ['y' => 2]]]]],
-            ['updateMany' => [['_id' => ['$gt' => 2]], [['$addFields' => ['y' => '$_id']]]]],
-        ];
-
-        $operation = new BulkWrite($this->getDatabaseName(), $this->getCollectionName(), $ops);
-        $result = $operation->execute($this->getPrimaryServer());
-
-        $this->assertInstanceOf(BulkWriteResult::class, $result);
-        $this->assertSame(3, $result->getMatchedCount());
-        $this->assertSame(3, $result->getModifiedCount());
-
-        $expected = [
-            ['_id' => 1, 'x' => 11],
-            ['_id' => 2, 'x' => 22, 'y' => 2],
-            ['_id' => 3, 'x' => 33, 'y' => 3],
-            ['_id' => 4, 'x' => 44, 'y' => 4],
-        ];
-
-        $this->assertSameDocuments($expected, $this->collection->find());
     }
 
     /**
@@ -316,7 +310,7 @@ class BulkWriteFunctionalTest extends FunctionalTestCase
      *
      * @param integer $n
      */
-    private function createFixtures(int $n): void
+    private function createFixtures($n)
     {
         $bulkWrite = new Bulk(['ordered' => true]);
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016-present MongoDB, Inc.
+ * Copyright 2016-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,20 +17,12 @@
 
 namespace MongoDB\GridFS;
 
-use ArrayIterator;
 use MongoDB\Collection;
+use MongoDB\UpdateResult;
 use MongoDB\Driver\Cursor;
 use MongoDB\Driver\Manager;
 use MongoDB\Driver\ReadPreference;
-use MongoDB\Exception\InvalidArgumentException;
-use MongoDB\UpdateResult;
-use MultipleIterator;
 use stdClass;
-
-use function abs;
-use function count;
-use function is_numeric;
-use function sprintf;
 
 /**
  * CollectionWrapper abstracts the GridFS files and chunks collections.
@@ -39,19 +31,10 @@ use function sprintf;
  */
 class CollectionWrapper
 {
-    /** @var string */
     private $bucketName;
-
-    /** @var Collection */
     private $chunksCollection;
-
-    /** @var string */
     private $databaseName;
-
-    /** @var boolean */
     private $checkedIndexes = false;
-
-    /** @var Collection */
     private $filesCollection;
 
     /**
@@ -138,7 +121,7 @@ class CollectionWrapper
      *
      * @see Bucket::downloadToStreamByName()
      * @see Bucket::openDownloadStreamByName()
-     * @param string  $filename
+     * @param string $filename
      * @param integer $revision
      * @return stdClass|null
      */
@@ -251,7 +234,7 @@ class CollectionWrapper
      */
     public function insertChunk($chunk)
     {
-        if (! $this->checkedIndexes) {
+        if ( ! $this->checkedIndexes) {
             $this->ensureIndexes();
         }
 
@@ -267,7 +250,7 @@ class CollectionWrapper
      */
     public function insertFile($file)
     {
-        if (! $this->checkedIndexes) {
+        if ( ! $this->checkedIndexes) {
             $this->ensureIndexes();
         }
 
@@ -278,7 +261,7 @@ class CollectionWrapper
      * Updates the filename field in the file document for a given ID.
      *
      * @param mixed  $id
-     * @param string $filename
+     * @param string $filename 
      * @return UpdateResult
      */
     public function updateFilenameForId($id, $filename)
@@ -294,15 +277,13 @@ class CollectionWrapper
      */
     private function ensureChunksIndex()
     {
-        $expectedIndex = ['files_id' => 1, 'n' => 1];
-
         foreach ($this->chunksCollection->listIndexes() as $index) {
-            if ($index->isUnique() && $this->indexKeysMatch($expectedIndex, $index->getKey())) {
+            if ($index->isUnique() && $index->getKey() === ['files_id' => 1, 'n' => 1]) {
                 return;
             }
         }
 
-        $this->chunksCollection->createIndex($expectedIndex, ['unique' => true]);
+        $this->chunksCollection->createIndex(['files_id' => 1, 'n' => 1], ['unique' => true]);
     }
 
     /**
@@ -310,15 +291,13 @@ class CollectionWrapper
      */
     private function ensureFilesIndex()
     {
-        $expectedIndex = ['filename' => 1, 'uploadDate' => 1];
-
         foreach ($this->filesCollection->listIndexes() as $index) {
-            if ($this->indexKeysMatch($expectedIndex, $index->getKey())) {
+            if ($index->getKey() === ['filename' => 1, 'uploadDate' => 1]) {
                 return;
             }
         }
 
-        $this->filesCollection->createIndex($expectedIndex);
+        $this->filesCollection->createIndex(['filename' => 1, 'uploadDate' => 1]);
     }
 
     /**
@@ -335,42 +314,12 @@ class CollectionWrapper
 
         $this->checkedIndexes = true;
 
-        if (! $this->isFilesCollectionEmpty()) {
+        if ( ! $this->isFilesCollectionEmpty()) {
             return;
         }
 
         $this->ensureFilesIndex();
         $this->ensureChunksIndex();
-    }
-
-    private function indexKeysMatch(array $expectedKeys, array $actualKeys): bool
-    {
-        if (count($expectedKeys) !== count($actualKeys)) {
-            return false;
-        }
-
-        $iterator = new MultipleIterator(MultipleIterator::MIT_NEED_ANY);
-        $iterator->attachIterator(new ArrayIterator($expectedKeys));
-        $iterator->attachIterator(new ArrayIterator($actualKeys));
-
-        foreach ($iterator as $key => $value) {
-            [$expectedKey, $actualKey]     = $key;
-            [$expectedValue, $actualValue] = $value;
-
-            if ($expectedKey !== $actualKey) {
-                return false;
-            }
-
-            /* Since we don't expect special indexes (e.g. text), we mark any
-             * index with a non-numeric definition as unequal. All others are
-             * compared against their int value to avoid differences due to
-             * some drivers using float values in the key specification. */
-            if (! is_numeric($actualValue) || (int) $expectedValue !== (int) $actualValue) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     /**

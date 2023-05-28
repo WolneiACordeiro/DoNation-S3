@@ -2,12 +2,16 @@
 
 <phpunit
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.3/phpunit.xsd"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutChangesToGlobalState="true"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.3/phpunit.xsd"
+         backupGlobals="false"
+         backupStaticAttributes="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
-         defaultTestSuite="Default Test Suite"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="tests/bootstrap.php"
 >
 
     <php>
@@ -17,12 +21,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="Default Test Suite">
+        <testsuite name="MongoDB CRUD Test Suite">
             <directory>./tests/</directory>
-        </testsuite>
-
-        <testsuite name="Atlas Data Lake Test Suite">
-            <file>tests/SpecTests/AtlasDataLakeSpecTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

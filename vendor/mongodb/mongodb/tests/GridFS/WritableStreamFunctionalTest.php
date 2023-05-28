@@ -6,17 +6,14 @@ use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\GridFS\CollectionWrapper;
 use MongoDB\GridFS\WritableStream;
 
-use function str_repeat;
-
 /**
  * Functional tests for the internal WritableStream class.
  */
 class WritableStreamFunctionalTest extends FunctionalTestCase
 {
-    /** @var CollectionWrapper */
     private $collectionWrapper;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
@@ -26,7 +23,7 @@ class WritableStreamFunctionalTest extends FunctionalTestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testValidConstructorOptions(): void
+    public function testValidConstructorOptions()
     {
         new WritableStream($this->collectionWrapper, 'filename', [
             '_id' => 'custom-id',
@@ -38,7 +35,7 @@ class WritableStreamFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideInvalidConstructorOptions
      */
-    public function testConstructorOptionTypeChecks(array $options): void
+    public function testConstructorOptionTypeChecks(array $options)
     {
         $this->expectException(InvalidArgumentException::class);
         new WritableStream($this->collectionWrapper, 'filename', $options);
@@ -48,11 +45,11 @@ class WritableStreamFunctionalTest extends FunctionalTestCase
     {
         $options = [];
 
-        foreach ($this->getInvalidIntegerValues(true) as $value) {
+        foreach ($this->getInvalidIntegerValues() as $value) {
             $options[][] = ['chunkSizeBytes' => $value];
         }
 
-        foreach ($this->getInvalidBooleanValues(true) as $value) {
+        foreach ($this->getInvalidBooleanValues() as $value) {
             $options[][] = ['disableMD5' => $value];
         }
 
@@ -63,14 +60,14 @@ class WritableStreamFunctionalTest extends FunctionalTestCase
         return $options;
     }
 
-    public function testConstructorShouldRequireChunkSizeBytesOptionToBePositive(): void
+    public function testConstructorShouldRequireChunkSizeBytesOptionToBePositive()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expected "chunkSizeBytes" option to be >= 1, 0 given');
         new WritableStream($this->collectionWrapper, 'filename', ['chunkSizeBytes' => 0]);
     }
 
-    public function testWriteBytesAlwaysUpdatesFileSize(): void
+    public function testWriteBytesAlwaysUpdatesFileSize()
     {
         $stream = new WritableStream($this->collectionWrapper, 'filename', ['chunkSizeBytes' => 1024]);
 
@@ -89,7 +86,7 @@ class WritableStreamFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideInputDataAndExpectedMD5
      */
-    public function testWriteBytesCalculatesMD5($input, $expectedMD5): void
+    public function testWriteBytesCalculatesMD5($input, $expectedMD5)
     {
         $stream = new WritableStream($this->collectionWrapper, 'filename');
         $stream->writeBytes($input);

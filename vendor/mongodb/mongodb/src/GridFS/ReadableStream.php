@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016-present MongoDB, Inc.
+ * Copyright 2016-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,10 @@
 
 namespace MongoDB\GridFS;
 
-use MongoDB\Driver\CursorInterface;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\GridFS\Exception\CorruptFileException;
+use IteratorIterator;
 use stdClass;
-
-use function ceil;
-use function floor;
-use function is_integer;
-use function property_exists;
-use function sprintf;
-use function strlen;
-use function substr;
 
 /**
  * ReadableStream abstracts the process of reading a GridFS file.
@@ -37,34 +29,15 @@ use function substr;
  */
 class ReadableStream
 {
-    /** @var string|null */
     private $buffer;
-
-    /** @var integer */
     private $bufferOffset = 0;
-
-    /** @var integer */
     private $chunkSize;
-
-    /** @var integer */
     private $chunkOffset = 0;
-
-    /** @var CursorInterface|null */
     private $chunksIterator;
-
-    /** @var CollectionWrapper */
     private $collectionWrapper;
-
-    /** @var float|integer */
     private $expectedLastChunkSize = 0;
-
-    /** @var stdClass */
     private $file;
-
-    /** @var integer */
     private $length;
-
-    /** @var integer */
     private $numChunks = 0;
 
     /**
@@ -76,15 +49,15 @@ class ReadableStream
      */
     public function __construct(CollectionWrapper $collectionWrapper, stdClass $file)
     {
-        if (! isset($file->chunkSize) || ! is_integer($file->chunkSize) || $file->chunkSize < 1) {
+        if ( ! isset($file->chunkSize) || ! is_integer($file->chunkSize) || $file->chunkSize < 1) {
             throw new CorruptFileException('file.chunkSize is not an integer >= 1');
         }
 
-        if (! isset($file->length) || ! is_integer($file->length) || $file->length < 0) {
+        if ( ! isset($file->length) || ! is_integer($file->length) || $file->length < 0) {
             throw new CorruptFileException('file.length is not an integer > 0');
         }
 
-        if (! isset($file->_id) && ! property_exists($file, '_id')) {
+        if ( ! isset($file->_id) && ! property_exists($file, '_id')) {
             throw new CorruptFileException('file._id does not exist');
         }
 
@@ -96,7 +69,7 @@ class ReadableStream
 
         if ($this->length > 0) {
             $this->numChunks = (integer) ceil($this->length / $this->chunkSize);
-            $this->expectedLastChunkSize = $this->length - (($this->numChunks - 1) * $this->chunkSize);
+            $this->expectedLastChunkSize = ($this->length - (($this->numChunks - 1) * $this->chunkSize));
         }
     }
 
@@ -229,7 +202,6 @@ class ReadableStream
          */
         if ($lastChunkOffset > $this->chunkOffset) {
             $this->chunksIterator = null;
-
             return;
         }
 
@@ -267,7 +239,7 @@ class ReadableStream
             return false;
         }
 
-        if (! $this->chunksIterator->valid()) {
+        if ( ! $this->chunksIterator->valid()) {
             throw CorruptFileException::missingChunk($this->chunkOffset);
         }
 
@@ -281,7 +253,7 @@ class ReadableStream
 
         $actualChunkSize = strlen($this->buffer);
 
-        $expectedChunkSize = $this->chunkOffset === $this->numChunks - 1
+        $expectedChunkSize = ($this->chunkOffset === $this->numChunks - 1)
             ? $this->expectedLastChunkSize
             : $this->chunkSize;
 
@@ -316,7 +288,9 @@ class ReadableStream
      */
     private function initChunksIterator()
     {
-        $this->chunksIterator = $this->collectionWrapper->findChunksByFileId($this->file->_id, $this->chunkOffset);
+        $cursor = $this->collectionWrapper->findChunksByFileId($this->file->_id, $this->chunkOffset);
+
+        $this->chunksIterator = new IteratorIterator($cursor);
         $this->chunksIterator->rewind();
     }
 }

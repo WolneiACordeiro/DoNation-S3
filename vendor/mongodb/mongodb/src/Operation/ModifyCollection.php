@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2018-present MongoDB, Inc.
+ * Copyright 2018 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,11 @@
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
-
-use function current;
-use function is_array;
 
 /**
  * Operation for the collMod command.
@@ -36,16 +33,9 @@ use function is_array;
  */
 class ModifyCollection implements Executable
 {
-    /** @var string */
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var array */
     private $collectionOptions;
-
-    /** @var array */
     private $options;
 
     /**
@@ -55,15 +45,20 @@ class ModifyCollection implements Executable
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      *  * typeMap (array): Type map for BSON deserialization. This will only be
      *    used for the returned command result document.
      *
      *  * writeConcern (MongoDB\Driver\WriteConcern): Write concern.
      *
-     * @param string $databaseName      Database name
-     * @param string $collectionName    Collection or view to modify
-     * @param array  $collectionOptions Collection or view options to assign
-     * @param array  $options           Command options
+     *    This is not supported for server versions < 3.2 and will result in an
+     *    exception at execution time if used.
+     *
+     * @param string       $databaseName      Database name
+     * @param string       $collectionName    Collection or view to modify
+     * @param string       $collectionOptions Collection or view options to assign
+     * @param array        $options           Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function __construct($databaseName, $collectionName, array $collectionOptions, array $options = [])
@@ -73,7 +68,7 @@ class ModifyCollection implements Executable
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
@@ -81,7 +76,7 @@ class ModifyCollection implements Executable
         }
 
         if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
-            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
+            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], 'MongoDB\Driver\WriteConcern');
         }
 
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
@@ -104,6 +99,10 @@ class ModifyCollection implements Executable
      */
     public function execute(Server $server)
     {
+        if (isset($this->options['writeConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForWriteConcern)) {
+            throw UnsupportedException::writeConcernNotSupported();
+        }
+
         $cursor = $server->executeWriteCommand($this->databaseName, new Command(['collMod' => $this->collectionName] + $this->collectionOptions), $this->createOptions());
 
         if (isset($this->options['typeMap'])) {
@@ -116,7 +115,7 @@ class ModifyCollection implements Executable
     /**
      * Create options for executing the command.
      *
-     * @see http://php.net/manual/en/mongodb-driver-server.executewritecommand.php
+     * @see http://php.net/manual/en/mongodb-driver-server.executereadwritecommand.php
      * @return array
      */
     private function createOptions()

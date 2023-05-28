@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Exception\InvalidArgumentException;
 
-use function is_array;
-use function is_object;
-
 /**
  * Operation for executing a database command.
  *
@@ -35,13 +32,8 @@ use function is_object;
  */
 class DatabaseCommand implements Executable
 {
-    /** @var string */
     private $databaseName;
-
-    /** @var array|Command|object */
     private $command;
-
-    /** @var array */
     private $options;
 
     /**
@@ -57,26 +49,28 @@ class DatabaseCommand implements Executable
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      *  * typeMap (array): Type map for BSON deserialization. This will be
      *    applied to the returned Cursor (it is not sent to the server).
      *
-     * @param string       $databaseName Database name
-     * @param array|object $command      Command document
-     * @param array        $options      Options for command execution
+     * @param string       $databaseName   Database name
+     * @param array|object $command        Command document
+     * @param array        $options        Options for command execution
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function __construct($databaseName, $command, array $options = [])
     {
-        if (! is_array($command) && ! is_object($command)) {
+        if ( ! is_array($command) && ! is_object($command)) {
             throw InvalidArgumentException::invalidType('$command', $command, 'array or object');
         }
 
         if (isset($options['readPreference']) && ! $options['readPreference'] instanceof ReadPreference) {
-            throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], ReadPreference::class);
+            throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], 'MongoDB\Driver\ReadPreference');
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
@@ -84,7 +78,7 @@ class DatabaseCommand implements Executable
         }
 
         $this->databaseName = (string) $databaseName;
-        $this->command = $command instanceof Command ? $command : new Command($command);
+        $this->command = ($command instanceof Command) ? $command : new Command($command);
         $this->options = $options;
     }
 

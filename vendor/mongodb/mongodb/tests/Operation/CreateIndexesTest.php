@@ -4,11 +4,10 @@ namespace MongoDB\Tests\Operation;
 
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Operation\CreateIndexes;
-use stdClass;
 
 class CreateIndexesTest extends TestCase
 {
-    public function testConstructorIndexesArgumentMustBeAList(): void
+    public function testConstructorIndexesArgumentMustBeAList()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$indexes is not a list (unexpected index: "1")');
@@ -18,7 +17,7 @@ class CreateIndexesTest extends TestCase
     /**
      * @dataProvider provideInvalidConstructorOptions
      */
-    public function testConstructorOptionTypeChecks(array $options): void
+    public function testConstructorOptionTypeChecks(array $options)
     {
         $this->expectException(InvalidArgumentException::class);
         new CreateIndexes($this->getDatabaseName(), $this->getCollectionName(), [['key' => ['x' => 1]]], $options);
@@ -27,10 +26,6 @@ class CreateIndexesTest extends TestCase
     public function provideInvalidConstructorOptions()
     {
         $options = [];
-
-        foreach ([3.14, true, [], new stdClass()] as $value) {
-            $options[][] = ['commitQuorum' => $value];
-        }
 
         foreach ($this->getInvalidIntegerValues() as $value) {
             $options[][] = ['maxTimeMS' => $value];
@@ -47,7 +42,7 @@ class CreateIndexesTest extends TestCase
         return $options;
     }
 
-    public function testConstructorRequiresAtLeastOneIndex(): void
+    public function testConstructorRequiresAtLeastOneIndex()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('$indexes is empty');
@@ -57,7 +52,7 @@ class CreateIndexesTest extends TestCase
     /**
      * @dataProvider provideInvalidIndexSpecificationTypes
      */
-    public function testConstructorRequiresIndexSpecificationsToBeAnArray($index): void
+    public function testConstructorRequiresIndexSpecificationsToBeAnArray($index)
     {
         $this->expectException(InvalidArgumentException::class);
         new CreateIndexes($this->getDatabaseName(), $this->getCollectionName(), [$index]);

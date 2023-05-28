@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,6 @@
 namespace MongoDB\Model;
 
 use IteratorIterator;
-use ReturnTypeWillChange;
-use Traversable;
-
-use function array_key_exists;
 
 /**
  * IndexInfoIterator for both listIndexes command and legacy query results.
@@ -38,19 +34,6 @@ use function array_key_exists;
  */
 class IndexInfoIteratorIterator extends IteratorIterator implements IndexInfoIterator
 {
-    /** @var string|null $ns */
-    private $ns;
-
-    /**
-     * @param string|null $ns
-     */
-    public function __construct(Traversable $iterator, $ns = null)
-    {
-        parent::__construct($iterator);
-
-        $this->ns = $ns;
-    }
-
     /**
      * Return the current element as an IndexInfo instance.
      *
@@ -58,15 +41,8 @@ class IndexInfoIteratorIterator extends IteratorIterator implements IndexInfoIte
      * @see http://php.net/iterator.current
      * @return IndexInfo
      */
-    #[ReturnTypeWillChange]
     public function current()
     {
-        $info = parent::current();
-
-        if (! array_key_exists('ns', $info) && $this->ns !== null) {
-            $info['ns'] = $this->ns;
-        }
-
-        return new IndexInfo($info);
+        return new IndexInfo(parent::current());
     }
 }

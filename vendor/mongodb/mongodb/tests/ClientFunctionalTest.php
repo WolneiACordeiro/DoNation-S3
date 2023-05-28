@@ -4,37 +4,30 @@ namespace MongoDB\Tests;
 
 use MongoDB\Client;
 use MongoDB\Driver\BulkWrite;
-use MongoDB\Driver\Manager;
-use MongoDB\Driver\Session;
+use MongoDB\Driver\Command;
 use MongoDB\Model\DatabaseInfo;
-use MongoDB\Model\DatabaseInfoIterator;
-
-use function call_user_func;
-use function is_callable;
-use function sprintf;
 
 /**
  * Functional tests for the Client class.
  */
 class ClientFunctionalTest extends FunctionalTestCase
 {
-    /** @var Client */
     private $client;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
-        $this->client = static::createTestClient();
+        $this->client = new Client($this->getUri());
         $this->client->dropDatabase($this->getDatabaseName());
     }
 
-    public function testGetManager(): void
+    public function testGetManager()
     {
-        $this->assertInstanceOf(Manager::class, $this->client->getManager());
+        $this->assertInstanceOf('MongoDB\Driver\Manager', $this->client->getManager());
     }
 
-    public function testDropDatabase(): void
+    public function testDropDatabase()
     {
         $bulkWrite = new BulkWrite();
         $bulkWrite->insert(['x' => 1]);
@@ -47,7 +40,7 @@ class ClientFunctionalTest extends FunctionalTestCase
         $this->assertCollectionCount($this->getNamespace(), 0);
     }
 
-    public function testListDatabases(): void
+    public function testListDatabases()
     {
         $bulkWrite = new BulkWrite();
         $bulkWrite->insert(['x' => 1]);
@@ -57,31 +50,17 @@ class ClientFunctionalTest extends FunctionalTestCase
 
         $databases = $this->client->listDatabases();
 
-        $this->assertInstanceOf(DatabaseInfoIterator::class, $databases);
+        $this->assertInstanceOf('MongoDB\Model\DatabaseInfoIterator', $databases);
 
         foreach ($databases as $database) {
-            $this->assertInstanceOf(DatabaseInfo::class, $database);
+            $this->assertInstanceOf('MongoDB\Model\DatabaseInfo', $database);
         }
 
-        $this->assertDatabaseExists($this->getDatabaseName(), function (DatabaseInfo $info): void {
-            $this->assertFalse($info->isEmpty());
-            $this->assertGreaterThan(0, $info->getSizeOnDisk());
+        $that = $this;
+        $this->assertDatabaseExists($this->getDatabaseName(), function(DatabaseInfo $info) use ($that) {
+            $that->assertFalse($info->isEmpty());
+            $that->assertGreaterThan(0, $info->getSizeOnDisk());
         });
-    }
-
-    public function testListDatabaseNames(): void
-    {
-        $bulkWrite = new BulkWrite();
-        $bulkWrite->insert(['x' => 1]);
-
-        $writeResult = $this->manager->executeBulkWrite($this->getNamespace(), $bulkWrite);
-        $this->assertEquals(1, $writeResult->getInsertedCount());
-
-        foreach ($this->client->listDatabaseNames() as $database) {
-            $this->assertIsString($database);
-        }
-
-        $this->assertContains($this->getDatabaseName(), $this->client->listDatabaseNames(), sprintf('Database %s does not exist on the server', $this->getDatabaseName()));
     }
 
     /**
@@ -92,10 +71,10 @@ class ClientFunctionalTest extends FunctionalTestCase
      * the given name is found, it will be passed to the callback, which may
      * perform additional assertions.
      *
-     * @param string   $databaseName
+     * @param string $databaseName
      * @param callable $callback
      */
-    private function assertDatabaseExists(string $databaseName, ?callable $callback = null): void
+    private function assertDatabaseExists($databaseName, $callback = null)
     {
         if ($callback !== null && ! is_callable($callback)) {
             throw new InvalidArgumentException('$callback is not a callable');
@@ -119,8 +98,11 @@ class ClientFunctionalTest extends FunctionalTestCase
         }
     }
 
-    public function testStartSession(): void
+    public function testStartSession()
     {
-        $this->assertInstanceOf(Session::class, $this->client->startSession());
+        if (version_compare($this->getFeatureCompatibilityVersion(), '3.6', '<')) {
+            $this->markTestSkipped('startSession() is only supported on FCV 3.6 or higher');
+        }
+        $this->assertInstanceOf('MongoDB\Driver\Session', $this->client->startSession());
     }
 }

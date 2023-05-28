@@ -10,7 +10,7 @@ class FindAndModifyTest extends TestCase
     /**
      * @dataProvider provideInvalidConstructorOptions
      */
-    public function testConstructorOptionTypeChecks(array $options): void
+    public function testConstructorOptionTypeChecks(array $options)
     {
         $this->expectException(InvalidArgumentException::class);
         new FindAndModify($this->getDatabaseName(), $this->getCollectionName(), $options);
@@ -40,7 +40,7 @@ class FindAndModifyTest extends TestCase
             $options[][] = ['maxTimeMS' => $value];
         }
 
-        foreach ($this->getInvalidBooleanValues(true) as $value) {
+        foreach ($this->getInvalidBooleanValues() as $value) {
             $options[][] = ['new' => $value];
         }
 
@@ -48,7 +48,7 @@ class FindAndModifyTest extends TestCase
             $options[][] = ['query' => $value];
         }
 
-        foreach ($this->getInvalidBooleanValues(true) as $value) {
+        foreach ($this->getInvalidBooleanValues() as $value) {
             $options[][] = ['remove' => $value];
         }
 
@@ -68,7 +68,7 @@ class FindAndModifyTest extends TestCase
             $options[][] = ['update' => $value];
         }
 
-        foreach ($this->getInvalidBooleanValues(true) as $value) {
+        foreach ($this->getInvalidBooleanValues() as $value) {
             $options[][] = ['upsert' => $value];
         }
 
@@ -79,7 +79,7 @@ class FindAndModifyTest extends TestCase
         return $options;
     }
 
-    public function testConstructorUpdateAndRemoveOptionsAreMutuallyExclusive(): void
+    public function testConstructorUpdateAndRemoveOptionsAreMutuallyExclusive()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The "remove" option must be true or an "update" document must be specified, but not both');

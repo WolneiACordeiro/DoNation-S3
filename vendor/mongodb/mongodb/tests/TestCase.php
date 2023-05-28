@@ -2,126 +2,44 @@
 
 namespace MongoDB\Tests;
 
-use InvalidArgumentException;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Model\BSONArray;
 use MongoDB\Model\BSONDocument;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use InvalidArgumentException;
 use ReflectionClass;
 use stdClass;
 use Traversable;
 
-use function array_map;
-use function array_merge;
-use function array_values;
-use function call_user_func;
-use function getenv;
-use function hash;
-use function is_array;
-use function is_object;
-use function is_string;
-use function iterator_to_array;
-use function MongoDB\BSON\fromPHP;
-use function MongoDB\BSON\toJSON;
-use function restore_error_handler;
-use function set_error_handler;
-use function sprintf;
-
-use const E_USER_DEPRECATED;
-
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * Return the connection URI.
-     *
-     * @return string
-     */
-    public static function getUri(): string
+    public function expectException($exception)
     {
-        return getenv('MONGODB_URI') ?: 'mongodb://127.0.0.1:27017';
+        if (method_exists(BaseTestCase::class, 'expectException')) {
+            parent::expectException($exception);
+            return;
+        }
+        parent::setExpectedException($exception);
     }
 
-    /**
-     * Asserts that a document has expected values for some fields.
-     *
-     * Only fields in the expected document will be checked. The actual document
-     * may contain additional fields.
-     *
-     * @param array|object $expectedDocument
-     * @param array|object $actualDocument
-     */
-    public function assertMatchesDocument($expectedDocument, $actualDocument): void
+   public function expectExceptionMessage($exceptionMessage)
     {
-        $normalizedExpectedDocument = $this->normalizeBSON($expectedDocument);
-        $normalizedActualDocument = $this->normalizeBSON($actualDocument);
-
-        $extraKeys = [];
-
-        /* Avoid unsetting fields while we're iterating on the ArrayObject to
-         * work around https://bugs.php.net/bug.php?id=70246 */
-        foreach ($normalizedActualDocument as $key => $value) {
-            if (! $normalizedExpectedDocument->offsetExists($key)) {
-                $extraKeys[] = $key;
-            }
+        if (method_exists(BaseTestCase::class, 'expectExceptionMessage')) {
+            parent::expectExceptionMessage($exceptionMessage);
+            return;
         }
-
-        foreach ($extraKeys as $key) {
-            $normalizedActualDocument->offsetUnset($key);
-        }
-
-        $this->assertEquals(
-            toJSON(fromPHP($normalizedExpectedDocument)),
-            toJSON(fromPHP($normalizedActualDocument))
-        );
+        parent::setExpectedException($this->getExpectedException(), $exceptionMessage);
     }
 
-    /**
-     * Asserts that a document has expected values for all fields.
-     *
-     * The actual document will be compared directly with the expected document
-     * and may not contain extra fields.
-     *
-     * @param array|object $expectedDocument
-     * @param array|object $actualDocument
-     */
-    public function assertSameDocument($expectedDocument, $actualDocument): void
+    public function expectExceptionMessageRegExp($exceptionMessageRegExp)
     {
-        $this->assertEquals(
-            toJSON(fromPHP($this->normalizeBSON($expectedDocument))),
-            toJSON(fromPHP($this->normalizeBSON($actualDocument)))
-        );
-    }
-
-    public function assertSameDocuments(array $expectedDocuments, $actualDocuments): void
-    {
-        if ($actualDocuments instanceof Traversable) {
-            $actualDocuments = iterator_to_array($actualDocuments);
+        if (method_exists(BaseTestCase::class, 'expectExceptionMessageRegExp')) {
+            parent::expectExceptionMessageRegExp($exceptionMessageRegExp);
+            return;
         }
-
-        if (! is_array($actualDocuments)) {
-            throw new InvalidArgumentException('$actualDocuments is not an array or Traversable');
-        }
-
-        $normalizeRootDocuments = function ($document) {
-            return toJSON(fromPHP($this->normalizeBSON($document)));
-        };
-
-        $this->assertEquals(
-            array_map($normalizeRootDocuments, $expectedDocuments),
-            array_map($normalizeRootDocuments, $actualDocuments)
-        );
-    }
-
-    /**
-     * Compatibility method as PHPUnit 9 no longer includes this method.
-     */
-    public function dataDescription(): string
-    {
-        $dataName = $this->dataName();
-
-        return is_string($dataName) ? $dataName : '';
+        parent::setExpectedExceptionRegExp($this->getExpectedException(), $exceptionMessageRegExp);
     }
 
     public function provideInvalidArrayValues()
@@ -134,11 +52,11 @@ abstract class TestCase extends BaseTestCase
         return $this->wrapValuesForDataProvider($this->getInvalidDocumentValues());
     }
 
-    protected function assertDeprecated(callable $execution): void
+    protected function assertDeprecated(callable $execution)
     {
         $errors = [];
 
-        set_error_handler(function ($errno, $errstr) use (&$errors): void {
+        set_error_handler(function($errno, $errstr) use (&$errors) {
             $errors[] = $errstr;
         }, E_USER_DEPRECATED);
 
@@ -152,11 +70,82 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * Asserts that a document has expected values for some fields.
+     *
+     * Only fields in the expected document will be checked. The actual document
+     * may contain additional fields.
+     *
+     * @param array|object $expectedDocument
+     * @param array|object $actualDocument
+     */
+    protected function assertMatchesDocument($expectedDocument, $actualDocument)
+    {
+        $normalizedExpectedDocument = $this->normalizeBSON($expectedDocument);
+        $normalizedActualDocument = $this->normalizeBSON($actualDocument);
+
+        $extraKeys = [];
+
+        /* Avoid unsetting fields while we're iterating on the ArrayObject to
+         * work around https://bugs.php.net/bug.php?id=70246 */
+        foreach ($normalizedActualDocument as $key => $value) {
+            if ( ! $normalizedExpectedDocument->offsetExists($key)) {
+                $extraKeys[] = $key;
+            }
+        }
+
+        foreach ($extraKeys as $key) {
+            $normalizedActualDocument->offsetUnset($key);
+        }
+
+        $this->assertEquals(
+            \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($normalizedExpectedDocument)),
+            \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($normalizedActualDocument))
+        );
+    }
+
+    /**
+     * Asserts that a document has expected values for all fields.
+     *
+     * The actual document will be compared directly with the expected document
+     * and may not contain extra fields.
+     *
+     * @param array|object $expectedDocument
+     * @param array|object $actualDocument
+     */
+    protected function assertSameDocument($expectedDocument, $actualDocument)
+    {
+        $this->assertEquals(
+            \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($this->normalizeBSON($expectedDocument))),
+            \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($this->normalizeBSON($actualDocument)))
+        );
+    }
+
+    protected function assertSameDocuments(array $expectedDocuments, $actualDocuments)
+    {
+        if ($actualDocuments instanceof Traversable) {
+            $actualDocuments = iterator_to_array($actualDocuments);
+        }
+
+        if ( ! is_array($actualDocuments)) {
+            throw new InvalidArgumentException('$actualDocuments is not an array or Traversable');
+        }
+
+        $normalizeRootDocuments = function($document) {
+            return \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP($this->normalizeBSON($document)));
+        };
+
+        $this->assertEquals(
+            array_map($normalizeRootDocuments, $expectedDocuments),
+            array_map($normalizeRootDocuments, $actualDocuments)
+        );
+    }
+
+    /**
      * Return the test collection name.
      *
      * @return string
      */
-    protected function getCollectionName(): string
+    protected function getCollectionName()
     {
         $class = new ReflectionClass($this);
 
@@ -168,7 +157,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return string
      */
-    protected function getDatabaseName(): string
+    protected function getDatabaseName()
     {
         return getenv('MONGODB_DATABASE') ?: 'phplib_test';
     }
@@ -176,109 +165,91 @@ abstract class TestCase extends BaseTestCase
     /**
      * Return a list of invalid array values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidArrayValues(bool $includeNull = false): array
+    protected function getInvalidArrayValues()
     {
-        return array_merge([123, 3.14, 'foo', true, new stdClass()], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true, new stdClass];
     }
 
     /**
      * Return a list of invalid boolean values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidBooleanValues(bool $includeNull = false): array
+    protected function getInvalidBooleanValues()
     {
-        return array_merge([123, 3.14, 'foo', [], new stdClass()], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', [], new stdClass];
     }
 
     /**
      * Return a list of invalid document values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidDocumentValues(bool $includeNull = false): array
+    protected function getInvalidDocumentValues()
     {
-        return array_merge([123, 3.14, 'foo', true], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true];
     }
 
     /**
      * Return a list of invalid integer values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidIntegerValues(bool $includeNull = false): array
+    protected function getInvalidIntegerValues()
     {
-        return array_merge([3.14, 'foo', true, [], new stdClass()], $includeNull ? [null] : []);
+        return [3.14, 'foo', true, [], new stdClass];
     }
 
     /**
      * Return a list of invalid ReadPreference values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidReadConcernValues(bool $includeNull = false): array
+    protected function getInvalidReadConcernValues()
     {
-        return array_merge([123, 3.14, 'foo', true, [], new stdClass(), new ReadPreference(ReadPreference::RP_PRIMARY), new WriteConcern(1)], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true, [], new stdClass, new ReadPreference(ReadPreference::RP_PRIMARY), new WriteConcern(1)];
     }
 
     /**
      * Return a list of invalid ReadPreference values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidReadPreferenceValues(bool $includeNull = false): array
+    protected function getInvalidReadPreferenceValues()
     {
-        return array_merge([123, 3.14, 'foo', true, [], new stdClass(), new ReadConcern(), new WriteConcern(1)], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true, [], new stdClass, new ReadConcern, new WriteConcern(1)];
     }
 
     /**
      * Return a list of invalid Session values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidSessionValues(bool $includeNull = false): array
+    protected function getInvalidSessionValues()
     {
-        return array_merge([123, 3.14, 'foo', true, [], new stdClass(), new ReadConcern(), new ReadPreference(ReadPreference::RP_PRIMARY), new WriteConcern(1)], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true, [], new stdClass, new ReadConcern, new ReadPreference(ReadPreference::RP_PRIMARY), new WriteConcern(1)];
     }
 
     /**
      * Return a list of invalid string values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidStringValues(bool $includeNull = false): array
+    protected function getInvalidStringValues()
     {
-        return array_merge([123, 3.14, true, [], new stdClass()], $includeNull ? [null] : []);
+        return [123, 3.14, true, [], new stdClass];
     }
 
     /**
      * Return a list of invalid WriteConcern values.
      *
-     * @param boolean $includeNull
-     *
      * @return array
      */
-    protected function getInvalidWriteConcernValues(bool $includeNull = false): array
+    protected function getInvalidWriteConcernValues()
     {
-        return array_merge([123, 3.14, 'foo', true, [], new stdClass(), new ReadConcern(), new ReadPreference(ReadPreference::RP_PRIMARY)], $includeNull ? [null] : []);
+        return [123, 3.14, 'foo', true, [], new stdClass, new ReadConcern, new ReadPreference(ReadPreference::RP_PRIMARY)];
     }
 
     /**
@@ -286,9 +257,19 @@ abstract class TestCase extends BaseTestCase
      *
      * @return string
      */
-    protected function getNamespace(): string
+    protected function getNamespace()
     {
          return sprintf('%s.%s', $this->getDatabaseName(), $this->getCollectionName());
+    }
+
+    /**
+     * Return the connection URI.
+     *
+     * @return string
+     */
+    protected function getUri()
+    {
+        return getenv('MONGODB_URI') ?: 'mongodb://127.0.0.1:27017';
     }
 
     /**
@@ -297,11 +278,9 @@ abstract class TestCase extends BaseTestCase
      * @param array $values List of values
      * @return array
      */
-    protected function wrapValuesForDataProvider(array $values): array
+    protected function wrapValuesForDataProvider(array $values)
     {
-        return array_map(function ($value) {
-            return [$value];
-        }, $values);
+        return array_map(function($value) { return [$value]; }, $values);
     }
 
     /**
@@ -317,16 +296,16 @@ abstract class TestCase extends BaseTestCase
      */
     private function normalizeBSON($bson)
     {
-        if (! is_array($bson) && ! is_object($bson)) {
+        if ( ! is_array($bson) && ! is_object($bson)) {
             throw new InvalidArgumentException('$bson is not an array or object');
         }
 
         if ($bson instanceof BSONArray || (is_array($bson) && $bson === array_values($bson))) {
-            if (! $bson instanceof BSONArray) {
+            if ( ! $bson instanceof BSONArray) {
                 $bson = new BSONArray($bson);
             }
         } else {
-            if (! $bson instanceof BSONDocument) {
+            if ( ! $bson instanceof BSONDocument) {
                 $bson = new BSONDocument((array) $bson);
             }
 

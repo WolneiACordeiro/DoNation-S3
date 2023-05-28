@@ -2,34 +2,34 @@
 
 namespace MongoDB\Tests\Operation;
 
-use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
+use MongoDB\UpdateResult;
 use MongoDB\Driver\BulkWrite;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\BadMethodCallException;
-use MongoDB\Exception\UnsupportedException;
 use MongoDB\Operation\Update;
 use MongoDB\Tests\CommandObserver;
-use MongoDB\UpdateResult;
-
-use function version_compare;
+use stdClass;
 
 class UpdateFunctionalTest extends FunctionalTestCase
 {
-    /** @var Collection */
     private $collection;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
         $this->collection = new Collection($this->manager, $this->getDatabaseName(), $this->getCollectionName());
     }
 
-    public function testSessionOption(): void
+    public function testSessionOption()
     {
-        (new CommandObserver())->observe(
-            function (): void {
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('Sessions are not supported');
+        }
+
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new Update(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -40,74 +40,13 @@ class UpdateFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
             }
         );
     }
 
-    public function testBypassDocumentValidationSetWhenTrue(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new Update(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    ['_id' => 1],
-                    ['$inc' => ['x' => 1]],
-                    ['bypassDocumentValidation' => true]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-                $this->assertEquals(true, $event['started']->getCommand()->bypassDocumentValidation);
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationUnsetWhenFalse(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new Update(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    ['_id' => 1],
-                    ['$inc' => ['x' => 1]],
-                    ['bypassDocumentValidation' => false]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-            }
-        );
-    }
-
-    public function testHintOptionAndUnacknowledgedWriteConcernUnsupportedClientSideError(): void
-    {
-        if (version_compare($this->getServerVersion(), '4.2.0', '>=')) {
-            $this->markTestSkipped('hint is supported');
-        }
-
-        $operation = new Update(
-            $this->getDatabaseName(),
-            $this->getCollectionName(),
-            ['_id' => 1],
-            ['$inc' => ['x' => 1]],
-            ['hint' => '_id_', 'writeConcern' => new WriteConcern(0)]
-        );
-
-        $this->expectException(UnsupportedException::class);
-        $this->expectExceptionMessage('Hint is not supported by the server executing this operation');
-
-        $operation->execute($this->getPrimaryServer());
-    }
-
-    public function testUpdateOne(): void
+    public function testUpdateOne()
     {
         $this->createFixtures(3);
 
@@ -117,7 +56,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $operation = new Update($this->getDatabaseName(), $this->getCollectionName(), $filter, $update);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(UpdateResult::class, $result);
+        $this->assertInstanceOf('MongoDB\UpdateResult', $result);
         $this->assertSame(1, $result->getMatchedCount());
         $this->assertSame(1, $result->getModifiedCount());
         $this->assertSame(0, $result->getUpsertedCount());
@@ -132,7 +71,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testUpdateMany(): void
+    public function testUpdateMany()
     {
         $this->createFixtures(3);
 
@@ -143,7 +82,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $operation = new Update($this->getDatabaseName(), $this->getCollectionName(), $filter, $update, $options);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(UpdateResult::class, $result);
+        $this->assertInstanceOf('MongoDB\UpdateResult', $result);
         $this->assertSame(2, $result->getMatchedCount());
         $this->assertSame(2, $result->getModifiedCount());
         $this->assertSame(0, $result->getUpsertedCount());
@@ -158,7 +97,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testUpdateManyWithExistingId(): void
+    public function testUpdateManyWithExistingId()
     {
         $this->createFixtures(3);
 
@@ -169,7 +108,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $operation = new Update($this->getDatabaseName(), $this->getCollectionName(), $filter, $update, $options);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(UpdateResult::class, $result);
+        $this->assertInstanceOf('MongoDB\UpdateResult', $result);
         $this->assertSame(0, $result->getMatchedCount());
         $this->assertSame(0, $result->getModifiedCount());
         $this->assertSame(1, $result->getUpsertedCount());
@@ -185,7 +124,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testUpdateManyWithGeneratedId(): void
+    public function testUpdateManyWithGeneratedId()
     {
         $this->createFixtures(3);
 
@@ -196,11 +135,11 @@ class UpdateFunctionalTest extends FunctionalTestCase
         $operation = new Update($this->getDatabaseName(), $this->getCollectionName(), $filter, $update, $options);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(UpdateResult::class, $result);
+        $this->assertInstanceOf('MongoDB\UpdateResult', $result);
         $this->assertSame(0, $result->getMatchedCount());
         $this->assertSame(0, $result->getModifiedCount());
         $this->assertSame(1, $result->getUpsertedCount());
-        $this->assertInstanceOf(ObjectId::class, $result->getUpsertedId());
+        $this->assertInstanceOf('MongoDB\BSON\ObjectId', $result->getUpsertedId());
 
         $expected = [
             ['_id' => 1, 'x' => 11],
@@ -228,40 +167,40 @@ class UpdateFunctionalTest extends FunctionalTestCase
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesMatchedCount(UpdateResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesMatchedCount(UpdateResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getMatchedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesModifiedCount(UpdateResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesModifiedCount(UpdateResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getModifiedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesUpsertedCount(UpdateResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesUpsertedCount(UpdateResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getUpsertedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesUpsertedId(UpdateResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesUpsertedId(UpdateResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getUpsertedId();
     }
 
@@ -270,7 +209,7 @@ class UpdateFunctionalTest extends FunctionalTestCase
      *
      * @param integer $n
      */
-    private function createFixtures(int $n): void
+    private function createFixtures($n)
     {
         $bulkWrite = new BulkWrite(['ordered' => true]);
 

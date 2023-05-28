@@ -2,15 +2,14 @@
 
 namespace MongoDB\Tests\Operation;
 
-use MongoDB\Model\DatabaseInfo;
-use MongoDB\Model\DatabaseInfoIterator;
 use MongoDB\Operation\InsertOne;
 use MongoDB\Operation\ListDatabases;
 use MongoDB\Tests\CommandObserver;
+use stdClass;
 
 class ListDatabasesFunctionalTest extends FunctionalTestCase
 {
-    public function testListDatabases(): void
+    public function testListDatabases()
     {
         $server = $this->getPrimaryServer();
 
@@ -18,44 +17,22 @@ class ListDatabasesFunctionalTest extends FunctionalTestCase
         $writeResult = $insertOne->execute($server);
         $this->assertEquals(1, $writeResult->getInsertedCount());
 
-        $databases = null;
-        (new CommandObserver())->observe(
-            function () use (&$databases, $server): void {
-                $operation = new ListDatabases();
+        $operation = new ListDatabases();
+        $databases = $operation->execute($server);
 
-                $databases = $operation->execute($server);
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute('authorizedDatabases', $event['started']->getCommand());
-            }
-        );
-
-        $this->assertInstanceOf(DatabaseInfoIterator::class, $databases);
+        $this->assertInstanceOf('MongoDB\Model\DatabaseInfoIterator', $databases);
 
         foreach ($databases as $database) {
-            $this->assertInstanceOf(DatabaseInfo::class, $database);
+            $this->assertInstanceOf('MongoDB\Model\DatabaseInfo', $database);
         }
     }
 
-    public function testAuthorizedDatabasesOption(): void
+    public function testFilterOption()
     {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new ListDatabases(
-                    ['authorizedDatabases' => true]
-                );
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('listDatabase command "filter" option is not supported');
+        }
 
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute('authorizedDatabases', $event['started']->getCommand());
-                $this->assertSame(true, $event['started']->getCommand()->authorizedDatabases);
-            }
-        );
-    }
-
-    public function testFilterOption(): void
-    {
         $server = $this->getPrimaryServer();
 
         $insertOne = new InsertOne($this->getDatabaseName(), $this->getCollectionName(), ['x' => 1]);
@@ -65,27 +42,31 @@ class ListDatabasesFunctionalTest extends FunctionalTestCase
         $operation = new ListDatabases(['filter' => ['name' => $this->getDatabaseName()]]);
         $databases = $operation->execute($server);
 
-        $this->assertInstanceOf(DatabaseInfoIterator::class, $databases);
+        $this->assertInstanceOf('MongoDB\Model\DatabaseInfoIterator', $databases);
 
         $this->assertCount(1, $databases);
 
         foreach ($databases as $database) {
-            $this->assertInstanceOf(DatabaseInfo::class, $database);
+            $this->assertInstanceOf('MongoDB\Model\DatabaseInfo', $database);
             $this->assertEquals($this->getDatabaseName(), $database->getName());
         }
     }
 
-    public function testSessionOption(): void
+    public function testSessionOption()
     {
-        (new CommandObserver())->observe(
-            function (): void {
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('Sessions are not supported');
+        }
+
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new ListDatabases(
                     ['session' => $this->createSession()]
                 );
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
             }
         );

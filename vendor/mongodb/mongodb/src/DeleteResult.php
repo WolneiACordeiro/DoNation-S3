@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,14 @@ use MongoDB\Exception\BadMethodCallException;
  */
 class DeleteResult
 {
-    /** @var WriteResult */
     private $writeResult;
-
-    /** @var boolean */
     private $isAcknowledged;
 
+    /**
+     * Constructor.
+     *
+     * @param WriteResult $writeResult
+     */
     public function __construct(WriteResult $writeResult)
     {
         $this->writeResult = $writeResult;

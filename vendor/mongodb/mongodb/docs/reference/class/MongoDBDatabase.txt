@@ -45,7 +45,6 @@ Methods
 
    /reference/method/MongoDBDatabase__construct
    /reference/method/MongoDBDatabase__get
-   /reference/method/MongoDBDatabase-aggregate
    /reference/method/MongoDBDatabase-command
    /reference/method/MongoDBDatabase-createCollection
    /reference/method/MongoDBDatabase-drop
@@ -56,10 +55,8 @@ Methods
    /reference/method/MongoDBDatabase-getReadPreference
    /reference/method/MongoDBDatabase-getTypeMap
    /reference/method/MongoDBDatabase-getWriteConcern
-   /reference/method/MongoDBDatabase-listCollectionNames
    /reference/method/MongoDBDatabase-listCollections
    /reference/method/MongoDBDatabase-modifyCollection
-   /reference/method/MongoDBDatabase-renameCollection
    /reference/method/MongoDBDatabase-selectCollection
    /reference/method/MongoDBDatabase-selectGridFSBucket
    /reference/method/MongoDBDatabase-watch

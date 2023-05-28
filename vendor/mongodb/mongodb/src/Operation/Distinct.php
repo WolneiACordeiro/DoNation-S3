@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,14 @@
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\ReadConcern;
 use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
-use function current;
-use function is_array;
-use function is_integer;
-use function is_object;
-use function MongoDB\create_field_path_type_map;
 
 /**
  * Operation for the distinct command.
@@ -42,19 +36,13 @@ use function MongoDB\create_field_path_type_map;
  */
 class Distinct implements Executable, Explainable
 {
-    /** @var string */
+    private static $wireVersionForCollation = 5;
+    private static $wireVersionForReadConcern = 4;
+
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var string */
     private $fieldName;
-
-    /** @var array|object */
     private $filter;
-
-    /** @var array */
     private $options;
 
     /**
@@ -64,16 +52,22 @@ class Distinct implements Executable, Explainable
      *
      *  * collation (document): Collation specification.
      *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
+     *
      *  * maxTimeMS (integer): The maximum amount of time to allow the query to
      *    run.
      *
      *  * readConcern (MongoDB\Driver\ReadConcern): Read concern.
      *
+     *    This is not supported for server versions < 3.2 and will result in an
+     *    exception at execution time if used.
+     *
      *  * readPreference (MongoDB\Driver\ReadPreference): Read preference.
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
-     *  * typeMap (array): Type map for BSON deserialization.
+     *    Sessions are not supported for server versions < 3.6.
      *
      * @param string       $databaseName   Database name
      * @param string       $collectionName Collection name
@@ -84,7 +78,7 @@ class Distinct implements Executable, Explainable
      */
     public function __construct($databaseName, $collectionName, $fieldName, $filter = [], array $options = [])
     {
-        if (! is_array($filter) && ! is_object($filter)) {
+        if ( ! is_array($filter) && ! is_object($filter)) {
             throw InvalidArgumentException::invalidType('$filter', $filter, 'array or object');
         }
 
@@ -97,19 +91,15 @@ class Distinct implements Executable, Explainable
         }
 
         if (isset($options['readConcern']) && ! $options['readConcern'] instanceof ReadConcern) {
-            throw InvalidArgumentException::invalidType('"readConcern" option', $options['readConcern'], ReadConcern::class);
+            throw InvalidArgumentException::invalidType('"readConcern" option', $options['readConcern'], 'MongoDB\Driver\ReadConcern');
         }
 
         if (isset($options['readPreference']) && ! $options['readPreference'] instanceof ReadPreference) {
-            throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], ReadPreference::class);
+            throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], 'MongoDB\Driver\ReadPreference');
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
-        }
-
-        if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
-            throw InvalidArgumentException::invalidType('"typeMap" option', $options['typeMap'], 'array');
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['readConcern']) && $options['readConcern']->isDefault()) {
@@ -130,38 +120,29 @@ class Distinct implements Executable, Explainable
      * @param Server $server
      * @return mixed[]
      * @throws UnexpectedValueException if the command response was malformed
-     * @throws UnsupportedException if read concern is used and unsupported
+     * @throws UnsupportedException if collation or read concern is used and unsupported
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function execute(Server $server)
     {
-        $inTransaction = isset($this->options['session']) && $this->options['session']->isInTransaction();
-        if ($inTransaction && isset($this->options['readConcern'])) {
-            throw UnsupportedException::readConcernNotSupportedInTransaction();
+        if (isset($this->options['collation']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForCollation)) {
+            throw UnsupportedException::collationNotSupported();
+        }
+
+        if (isset($this->options['readConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+            throw UnsupportedException::readConcernNotSupported();
         }
 
         $cursor = $server->executeReadCommand($this->databaseName, new Command($this->createCommandDocument()), $this->createOptions());
-
-        if (isset($this->options['typeMap'])) {
-            $cursor->setTypeMap(create_field_path_type_map($this->options['typeMap'], 'values.$'));
-        }
-
         $result = current($cursor->toArray());
 
-        if (! isset($result->values) || ! is_array($result->values)) {
+        if ( ! isset($result->values) || ! is_array($result->values)) {
             throw new UnexpectedValueException('distinct command did not return a "values" array');
         }
 
         return $result->values;
     }
 
-    /**
-     * Returns the command document for this operation.
-     *
-     * @see Explainable::getCommandDocument()
-     * @param Server $server
-     * @return array
-     */
     public function getCommandDocument(Server $server)
     {
         return $this->createCommandDocument();
@@ -179,7 +160,7 @@ class Distinct implements Executable, Explainable
             'key' => $this->fieldName,
         ];
 
-        if (! empty($this->filter)) {
+        if ( ! empty($this->filter)) {
             $cmd['query'] = (object) $this->filter;
         }
 

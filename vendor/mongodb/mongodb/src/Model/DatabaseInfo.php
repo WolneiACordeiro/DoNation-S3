@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,8 @@
 
 namespace MongoDB\Model;
 
-use ArrayAccess;
 use MongoDB\Exception\BadMethodCallException;
-use ReturnTypeWillChange;
-
-use function array_key_exists;
-
+use ArrayAccess;
 /**
  * Database information model class.
  *
@@ -35,10 +31,11 @@ use function array_key_exists;
  */
 class DatabaseInfo implements ArrayAccess
 {
-    /** @var array */
     private $info;
 
     /**
+     * Constructor.
+     *
      * @param array $info Database info
      */
     public function __construct(array $info)
@@ -47,7 +44,7 @@ class DatabaseInfo implements ArrayAccess
     }
 
     /**
-     * Return the database info as an array.
+     * Return the collection info as an array.
      *
      * @see http://php.net/oop5.magic#language.oop5.magic.debuginfo
      * @return array
@@ -74,7 +71,6 @@ class DatabaseInfo implements ArrayAccess
      */
     public function getSizeOnDisk()
     {
-        /* The MongoDB server might return this number as an integer or float */
         return (integer) $this->info['sizeOnDisk'];
     }
 
@@ -95,7 +91,6 @@ class DatabaseInfo implements ArrayAccess
      * @param mixed $key
      * @return boolean
      */
-    #[ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return array_key_exists($key, $this->info);
@@ -108,7 +103,6 @@ class DatabaseInfo implements ArrayAccess
      * @param mixed $key
      * @return mixed
      */
-    #[ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->info[$key];
@@ -118,28 +112,21 @@ class DatabaseInfo implements ArrayAccess
      * Not supported.
      *
      * @see http://php.net/arrayaccess.offsetset
-     * @param mixed $key
-     * @param mixed $value
      * @throws BadMethodCallException
-     * @return void
      */
-    #[ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
-        throw BadMethodCallException::classIsImmutable(self::class);
+        throw BadMethodCallException::classIsImmutable(__CLASS__);
     }
 
     /**
      * Not supported.
      *
      * @see http://php.net/arrayaccess.offsetunset
-     * @param mixed $key
      * @throws BadMethodCallException
-     * @return void
      */
-    #[ReturnTypeWillChange]
     public function offsetUnset($key)
     {
-        throw BadMethodCallException::classIsImmutable(self::class);
+        throw BadMethodCallException::classIsImmutable(__CLASS__);
     }
 }

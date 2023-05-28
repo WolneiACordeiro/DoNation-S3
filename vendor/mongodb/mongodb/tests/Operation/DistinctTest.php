@@ -10,7 +10,7 @@ class DistinctTest extends TestCase
     /**
      * @dataProvider provideInvalidDocumentValues
      */
-    public function testConstructorFilterArgumentTypeCheck($filter): void
+    public function testConstructorFilterArgumentTypeCheck($filter)
     {
         $this->expectException(InvalidArgumentException::class);
         new Distinct($this->getDatabaseName(), $this->getCollectionName(), 'x', $filter);
@@ -19,7 +19,7 @@ class DistinctTest extends TestCase
     /**
      * @dataProvider provideInvalidConstructorOptions
      */
-    public function testConstructorOptionTypeChecks(array $options): void
+    public function testConstructorOptionTypeChecks(array $options)
     {
         $this->expectException(InvalidArgumentException::class);
         new Distinct($this->getDatabaseName(), $this->getCollectionName(), 'x', [], $options);
@@ -47,10 +47,6 @@ class DistinctTest extends TestCase
 
         foreach ($this->getInvalidSessionValues() as $value) {
             $options[][] = ['session' => $value];
-        }
-
-        foreach ($this->getInvalidArrayValues() as $value) {
-            $options[][] = ['typeMap' => $value];
         }
 
         return $options;

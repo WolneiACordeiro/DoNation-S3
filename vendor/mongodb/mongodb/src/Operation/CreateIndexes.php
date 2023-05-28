@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,15 @@
 
 namespace MongoDB\Operation;
 
+use MongoDB\Driver\BulkWrite as Bulk;
 use MongoDB\Driver\Command;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
 use MongoDB\Model\IndexInput;
-
-use function array_map;
-use function is_array;
-use function is_integer;
-use function is_string;
-use function MongoDB\server_supports_feature;
-use function sprintf;
 
 /**
  * Operation for the createIndexes command.
@@ -43,19 +37,13 @@ use function sprintf;
  */
 class CreateIndexes implements Executable
 {
-    /** @var integer */
-    private static $wireVersionForCommitQuorum = 9;
+    private static $wireVersionForCollation = 5;
+    private static $wireVersionForWriteConcern = 5;
 
-    /** @var string */
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var array */
     private $indexes = [];
-
-    /** @var array */
+    private $isCollationUsed = false;
     private $options = [];
 
     /**
@@ -63,16 +51,17 @@ class CreateIndexes implements Executable
      *
      * Supported options:
      *
-     *  * commitQuorum (integer|string): Specifies how many data-bearing members
-     *    of a replica set, including the primary, must complete the index
-     *    builds successfully before the primary marks the indexes as ready.
-     *
      *  * maxTimeMS (integer): The maximum amount of time to allow the query to
      *    run.
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      *  * writeConcern (MongoDB\Driver\WriteConcern): Write concern.
+     *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
      *
      * @param string  $databaseName   Database name
      * @param string  $collectionName Collection name
@@ -93,8 +82,16 @@ class CreateIndexes implements Executable
                 throw new InvalidArgumentException(sprintf('$indexes is not a list (unexpected index: "%s")', $i));
             }
 
-            if (! is_array($index)) {
+            if ( ! is_array($index)) {
                 throw InvalidArgumentException::invalidType(sprintf('$index[%d]', $i), $index, 'array');
+            }
+
+            if ( ! isset($index['ns'])) {
+                $index['ns'] = $databaseName . '.' . $collectionName;
+            }
+
+            if (isset($index['collation'])) {
+                $this->isCollationUsed = true;
             }
 
             $this->indexes[] = new IndexInput($index);
@@ -102,20 +99,16 @@ class CreateIndexes implements Executable
             $expectedIndex += 1;
         }
 
-        if (isset($options['commitQuorum']) && ! is_string($options['commitQuorum']) && ! is_integer($options['commitQuorum'])) {
-            throw InvalidArgumentException::invalidType('"commitQuorum" option', $options['commitQuorum'], ['integer', 'string']);
-        }
-
-        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+        if (isset($options['maxTimeMS']) && !is_integer($options['maxTimeMS'])) {
             throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
-            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
+            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], 'MongoDB\Driver\WriteConcern');
         }
 
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
@@ -133,21 +126,22 @@ class CreateIndexes implements Executable
      * @see Executable::execute()
      * @param Server $server
      * @return string[] The names of the created indexes
-     * @throws UnsupportedException if write concern is used and unsupported
+     * @throws UnsupportedException if collation or write concern is used and unsupported
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function execute(Server $server)
     {
-        $inTransaction = isset($this->options['session']) && $this->options['session']->isInTransaction();
-        if ($inTransaction && isset($this->options['writeConcern'])) {
-            throw UnsupportedException::writeConcernNotSupportedInTransaction();
+        if ($this->isCollationUsed && ! \MongoDB\server_supports_feature($server, self::$wireVersionForCollation)) {
+            throw UnsupportedException::collationNotSupported();
+        }
+
+        if (isset($this->options['writeConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForWriteConcern)) {
+            throw UnsupportedException::writeConcernNotSupported();
         }
 
         $this->executeCommand($server);
 
-        return array_map(function (IndexInput $index) {
-            return (string) $index;
-        }, $this->indexes);
+        return array_map(function(IndexInput $index) { return (string) $index; }, $this->indexes);
     }
 
     /**
@@ -184,16 +178,6 @@ class CreateIndexes implements Executable
             'createIndexes' => $this->collectionName,
             'indexes' => $this->indexes,
         ];
-
-        if (isset($this->options['commitQuorum'])) {
-            /* Drivers MUST manually raise an error if this option is specified
-             * when creating an index on a pre 4.4 server. */
-            if (! server_supports_feature($server, self::$wireVersionForCommitQuorum)) {
-                throw UnsupportedException::commitQuorumNotSupported();
-            }
-
-            $cmd['commitQuorum'] = $this->options['commitQuorum'];
-        }
 
         if (isset($this->options['maxTimeMS'])) {
             $cmd['maxTimeMS'] = $this->options['maxTimeMS'];

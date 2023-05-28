@@ -10,6 +10,7 @@ $mongoDBUri = "mongodb://localhost:27017"; // URI de conexão do MongoDB
 $mongoDBNome = "DonationPlatform"; // Nome do seu banco de dados MongoDB
 $colecaoUsuario = "usuario"; // Nome da coleção onde os dados do usuario são armazenados
 $colecaoContribuicao = "contribuicao"; // Nome da coleção onde os dados da contribuição são armazenados
+$colecaoSolcitacao = "solicitacao";
 
 // Cria uma instância do cliente do MongoDB
 $cliente = new Client($mongoDBUri);
@@ -20,6 +21,8 @@ $bancoDeDados = $cliente->selectDatabase($mongoDBNome);
 // Seleciona a coleção
 $colecaoUsuario = $bancoDeDados->selectCollection($colecaoUsuario);
 $colecaoContribuicao = $bancoDeDados->selectCollection($colecaoContribuicao);
+$colecaoSolicitacao = $bancoDeDados->selectCollection($colecaoSolcitacao);
 
-global $colecaoUsuario, $colecaoContribuicao;
+global $colecaoUsuario, $colecaoContribuicao, $colecaoSolicitacao;
+
 ?>

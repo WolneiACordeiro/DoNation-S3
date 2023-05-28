@@ -2,28 +2,27 @@
 
 namespace MongoDB\Tests\Operation;
 
-use MongoDB\BSON\ObjectId;
 use MongoDB\Collection;
+use MongoDB\InsertManyResult;
 use MongoDB\Driver\WriteConcern;
 use MongoDB\Exception\BadMethodCallException;
-use MongoDB\InsertManyResult;
 use MongoDB\Model\BSONDocument;
 use MongoDB\Operation\InsertMany;
 use MongoDB\Tests\CommandObserver;
+use stdClass;
 
 class InsertManyFunctionalTest extends FunctionalTestCase
 {
-    /** @var Collection */
     private $collection;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
         $this->collection = new Collection($this->manager, $this->getDatabaseName(), $this->getCollectionName());
     }
 
-    public function testInsertMany(): void
+    public function testInsertMany()
     {
         $documents = [
             ['_id' => 'foo', 'x' => 11],
@@ -35,12 +34,12 @@ class InsertManyFunctionalTest extends FunctionalTestCase
         $operation = new InsertMany($this->getDatabaseName(), $this->getCollectionName(), $documents);
         $result = $operation->execute($this->getPrimaryServer());
 
-        $this->assertInstanceOf(InsertManyResult::class, $result);
+        $this->assertInstanceOf('MongoDB\InsertManyResult', $result);
         $this->assertSame(4, $result->getInsertedCount());
 
         $insertedIds = $result->getInsertedIds();
         $this->assertSame('foo', $insertedIds[0]);
-        $this->assertInstanceOf(ObjectId::class, $insertedIds[1]);
+        $this->assertInstanceOf('MongoDB\BSON\ObjectId', $insertedIds[1]);
         $this->assertSame('bar', $insertedIds[2]);
         $this->assertSame('baz', $insertedIds[3]);
 
@@ -54,10 +53,14 @@ class InsertManyFunctionalTest extends FunctionalTestCase
         $this->assertSameDocuments($expected, $this->collection->find());
     }
 
-    public function testSessionOption(): void
+    public function testSessionOption()
     {
-        (new CommandObserver())->observe(
-            function (): void {
+        if (version_compare($this->getServerVersion(), '3.6.0', '<')) {
+            $this->markTestSkipped('Sessions are not supported');
+        }
+
+        (new CommandObserver)->observe(
+            function() {
                 $operation = new InsertMany(
                     $this->getDatabaseName(),
                     $this->getCollectionName(),
@@ -67,47 +70,8 @@ class InsertManyFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationSetWhenTrue(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new InsertMany(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    [['_id' => 1], ['_id' => 2]],
-                    ['bypassDocumentValidation' => true]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
-                $this->assertEquals(true, $event['started']->getCommand()->bypassDocumentValidation);
-            }
-        );
-    }
-
-    public function testBypassDocumentValidationUnsetWhenFalse(): void
-    {
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new InsertMany(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    [['_id' => 1], ['_id' => 2]],
-                    ['bypassDocumentValidation' => false]
-                );
-
-                $operation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute('bypassDocumentValidation', $event['started']->getCommand());
             }
         );
     }
@@ -128,18 +92,18 @@ class InsertManyFunctionalTest extends FunctionalTestCase
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesInsertedCount(InsertManyResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesInsertedCount(InsertManyResult $result)
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessageMatches('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
+        $this->expectExceptionMessageRegExp('/[\w:\\\\]+ should not be called for an unacknowledged write result/');
         $result->getInsertedCount();
     }
 
     /**
      * @depends testUnacknowledgedWriteConcern
      */
-    public function testUnacknowledgedWriteConcernAccessesInsertedId(InsertManyResult $result): void
+    public function testUnacknowledgedWriteConcernAccessesInsertedId(InsertManyResult $result)
     {
-        $this->assertInstanceOf(ObjectId::class, $result->getInsertedIds()[0]);
+        $this->assertInstanceOf('MongoDB\BSON\ObjectId', $result->getInsertedIds()[0]);
     }
 }

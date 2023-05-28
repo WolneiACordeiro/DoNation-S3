@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 namespace MongoDB\Model;
 
 use IteratorIterator;
-use ReturnTypeWillChange;
-use Traversable;
 
 /**
  * CollectionInfoIterator for listCollections command results.
@@ -34,19 +32,6 @@ use Traversable;
  */
 class CollectionInfoCommandIterator extends IteratorIterator implements CollectionInfoIterator
 {
-    /** @var string|null */
-    private $databaseName;
-
-    /**
-     * @param string|null $databaseName
-     */
-    public function __construct(Traversable $iterator, $databaseName = null)
-    {
-        parent::__construct($iterator);
-
-        $this->databaseName = $databaseName;
-    }
-
     /**
      * Return the current element as a CollectionInfo instance.
      *
@@ -54,15 +39,8 @@ class CollectionInfoCommandIterator extends IteratorIterator implements Collecti
      * @see http://php.net/iterator.current
      * @return CollectionInfo
      */
-    #[ReturnTypeWillChange]
     public function current()
     {
-        $info = parent::current();
-
-        if ($this->databaseName !== null && isset($info['idIndex']) && ! isset($info['idIndex']['ns'])) {
-            $info['idIndex']['ns'] = $this->databaseName . '.' . $info['name'];
-        }
-
-        return new CollectionInfo($info);
+        return new CollectionInfo(parent::current());
     }
 }

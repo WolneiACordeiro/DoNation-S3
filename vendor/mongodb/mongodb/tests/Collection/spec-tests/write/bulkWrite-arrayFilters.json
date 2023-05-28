@@ -28,57 +28,48 @@
     {
       "description": "BulkWrite with arrayFilters",
       "operation": {
-        "name": "bulkWrite",
         "arguments": {
+          "options": {
+            "ordered": true
+          },
           "requests": [
             {
-              "name": "updateOne",
               "arguments": {
-                "filter": {},
-                "update": {
-                  "$set": {
-                    "y.$[i].b": 2
-                  }
-                },
                 "arrayFilters": [
                   {
                     "i.b": 3
                   }
-                ]
-              }
-            },
-            {
-              "name": "updateMany",
-              "arguments": {
+                ],
                 "filter": {},
                 "update": {
                   "$set": {
                     "y.$[i].b": 2
                   }
-                },
+                }
+              },
+              "name": "updateOne"
+            },
+            {
+              "arguments": {
                 "arrayFilters": [
                   {
                     "i.b": 1
                   }
-                ]
-              }
+                ],
+                "filter": {},
+                "update": {
+                  "$set": {
+                    "y.$[i].b": 2
+                  }
+                }
+              },
+              "name": "updateMany"
             }
-          ],
-          "options": {
-            "ordered": true
-          }
-        }
+          ]
+        },
+        "name": "bulkWrite"
       },
       "outcome": {
-        "result": {
-          "deletedCount": 0,
-          "insertedCount": 0,
-          "insertedIds": {},
-          "matchedCount": 3,
-          "modifiedCount": 3,
-          "upsertedCount": 0,
-          "upsertedIds": {}
-        },
         "collection": {
           "data": [
             {
@@ -104,6 +95,14 @@
               ]
             }
           ]
+        },
+        "result": {
+          "deletedCount": 0,
+          "insertedIds": {},
+          "matchedCount": 3,
+          "modifiedCount": 3,
+          "upsertedCount": 0,
+          "upsertedIds": {}
         }
       }
     }

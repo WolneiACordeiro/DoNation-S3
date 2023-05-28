@@ -36,12 +36,6 @@ source:
 ---
 source:
   file: apiargs-method-watch-option.yaml
-  ref: startAfter
-post: |
-  .. versionadded: 1.5
----
-source:
-  file: apiargs-method-watch-option.yaml
   ref: startAtOperationTime
 ---
 source:

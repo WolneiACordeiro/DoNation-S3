@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,7 @@
 
 namespace MongoDB\Exception;
 
-use BadMethodCallException as BaseBadMethodCallException;
-
-use function sprintf;
-
-class BadMethodCallException extends BaseBadMethodCallException implements Exception
+class BadMethodCallException extends \BadMethodCallException implements Exception
 {
     /**
      * Thrown when a mutable method is invoked on an immutable object.

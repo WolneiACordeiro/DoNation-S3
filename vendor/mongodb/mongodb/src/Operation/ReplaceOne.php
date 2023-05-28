@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,11 @@
 
 namespace MongoDB\Operation;
 
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\UpdateResult;
 use MongoDB\Driver\Server;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-use MongoDB\UpdateResult;
-
-use function is_array;
-use function is_object;
-use function MongoDB\is_first_key_operator;
-use function MongoDB\is_pipeline;
 
 /**
  * Operation for replacing a single document with the update command.
@@ -37,7 +32,6 @@ use function MongoDB\is_pipeline;
  */
 class ReplaceOne implements Executable
 {
-    /** @var Update */
     private $update;
 
     /**
@@ -48,16 +42,17 @@ class ReplaceOne implements Executable
      *  * bypassDocumentValidation (boolean): If true, allows the write to
      *    circumvent document level validation.
      *
+     *    For servers < 3.2, this option is ignored as document level validation
+     *    is not available.
+     *
      *  * collation (document): Collation specification.
      *
-     *  * hint (string|document): The index to use. Specify either the index
-     *    name as a string or the index key pattern as a document. If specified,
-     *    then the query system will only consider plans using the hinted index.
-     *
-     *    This is not supported for server versions < 4.2 and will result in an
+     *    This is not supported for server versions < 3.4 and will result in an
      *    exception at execution time if used.
      *
      *  * session (MongoDB\Driver\Session): Client session.
+     *
+     *    Sessions are not supported for server versions < 3.6.
      *
      *  * upsert (boolean): When true, a new document is created if no document
      *    matches the query. The default is false.
@@ -73,16 +68,12 @@ class ReplaceOne implements Executable
      */
     public function __construct($databaseName, $collectionName, $filter, $replacement, array $options = [])
     {
-        if (! is_array($replacement) && ! is_object($replacement)) {
+        if ( ! is_array($replacement) && ! is_object($replacement)) {
             throw InvalidArgumentException::invalidType('$replacement', $replacement, 'array or object');
         }
 
-        if (is_first_key_operator($replacement)) {
+        if (\MongoDB\is_first_key_operator($replacement)) {
             throw new InvalidArgumentException('First key in $replacement argument is an update operator');
-        }
-
-        if (is_pipeline($replacement)) {
-            throw new InvalidArgumentException('$replacement argument is a pipeline');
         }
 
         $this->update = new Update(

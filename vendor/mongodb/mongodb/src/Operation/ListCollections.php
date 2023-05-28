@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,16 @@
 
 namespace MongoDB\Operation;
 
-use MongoDB\Command\ListCollections as ListCollectionsCommand;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Command;
+use MongoDB\Driver\Query;
 use MongoDB\Driver\Server;
+use MongoDB\Driver\Session;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
+use MongoDB\Model\CachingIterator;
 use MongoDB\Model\CollectionInfoCommandIterator;
 use MongoDB\Model\CollectionInfoIterator;
+use MongoDB\Model\CollectionInfoLegacyIterator;
 
 /**
  * Operation for the listCollections command.
@@ -33,21 +37,13 @@ use MongoDB\Model\CollectionInfoIterator;
  */
 class ListCollections implements Executable
 {
-    /** @var string */
     private $databaseName;
-
-    /** @var ListCollectionsCommand */
-    private $listCollections;
+    private $options;
 
     /**
      * Constructs a listCollections command.
      *
      * Supported options:
-     *
-     *  * authorizedCollections (boolean): Determines which collections are
-     *    returned based on the user privileges.
-     *
-     *    For servers < 4.0, this option is ignored.
      *
      *  * filter (document): Query by which to filter collections.
      *
@@ -56,14 +52,28 @@ class ListCollections implements Executable
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      * @param string $databaseName Database name
      * @param array  $options      Command options
      * @throws InvalidArgumentException for parameter/option parsing errors
      */
     public function __construct($databaseName, array $options = [])
     {
+        if (isset($options['filter']) && ! is_array($options['filter']) && ! is_object($options['filter'])) {
+            throw InvalidArgumentException::invalidType('"filter" option', $options['filter'], 'array or object');
+        }
+
+        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+            throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
+        }
+
+        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
+        }
+
         $this->databaseName = (string) $databaseName;
-        $this->listCollections = new ListCollectionsCommand($databaseName, ['nameOnly' => false] + $options);
+        $this->options = $options;
     }
 
     /**
@@ -76,6 +86,52 @@ class ListCollections implements Executable
      */
     public function execute(Server $server)
     {
-        return new CollectionInfoCommandIterator($this->listCollections->execute($server), $this->databaseName);
+        return $this->executeCommand($server);
+    }
+
+    /**
+     * Create options for executing the command.
+     *
+     * Note: read preference is intentionally omitted, as the spec requires that
+     * the command be executed on the primary.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-server.executecommand.php
+     * @return array
+     */
+    private function createOptions()
+    {
+        $options = [];
+
+        if (isset($this->options['session'])) {
+            $options['session'] = $this->options['session'];
+        }
+
+        return $options;
+    }
+
+    /**
+     * Returns information for all collections in this database using the
+     * listCollections command.
+     *
+     * @param Server $server
+     * @return CollectionInfoCommandIterator
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
+     */
+    private function executeCommand(Server $server)
+    {
+        $cmd = ['listCollections' => 1];
+
+        if ( ! empty($this->options['filter'])) {
+            $cmd['filter'] = (object) $this->options['filter'];
+        }
+
+        if (isset($this->options['maxTimeMS'])) {
+            $cmd['maxTimeMS'] = $this->options['maxTimeMS'];
+        }
+
+        $cursor = $server->executeCommand($this->databaseName, new Command($cmd), $this->createOptions());
+        $cursor->setTypeMap(['root' => 'array', 'document' => 'array']);
+
+        return new CollectionInfoCommandIterator(new CachingIterator($cursor));
     }
 }

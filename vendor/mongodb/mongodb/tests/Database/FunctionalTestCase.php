@@ -10,10 +10,9 @@ use MongoDB\Tests\FunctionalTestCase as BaseFunctionalTestCase;
  */
 abstract class FunctionalTestCase extends BaseFunctionalTestCase
 {
-    /** @var Database */
     protected $database;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 

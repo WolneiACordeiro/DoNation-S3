@@ -6,27 +6,16 @@ use MongoDB\Collection;
 use MongoDB\GridFS\Bucket;
 use MongoDB\Tests\FunctionalTestCase as BaseFunctionalTestCase;
 
-use function fopen;
-use function fwrite;
-use function get_resource_type;
-use function rewind;
-use function stream_get_contents;
-
 /**
  * Base class for GridFS functional tests.
  */
 abstract class FunctionalTestCase extends BaseFunctionalTestCase
 {
-    /** @var Bucket */
     protected $bucket;
-
-    /** @var Collection */
     protected $chunksCollection;
-
-    /** @var Collection */
     protected $filesCollection;
 
-    public function setUp(): void
+    public function setUp()
     {
         parent::setUp();
 
@@ -45,9 +34,9 @@ abstract class FunctionalTestCase extends BaseFunctionalTestCase
      * @param string   $expectedContents
      * @param resource $stream
      */
-    protected function assertStreamContents(string $expectedContents, $stream): void
+    protected function assertStreamContents($expectedContents, $stream)
     {
-        $this->assertIsResource($stream);
+        $this->assertInternalType('resource', $stream);
         $this->assertSame('stream', get_resource_type($stream));
         $this->assertEquals($expectedContents, stream_get_contents($stream, -1, 0));
     }
@@ -58,7 +47,7 @@ abstract class FunctionalTestCase extends BaseFunctionalTestCase
      * @param string $data
      * @return resource
      */
-    protected function createStream(string $data = '')
+    protected function createStream($data = '')
     {
         $stream = fopen('php://temp', 'w+b');
         fwrite($stream, $data);

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,12 @@
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
-
-use function current;
-use function is_array;
-use function is_bool;
-use function is_integer;
-use function is_object;
-use function is_string;
-use function trigger_error;
-
-use const E_USER_DEPRECATED;
+use MongoDB\Exception\UnsupportedException;
 
 /**
  * Operation for the create command.
@@ -43,16 +34,14 @@ use const E_USER_DEPRECATED;
  */
 class CreateCollection implements Executable
 {
-    public const USE_POWER_OF_2_SIZES = 1;
-    public const NO_PADDING = 2;
+    const USE_POWER_OF_2_SIZES = 1;
+    const NO_PADDING = 2;
 
-    /** @var string */
+    private static $wireVersionForCollation = 5;
+    private static $wireVersionForWriteConcern = 5;
+
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var array */
     private $options = [];
 
     /**
@@ -73,9 +62,8 @@ class CreateCollection implements Executable
      *
      *  * collation (document): Collation specification.
      *
-     *  * expireAfterSeconds: The TTL for documents in time series collections.
-     *
-     *    This is not supported for servers versions < 5.0.
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
      *
      *  * flags (integer): Options for the MMAPv1 storage engine only. Must be a
      *    bitwise combination CreateCollection::USE_POWER_OF_2_SIZES and
@@ -93,13 +81,11 @@ class CreateCollection implements Executable
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      *  * size (integer): The maximum number of bytes for a capped collection.
      *
      *  * storageEngine (document): Storage engine options.
-     *
-     *  * timeseries (document): Options for time series collections.
-     *
-     *    This is not supported for servers versions < 5.0.
      *
      *  * typeMap (array): Type map for BSON deserialization. This will only be
      *    used for the returned command result document.
@@ -111,6 +97,9 @@ class CreateCollection implements Executable
      *  * validator (document): Validation rules or expressions.
      *
      *  * writeConcern (MongoDB\Driver\WriteConcern): Write concern.
+     *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
      *
      * @see http://source.wiredtiger.com/2.4.1/struct_w_t___s_e_s_s_i_o_n.html#a358ca4141d59c345f401c58501276bbb
      * @see https://docs.mongodb.org/manual/core/document-validation/
@@ -133,10 +122,6 @@ class CreateCollection implements Executable
             throw InvalidArgumentException::invalidType('"collation" option', $options['collation'], 'array or object');
         }
 
-        if (isset($options['expireAfterSeconds']) && ! is_integer($options['expireAfterSeconds'])) {
-            throw InvalidArgumentException::invalidType('"expireAfterSeconds" option', $options['expireAfterSeconds'], 'integer');
-        }
-
         if (isset($options['flags']) && ! is_integer($options['flags'])) {
             throw InvalidArgumentException::invalidType('"flags" option', $options['flags'], 'integer');
         }
@@ -154,7 +139,7 @@ class CreateCollection implements Executable
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['size']) && ! is_integer($options['size'])) {
@@ -163,10 +148,6 @@ class CreateCollection implements Executable
 
         if (isset($options['storageEngine']) && ! is_array($options['storageEngine']) && ! is_object($options['storageEngine'])) {
             throw InvalidArgumentException::invalidType('"storageEngine" option', $options['storageEngine'], 'array or object');
-        }
-
-        if (isset($options['timeseries']) && ! is_array($options['timeseries']) && ! is_object($options['timeseries'])) {
-            throw InvalidArgumentException::invalidType('"timeseries" option', $options['timeseries'], ['array', 'object']);
         }
 
         if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
@@ -186,7 +167,7 @@ class CreateCollection implements Executable
         }
 
         if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
-            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
+            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], 'MongoDB\Driver\WriteConcern');
         }
 
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
@@ -208,10 +189,19 @@ class CreateCollection implements Executable
      * @see Executable::execute()
      * @param Server $server
      * @return array|object Command result document
+     * @throws UnsupportedException if collation or write concern is used and unsupported
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function execute(Server $server)
     {
+        if (isset($this->options['collation']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForCollation)) {
+            throw UnsupportedException::collationNotSupported();
+        }
+
+        if (isset($this->options['writeConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForWriteConcern)) {
+            throw UnsupportedException::writeConcernNotSupported();
+        }
+
         $cursor = $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());
 
         if (isset($this->options['typeMap'])) {
@@ -230,13 +220,13 @@ class CreateCollection implements Executable
     {
         $cmd = ['create' => $this->collectionName];
 
-        foreach (['autoIndexId', 'capped', 'expireAfterSeconds', 'flags', 'max', 'maxTimeMS', 'size', 'validationAction', 'validationLevel'] as $option) {
+        foreach (['autoIndexId', 'capped', 'flags', 'max', 'maxTimeMS', 'size', 'validationAction', 'validationLevel'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = $this->options[$option];
             }
         }
 
-        foreach (['collation', 'indexOptionDefaults', 'storageEngine', 'timeseries', 'validator'] as $option) {
+        foreach (['collation', 'indexOptionDefaults', 'storageEngine', 'validator'] as $option) {
             if (isset($this->options[$option])) {
                 $cmd[$option] = (object) $this->options[$option];
             }

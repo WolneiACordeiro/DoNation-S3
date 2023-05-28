@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,15 @@
 
 namespace MongoDB\Operation;
 
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
+use MongoDB\Driver\Command;
+use MongoDB\Driver\ReadConcern;
+use MongoDB\Driver\ReadPreference;
 use MongoDB\Driver\Server;
+use MongoDB\Driver\Session;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
-
-use function array_intersect_key;
-use function count;
-use function current;
-use function is_array;
-use function is_float;
-use function is_integer;
-use function is_object;
 
 /**
  * Operation for obtaining an exact count of documents in a collection
@@ -40,23 +36,13 @@ use function is_object;
  */
 class CountDocuments implements Executable
 {
-    /** @var string */
+    private static $wireVersionForCollation = 5;
+    private static $wireVersionForReadConcern = 4;
+
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var array|object */
     private $filter;
-
-    /** @var array */
-    private $aggregateOptions;
-
-    /** @var array */
-    private $countOptions;
-
-    /** @var Aggregate */
-    private $aggregate;
+    private $options;
 
     /**
      * Constructs an aggregate command for counting documents
@@ -64,6 +50,9 @@ class CountDocuments implements Executable
      * Supported options:
      *
      *  * collation (document): Collation specification.
+     *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
      *
      *  * hint (string|document): The index to use. Specify either the index
      *    name as a string or the index key pattern as a document. If specified,
@@ -76,9 +65,14 @@ class CountDocuments implements Executable
      *
      *  * readConcern (MongoDB\Driver\ReadConcern): Read concern.
      *
+     *    This is not supported for server versions < 3.2 and will result in an
+     *    exception at execution time if used.
+     *
      *  * readPreference (MongoDB\Driver\ReadPreference): Read preference.
      *
      *  * session (MongoDB\Driver\Session): Client session.
+     *
+     *    Sessions are not supported for server versions < 3.6.
      *
      *  * skip (integer): The number of documents to skip before returning the
      *    documents.
@@ -91,26 +85,50 @@ class CountDocuments implements Executable
      */
     public function __construct($databaseName, $collectionName, $filter, array $options = [])
     {
-        if (! is_array($filter) && ! is_object($filter)) {
+        if ( ! is_array($filter) && ! is_object($filter)) {
             throw InvalidArgumentException::invalidType('$filter', $filter, 'array or object');
+        }
+
+        if (isset($options['collation']) && ! is_array($options['collation']) && ! is_object($options['collation'])) {
+            throw InvalidArgumentException::invalidType('"collation" option', $options['collation'], 'array or object');
+        }
+
+        if (isset($options['hint']) && ! is_string($options['hint']) && ! is_array($options['hint']) && ! is_object($options['hint'])) {
+            throw InvalidArgumentException::invalidType('"hint" option', $options['hint'], 'string or array or object');
         }
 
         if (isset($options['limit']) && ! is_integer($options['limit'])) {
             throw InvalidArgumentException::invalidType('"limit" option', $options['limit'], 'integer');
         }
 
+        if (isset($options['maxTimeMS']) && ! is_integer($options['maxTimeMS'])) {
+            throw InvalidArgumentException::invalidType('"maxTimeMS" option', $options['maxTimeMS'], 'integer');
+        }
+
+        if (isset($options['readConcern']) && ! $options['readConcern'] instanceof ReadConcern) {
+            throw InvalidArgumentException::invalidType('"readConcern" option', $options['readConcern'], 'MongoDB\Driver\ReadConcern');
+        }
+
+        if (isset($options['readPreference']) && ! $options['readPreference'] instanceof ReadPreference) {
+            throw InvalidArgumentException::invalidType('"readPreference" option', $options['readPreference'], 'MongoDB\Driver\ReadPreference');
+        }
+
+        if (isset($options['session']) && ! $options['session'] instanceof Session) {
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
+        }
+
         if (isset($options['skip']) && ! is_integer($options['skip'])) {
             throw InvalidArgumentException::invalidType('"skip" option', $options['skip'], 'integer');
+        }
+
+        if (isset($options['readConcern']) && $options['readConcern']->isDefault()) {
+            unset($options['readConcern']);
         }
 
         $this->databaseName = (string) $databaseName;
         $this->collectionName = (string) $collectionName;
         $this->filter = $filter;
-
-        $this->aggregateOptions = array_intersect_key($options, ['collation' => 1, 'hint' => 1, 'maxTimeMS' => 1, 'readConcern' => 1, 'readPreference' => 1, 'session' => 1]);
-        $this->countOptions = array_intersect_key($options, ['limit' => 1, 'skip' => 1]);
-
-        $this->aggregate = $this->createAggregate();
+        $this->options = $options;
     }
 
     /**
@@ -125,7 +143,15 @@ class CountDocuments implements Executable
      */
     public function execute(Server $server)
     {
-        $cursor = $this->aggregate->execute($server);
+        if (isset($this->options['collation']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForCollation)) {
+            throw UnsupportedException::collationNotSupported();
+        }
+
+        if (isset($this->options['readConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+            throw UnsupportedException::readConcernNotSupported();
+        }
+
+        $cursor = $server->executeReadCommand($this->databaseName, new Command($this->createCommandDocument()), $this->createOptions());
         $allResults = $cursor->toArray();
 
         /* If there are no documents to count, the aggregation pipeline has no items to group, and
@@ -135,7 +161,7 @@ class CountDocuments implements Executable
         }
 
         $result = current($allResults);
-        if (! isset($result->n) || ! (is_integer($result->n) || is_float($result->n))) {
+        if ( ! isset($result->n) || ! (is_integer($result->n) || is_float($result->n))) {
             throw new UnexpectedValueException('count command did not return a numeric "n" value');
         }
 
@@ -143,24 +169,69 @@ class CountDocuments implements Executable
     }
 
     /**
-     * @return Aggregate
+     * Create the count command document.
+     *
+     * @return array
      */
-    private function createAggregate()
+    private function createCommandDocument()
     {
         $pipeline = [
-            ['$match' => (object) $this->filter],
+            ['$match' => (object) $this->filter]
         ];
 
-        if (isset($this->countOptions['skip'])) {
-            $pipeline[] = ['$skip' => $this->countOptions['skip']];
+        if (isset($this->options['skip'])) {
+            $pipeline[] = ['$skip' => $this->options['skip']];
         }
 
-        if (isset($this->countOptions['limit'])) {
-            $pipeline[] = ['$limit' => $this->countOptions['limit']];
+        if (isset($this->options['limit'])) {
+            $pipeline[] = ['$limit' => $this->options['limit']];
         }
 
-        $pipeline[] = ['$group' => ['_id' => 1, 'n' => ['$sum' => 1]]];
+        $pipeline[] = ['$group' => ['_id' => null, 'n' => ['$sum' => 1]]];
 
-        return new Aggregate($this->databaseName, $this->collectionName, $pipeline, $this->aggregateOptions);
+        $cmd = [
+            'aggregate' => $this->collectionName,
+            'pipeline' => $pipeline,
+            'cursor' => (object) [],
+        ];
+
+        if (isset($this->options['collation'])) {
+            $cmd['collation'] = (object) $this->options['collation'];
+        }
+
+        if (isset($this->options['hint'])) {
+            $cmd['hint'] = is_array($this->options['hint']) ? (object) $this->options['hint'] : $this->options['hint'];
+        }
+
+        if (isset($this->options['maxTimeMS'])) {
+            $cmd['maxTimeMS'] = $this->options['maxTimeMS'];
+        }
+
+        return $cmd;
+    }
+
+    /**
+     * Create options for executing the command.
+     *
+     * @see http://php.net/manual/en/mongodb-driver-server.executereadcommand.php
+     * @return array
+     */
+    private function createOptions()
+    {
+        $options = [];
+
+        if (isset($this->options['readConcern'])) {
+            $options['readConcern'] = $this->options['readConcern'];
+        }
+
+        if (isset($this->options['readPreference'])) {
+            $options['readPreference'] = $this->options['readPreference'];
+        }
+
+        if (isset($this->options['session'])) {
+            $options['session'] = $this->options['session'];
+        }
+
+        return $options;
     }
 }

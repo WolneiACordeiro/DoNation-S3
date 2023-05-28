@@ -46,8 +46,7 @@
       "outcome": {
         "result": {
           "matchedCount": 2,
-          "modifiedCount": 0,
-          "upsertedCount": 0
+          "modifiedCount": 0
         },
         "collection": {
           "data": [
@@ -98,8 +97,7 @@
       "outcome": {
         "result": {
           "matchedCount": 2,
-          "modifiedCount": 1,
-          "upsertedCount": 0
+          "modifiedCount": 1
         },
         "collection": {
           "data": [
@@ -150,8 +148,7 @@
       "outcome": {
         "result": {
           "matchedCount": 2,
-          "modifiedCount": 2,
-          "upsertedCount": 0
+          "modifiedCount": 2
         },
         "collection": {
           "data": [

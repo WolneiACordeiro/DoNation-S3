@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2015-present MongoDB, Inc.
+ * Copyright 2015-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,12 @@
 namespace MongoDB\Operation;
 
 use MongoDB\Driver\Command;
-use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Driver\Server;
 use MongoDB\Driver\Session;
 use MongoDB\Driver\WriteConcern;
+use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnsupportedException;
-
-use function current;
-use function is_array;
-use function is_integer;
 
 /**
  * Operation for the dropIndexes command.
@@ -38,16 +34,11 @@ use function is_integer;
  */
 class DropIndexes implements Executable
 {
-    /** @var string */
+    private static $wireVersionForWriteConcern = 5;
+
     private $databaseName;
-
-    /** @var string */
     private $collectionName;
-
-    /** @var string */
     private $indexName;
-
-    /** @var array */
     private $options;
 
     /**
@@ -60,10 +51,15 @@ class DropIndexes implements Executable
      *
      *  * session (MongoDB\Driver\Session): Client session.
      *
+     *    Sessions are not supported for server versions < 3.6.
+     *
      *  * typeMap (array): Type map for BSON deserialization. This will be used
      *    for the returned command result document.
      *
      *  * writeConcern (MongoDB\Driver\WriteConcern): Write concern.
+     *
+     *    This is not supported for server versions < 3.4 and will result in an
+     *    exception at execution time if used.
      *
      * @param string $databaseName   Database name
      * @param string $collectionName Collection name
@@ -84,7 +80,7 @@ class DropIndexes implements Executable
         }
 
         if (isset($options['session']) && ! $options['session'] instanceof Session) {
-            throw InvalidArgumentException::invalidType('"session" option', $options['session'], Session::class);
+            throw InvalidArgumentException::invalidType('"session" option', $options['session'], 'MongoDB\Driver\Session');
         }
 
         if (isset($options['typeMap']) && ! is_array($options['typeMap'])) {
@@ -92,7 +88,7 @@ class DropIndexes implements Executable
         }
 
         if (isset($options['writeConcern']) && ! $options['writeConcern'] instanceof WriteConcern) {
-            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], WriteConcern::class);
+            throw InvalidArgumentException::invalidType('"writeConcern" option', $options['writeConcern'], 'MongoDB\Driver\WriteConcern');
         }
 
         if (isset($options['writeConcern']) && $options['writeConcern']->isDefault()) {
@@ -111,14 +107,13 @@ class DropIndexes implements Executable
      * @see Executable::execute()
      * @param Server $server
      * @return array|object Command result document
-     * @throws UnsupportedException if write concern is used and unsupported
+     * @throws UnsupportedException if writeConcern is used and unsupported
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
      */
     public function execute(Server $server)
     {
-        $inTransaction = isset($this->options['session']) && $this->options['session']->isInTransaction();
-        if ($inTransaction && isset($this->options['writeConcern'])) {
-            throw UnsupportedException::writeConcernNotSupportedInTransaction();
+        if (isset($this->options['writeConcern']) && ! \MongoDB\server_supports_feature($server, self::$wireVersionForWriteConcern)) {
+            throw UnsupportedException::writeConcernNotSupported();
         }
 
         $cursor = $server->executeWriteCommand($this->databaseName, $this->createCommand(), $this->createOptions());

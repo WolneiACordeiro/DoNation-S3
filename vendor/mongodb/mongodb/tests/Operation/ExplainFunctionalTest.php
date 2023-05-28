@@ -3,13 +3,13 @@
 namespace MongoDB\Tests\Operation;
 
 use MongoDB\Driver\BulkWrite;
-use MongoDB\Operation\Aggregate;
+use MongoDB\Collection;
 use MongoDB\Operation\Count;
 use MongoDB\Operation\CreateCollection;
+use MongoDB\Operation\Distinct;
 use MongoDB\Operation\Delete;
 use MongoDB\Operation\DeleteMany;
 use MongoDB\Operation\DeleteOne;
-use MongoDB\Operation\Distinct;
 use MongoDB\Operation\Explain;
 use MongoDB\Operation\Find;
 use MongoDB\Operation\FindAndModify;
@@ -21,15 +21,14 @@ use MongoDB\Operation\Update;
 use MongoDB\Operation\UpdateMany;
 use MongoDB\Operation\UpdateOne;
 use MongoDB\Tests\CommandObserver;
-
-use function version_compare;
+use stdClass;
 
 class ExplainFunctionalTest extends FunctionalTestCase
 {
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testCount($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testCount($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -44,7 +43,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testDelete($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testDelete($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -61,7 +60,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testDeleteMany($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testDeleteMany($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -78,7 +77,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testDeleteOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testDeleteOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -95,8 +94,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testDistinct($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testDistinct($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('Explaining distinct command requires server version >= 3.2');
+        }
+
         $operation = new Distinct($this->getDatabaseName(), $this->getCollectionName(), 'x', []);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -108,8 +111,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFindAndModify($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFindAndModify($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('Explaining findAndModify command requires server version >= 3.2');
+        }
+
         $operation = new FindAndModify($this->getDatabaseName(), $this->getCollectionName(), ['remove' => true]);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -121,7 +128,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFind($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFind($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -133,14 +140,18 @@ class ExplainFunctionalTest extends FunctionalTestCase
         $this->assertExplainResult($result, $executionStatsExpected, $allPlansExecutionExpected);
     }
 
-    public function testFindMaxAwait(): void
+    public function testFindMaxAwait()
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('maxAwaitTimeMS option is not supported');
+        }
+
         $maxAwaitTimeMS = 100;
 
         /* Calculate an approximate pivot to use for time assertions. We will
          * assert that the duration of blocking responses is greater than this
          * value, and vice versa. */
-        $pivot = $maxAwaitTimeMS * 0.001 * 0.9;
+        $pivot = ($maxAwaitTimeMS * 0.001) * 0.9;
 
         // Create a capped collection.
         $databaseName = $this->getDatabaseName();
@@ -158,12 +169,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
 
         $operation = new Find($databaseName, $cappedCollectionName, [], ['cursorType' => Find::TAILABLE_AWAIT, 'maxAwaitTimeMS' => $maxAwaitTimeMS]);
 
-        (new CommandObserver())->observe(
-            function () use ($operation): void {
+        (new CommandObserver)->observe(
+            function() use ($operation) {
                 $explainOperation = new Explain($this->getDatabaseName(), $operation, ['typeMap' => ['root' => 'array', 'document' => 'array']]);
                 $explainOperation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $command = $event['started']->getCommand();
                 $this->assertObjectNotHasAttribute('maxAwaitTimeMS', $command->explain);
                 $this->assertObjectHasAttribute('tailable', $command->explain);
@@ -172,7 +183,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
         );
     }
 
-    public function testFindModifiers(): void
+    public function testFindModifiers()
     {
         $this->createFixtures(3);
 
@@ -183,12 +194,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
             ['modifiers' => ['$orderby' => ['_id' => 1]]]
         );
 
-        (new CommandObserver())->observe(
-            function () use ($operation): void {
+        (new CommandObserver)->observe(
+            function() use ($operation) {
                 $explainOperation = new Explain($this->getDatabaseName(), $operation, ['typeMap' => ['root' => 'array', 'document' => 'array']]);
                 $explainOperation->execute($this->getPrimaryServer());
             },
-            function (array $event): void {
+            function(array $event) {
                 $command = $event['started']->getCommand();
                 $this->assertObjectHasAttribute('sort', $command->explain);
                 $this->assertObjectNotHasAttribute('modifiers', $command->explain);
@@ -196,10 +207,11 @@ class ExplainFunctionalTest extends FunctionalTestCase
         );
     }
 
+
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFindOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFindOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(1);
 
@@ -214,8 +226,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFindOneAndDelete($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFindOneAndDelete($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('Explaining findOneAndDelete command requires server version >= 3.2');
+        }
+
         $operation = new FindOneAndDelete($this->getDatabaseName(), $this->getCollectionName(), []);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -227,8 +243,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFindOneAndReplace($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFindOneAndReplace($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('Explaining findOneAndReplace command requires server version >= 3.2');
+        }
+
         $operation = new FindOneAndReplace($this->getDatabaseName(), $this->getCollectionName(), ['x' => 1.1], ['x' => 5]);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -240,8 +260,12 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testFindOneAndUpdate($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testFindOneAndUpdate($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
+        if (version_compare($this->getServerVersion(), '3.2.0', '<')) {
+            $this->markTestSkipped('Explaining findOneAndUpdate command requires server version >= 3.2');
+        }
+
         $operation = new FindOneAndUpdate($this->getDatabaseName(), $this->getCollectionName(), [], ['$rename' => ['x' => 'y']]);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
@@ -253,7 +277,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testUpdate($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testUpdate($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -268,63 +292,10 @@ class ExplainFunctionalTest extends FunctionalTestCase
         $this->assertExplainResult($result, $executionStatsExpected, $allPlansExecutionExpected);
     }
 
-    public function testUpdateBypassDocumentValidationSetWhenTrue(): void
-    {
-        $this->createFixtures(3);
-
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new Update(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    ['_id' => ['$gt' => 1]],
-                    ['$inc' => ['x' => 1]],
-                    ['bypassDocumentValidation' => true]
-                );
-
-                $explainOperation = new Explain($this->getDatabaseName(), $operation);
-                $result = $explainOperation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectHasAttribute(
-                    'bypassDocumentValidation',
-                    $event['started']->getCommand()->explain
-                );
-                $this->assertEquals(true, $event['started']->getCommand()->explain->bypassDocumentValidation);
-            }
-        );
-    }
-
-    public function testUpdateBypassDocumentValidationUnsetWhenFalse(): void
-    {
-        $this->createFixtures(3);
-
-        (new CommandObserver())->observe(
-            function (): void {
-                $operation = new Update(
-                    $this->getDatabaseName(),
-                    $this->getCollectionName(),
-                    ['_id' => ['$gt' => 1]],
-                    ['$inc' => ['x' => 1]],
-                    ['bypassDocumentValidation' => false]
-                );
-
-                $explainOperation = new Explain($this->getDatabaseName(), $operation);
-                $result = $explainOperation->execute($this->getPrimaryServer());
-            },
-            function (array $event): void {
-                $this->assertObjectNotHasAttribute(
-                    'bypassDocumentValidation',
-                    $event['started']->getCommand()->explain
-                );
-            }
-        );
-    }
-
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testUpdateMany($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testUpdateMany($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -342,7 +313,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
     /**
      * @dataProvider provideVerbosityInformation
      */
-    public function testUpdateOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
+    public function testUpdateOne($verbosity, $executionStatsExpected, $allPlansExecutionExpected)
     {
         $this->createFixtures(3);
 
@@ -350,43 +321,6 @@ class ExplainFunctionalTest extends FunctionalTestCase
         $update = ['$inc' => ['x' => 1]];
 
         $operation = new UpdateOne($this->getDatabaseName(), $this->getCollectionName(), $filter, $update);
-
-        $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
-        $result = $explainOperation->execute($this->getPrimaryServer());
-
-        $this->assertExplainResult($result, $executionStatsExpected, $allPlansExecutionExpected);
-    }
-
-    public function testAggregate(): void
-    {
-        if (version_compare($this->getServerVersion(), '4.0.0', '<')) {
-            $this->markTestSkipped('Explaining aggregate command requires server version >= 4.0');
-        }
-
-        $this->createFixtures(3);
-
-        $pipeline = [['$group' => ['_id' => null]]];
-        $operation = new Aggregate($this->getDatabaseName(), $this->getCollectionName(), $pipeline);
-
-        $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => Explain::VERBOSITY_QUERY, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
-        $result = $explainOperation->execute($this->getPrimaryServer());
-
-        $this->assertExplainResult($result, false, false, true);
-    }
-
-    /**
-     * @dataProvider provideVerbosityInformation
-     */
-    public function testAggregateOptimizedToQuery($verbosity, $executionStatsExpected, $allPlansExecutionExpected): void
-    {
-        if (version_compare($this->getServerVersion(), '4.2.0', '<')) {
-            $this->markTestSkipped('MongoDB < 4.2 does not optimize simple aggregation pipelines');
-        }
-
-        $this->createFixtures(3);
-
-        $pipeline = [['$match' => ['_id' => ['$ne' => 2]]]];
-        $operation = new Aggregate($this->getDatabaseName(), $this->getCollectionName(), $pipeline);
 
         $explainOperation = new Explain($this->getDatabaseName(), $operation, ['verbosity' => $verbosity, 'typeMap' => ['root' => 'array', 'document' => 'array']]);
         $result = $explainOperation->execute($this->getPrimaryServer());
@@ -403,14 +337,9 @@ class ExplainFunctionalTest extends FunctionalTestCase
         ];
     }
 
-    private function assertExplainResult($result, $executionStatsExpected, $allPlansExecutionExpected, $stagesExpected = false): void
+    private function assertExplainResult($result, $executionStatsExpected, $allPlansExecutionExpected)
     {
-        if ($stagesExpected) {
-            $this->assertArrayHasKey('stages', $result);
-        } else {
-            $this->assertArrayHasKey('queryPlanner', $result);
-        }
-
+        $this->assertArrayHasKey('queryPlanner', $result);
         if ($executionStatsExpected) {
             $this->assertArrayHasKey('executionStats', $result);
             if ($allPlansExecutionExpected) {
@@ -428,7 +357,7 @@ class ExplainFunctionalTest extends FunctionalTestCase
      *
      * @param integer $n
      */
-    private function createFixtures(int $n): void
+    private function createFixtures($n)
     {
         $bulkWrite = new BulkWrite(['ordered' => true]);
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright 2016-present MongoDB, Inc.
+ * Copyright 2016-2017 MongoDB, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,6 @@
 namespace MongoDB\GridFS\Exception;
 
 use MongoDB\Exception\RuntimeException;
-
-use function MongoDB\BSON\fromPHP;
-use function MongoDB\BSON\toJSON;
-use function sprintf;
 
 class FileNotFoundException extends RuntimeException
 {
@@ -47,7 +43,7 @@ class FileNotFoundException extends RuntimeException
      */
     public static function byId($id, $namespace)
     {
-        $json = toJSON(fromPHP(['_id' => $id]));
+        $json = \MongoDB\BSON\toJSON(\MongoDB\BSON\fromPHP(['_id' => $id]));
 
         return new static(sprintf('File "%s" not found in "%s"', $json, $namespace));
     }

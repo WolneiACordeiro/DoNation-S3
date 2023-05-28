@@ -2,7 +2,6 @@
 
 namespace MongoDB\Tests\Model;
 
-use MongoDB\BSON\Serializable;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Model\IndexInput;
 use MongoDB\Tests\TestCase;
@@ -10,13 +9,13 @@ use stdClass;
 
 class IndexInputTest extends TestCase
 {
-    public function testConstructorShouldRequireKey(): void
+    public function testConstructorShouldRequireKey()
     {
         $this->expectException(InvalidArgumentException::class);
         new IndexInput([]);
     }
 
-    public function testConstructorShouldRequireKeyToBeArrayOrObject(): void
+    public function testConstructorShouldRequireKeyToBeArrayOrObject()
     {
         $this->expectException(InvalidArgumentException::class);
         new IndexInput(['key' => 'foo']);
@@ -25,7 +24,7 @@ class IndexInputTest extends TestCase
     /**
      * @dataProvider provideInvalidFieldOrderValues
      */
-    public function testConstructorShouldRequireKeyFieldOrderToBeNumericOrString($order): void
+    public function testConstructorShouldRequireKeyFieldOrderToBeNumericOrString($order)
     {
         $this->expectException(InvalidArgumentException::class);
         new IndexInput(['key' => ['x' => $order]]);
@@ -33,21 +32,33 @@ class IndexInputTest extends TestCase
 
     public function provideInvalidFieldOrderValues()
     {
-        return $this->wrapValuesForDataProvider([true, [], new stdClass()]);
+        return $this->wrapValuesForDataProvider([true, [], new stdClass]);
     }
 
-    public function testConstructorShouldRequireNameToBeString(): void
+    public function testConstructorShouldRequireNamespace()
     {
         $this->expectException(InvalidArgumentException::class);
-        new IndexInput(['key' => ['x' => 1], 'name' => 1]);
+        new IndexInput(['key' => ['x' => 1]]);
+    }
+
+    public function testConstructorShouldRequireNamespaceToBeString()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new IndexInput(['key' => ['x' => 1], 'ns' => 1]);
+    }
+
+    public function testConstructorShouldRequireNameToBeString()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new IndexInput(['key' => ['x' => 1], 'ns' => 'foo.bar', 'name' => 1]);
     }
 
     /**
      * @dataProvider provideExpectedNameAndKey
      */
-    public function testNameGeneration($expectedName, array $key): void
+    public function testNameGeneration($expectedName, array $key)
     {
-        $this->assertSame($expectedName, (string) new IndexInput(['key' => $key]));
+        $this->assertSame($expectedName, (string) new IndexInput(['key' => $key, 'ns' => 'foo.bar']));
     }
 
     public function provideExpectedNameAndKey()
@@ -61,20 +72,20 @@ class IndexInputTest extends TestCase
         ];
     }
 
-    public function testBsonSerialization(): void
+    public function testBsonSerialization()
     {
         $expected = [
             'key' => ['x' => 1],
-            'unique' => true,
+            'ns' => 'foo.bar',
             'name' => 'x_1',
         ];
 
         $indexInput = new IndexInput([
             'key' => ['x' => 1],
-            'unique' => true,
+            'ns' => 'foo.bar',
         ]);
 
-        $this->assertInstanceOf(Serializable::class, $indexInput);
-        $this->assertSame($expected, $indexInput->bsonSerialize());
+        $this->assertInstanceOf('MongoDB\BSON\Serializable', $indexInput);
+        $this->assertEquals($expected, $indexInput->bsonSerialize());
     }
 }
