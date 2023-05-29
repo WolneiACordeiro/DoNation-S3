@@ -9,6 +9,7 @@ const servicos = [
       seg: [
         { inicio: "08:00", fim: "10:00" },
         { inicio: "14:00", fim: "16:00" },
+        { inicio: "18:00", fim: "20:00" },
       ],
       ter: [
         { inicio: "11:00", fim: "13:00" },
@@ -37,19 +38,19 @@ const servicos = [
   // adicione mais objetos conforme necessário
 ];
 
-// Função para construir o HTML do horário
 const buildTimeSlotsHTML = (horarios) => {
   return horarios
     .map(
-      (horario) =>
-        `<div class="time-slot">
-          <span class="start-time">${horario.inicio}</span> ás <span class="end-time">${horario.fim}</span>
-        </div>`
+      (horario, index) =>
+        `<div class="time-slot ${index % 2 === 0 ? "even" : "odd"}">
+            <span class="start-time">${
+              horario.inicio
+            }</span> às <span class="end-time">${horario.fim}</span>
+          </div>`
     )
     .join("");
 };
 
-// Função para construir o HTML completo do serviço
 const buildServiceCardHTML = (servico) => {
   const weekdays = Object.keys(servico.diasSemana);
   const activeWeekday = weekdays[0]; // Defina o primeiro dia como ativo
@@ -74,9 +75,7 @@ const buildServiceCardHTML = (servico) => {
           </div>
 
           <div class="more-infos">
-
               <div class="availability">
-                  Disponibilidade
                   <div class="weekdays">
                       ${weekdays
                         .map(
@@ -113,42 +112,46 @@ const buildServiceCardHTML = (servico) => {
   </div>`;
 };
 
-// Constrói o HTML de todos os serviços
-const servicesHTML = servicos
-  .map((servico) => buildServiceCardHTML(servico))
-  .join("");
+const buildAllServicesHTML = () => {
+  const servicesHTML = servicos
+    .map((servico) => buildServiceCardHTML(servico))
+    .join("");
 
-// Adiciona o HTML dos serviços à div all-services
-allServices.innerHTML = servicesHTML;
+  allServices.innerHTML = servicesHTML;
+};
+
+const handleRequestButtonClick = () => {
+  console.log("Botão de solicitar clicado");
+};
+
+const handleAboutServiceClick = (event) => {
+  const infos = event.currentTarget;
+  const serviceCard = infos.closest(".service-card");
+  const moreInfos = serviceCard.querySelector(".more-infos");
+
+  infos.classList.toggle("active");
+  moreInfos.classList.toggle("active");
+};
 
 const addRequestButtonEvents = () => {
   const requestButtons = document.querySelectorAll(".service-card .btn");
   requestButtons.forEach((button) => {
     button.addEventListener("click", handleRequestButtonClick);
   });
+};
 
-  const servicesCardsAboutServices = document.querySelectorAll(
-    ".service-card__about-service"
+const addServiceCardEvents = () => {
+  const infosList = document.querySelectorAll(
+    ".service-card__about-service .infos"
   );
-
-  servicesCardsAboutServices.forEach((serviceCard) => {
-    const infos = serviceCard.querySelector(".infos");
-    infos.addEventListener("click", () => {
-      const moreInfos = serviceCard.querySelector(".more-infos");
-
-      infos.classList.toggle("active");
-      moreInfos.classList.toggle("active");
-    });
+  infosList.forEach((infos) => {
+    infos.addEventListener("click", handleAboutServiceClick);
   });
 };
 
-const handleRequestButtonClick = () => {
-  // Lógica para lidar com o clique no botão de solicitar
-  console.log("Botão de solicitar clicado");
-};
-
-// Adicionar eventos aos botões de solicitar e elementos infos
+buildAllServicesHTML();
 addRequestButtonEvents();
+addServiceCardEvents();
 
 // // services-type__search 01 - botões
 // const typesServicesBtn = document.querySelectorAll(".types-services__btn");

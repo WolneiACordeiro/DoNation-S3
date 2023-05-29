@@ -103,12 +103,14 @@ body::-webkit-scrollbar-thumb {
 .outline {
     color: var(--preto80);
     border: 2px solid var(--vermelho);
+    background: var(--branco);
     transition: .5s ease all;
 }
 
 .outline:hover {
     background: var(--vermelho-linear);
     color: var(--branco);
+    border: 2px;
 }
 
 .contained {
