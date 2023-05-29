@@ -15,11 +15,11 @@
             </div>
             <div class="profile-services">
                 <sidebar class="profile">
-                    <?php
-                        include('../blades/avatar.php')
-                    ?>
+                    <?php include('../blades/profile.php') ?>
                 </sidebar>
-                <section class="services"></section>
+                <section class="services">
+                    <?php include('../blades/services.php'); ?>
+                </section>
             </div>
         </section>
     </header>
@@ -28,4 +28,8 @@
         donation.com © 2022-2023 donation LTDA
     </footer>
 </main>
+
+<script src="../js/profile.js"></script>
+<script src="../js/services.js"></script>
+
 <?php include('../blades/footer.php'); ?>

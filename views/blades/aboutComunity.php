@@ -20,8 +20,8 @@
         <?php include('../svgs/user.svg'); ?>
     </div>
 
-    <div class="about-menu__button">
+    <button class="about-menu__button">
         <?php include('../svgs/menu.svg'); ?>
-    </div>
+    </button>
 
 </div>
