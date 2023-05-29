@@ -43,9 +43,7 @@ const buildTimeSlotsHTML = (horarios) => {
     .map(
       (horario, index) =>
         `<div class="time-slot ${index % 2 === 0 ? "even" : "odd"}">
-            <span class="start-time">${
-              horario.inicio
-            }</span> às <span class="end-time">${horario.fim}</span>
+            <span class="start-time">${horario.inicio}</span> às <span class="end-time">${horario.fim}</span>
           </div>`
     )
     .join("");
@@ -53,63 +51,69 @@ const buildTimeSlotsHTML = (horarios) => {
 
 const buildServiceCardHTML = (servico) => {
   const weekdays = Object.keys(servico.diasSemana);
-  const activeWeekday = weekdays[0]; // Defina o primeiro dia como ativo
+  let activeWeekday = weekdays[0]; // Defina o primeiro dia como ativo
+
+  const buildTimeSlotsHTML = (horarios) => {
+    return horarios
+      .map(
+        (horario, index) =>
+          `<div class="time-slot ${index % 2 === 0 ? "even" : "odd"}">
+            <span class="start-time">${horario.inicio}</span> às <span class="end-time">${horario.fim}</span>
+          </div>`
+      )
+      .join("");
+  };
 
   const timeSlotsHTML = buildTimeSlotsHTML(servico.diasSemana[activeWeekday]);
 
-  return `<div class="service-card">
-      <div class="service-card__img">
-          <img src="${servico.imagemServico}" alt="Foto do serviço">
+  const serviceCardHTML = `<div class="service-card">
+    <div class="service-card__img">
+      <img src="${servico.imagemServico}" alt="Foto do serviço">
+    </div>
+    <div class="service-card__about-service">
+      <div class="infos">
+        <div class="photo-offer">
+          <img src="${servico.fotoOfertante}" alt="Foto do ofertante">
+          <span class="type-service">${servico.tipoServico}</span>
+        </div>
+        <div class="service__more-infos">
+          <!-- Coloque o SVG aqui -->
+        </div>
       </div>
-
-      <div class="service-card__about-service">
-          <div class="infos">
-              <div class="photo-offer">
-                  <img src="${servico.fotoOfertante}" alt="Foto do ofertante">
-                  <span class="type-service">${servico.tipoServico}</span>
-              </div>
-
-              <div class="service__more-infos">
-                  <!-- Coloque o SVG aqui -->
-              </div>
+      <div class="more-infos">
+        <div class="availability">
+          <div class="weekdays">
+            ${weekdays
+              .map(
+                (weekday) =>
+                  `<button class="weekday-btn ${
+                    weekday === activeWeekday ? "active" : ""
+                  }">${weekday}</button>`
+              )
+              .join("")}
           </div>
-
-          <div class="more-infos">
-              <div class="availability">
-                  <div class="weekdays">
-                      ${weekdays
-                        .map(
-                          (weekday) =>
-                            `<button class="weekday-btn ${
-                              weekday === activeWeekday ? "active" : ""
-                            }">${weekday}</button>`
-                        )
-                        .join("")}
-                  </div>
-
-                  <div class="time-slots">
-                      ${timeSlotsHTML}
-                  </div>
-
-                  <div class="description-service">
-                      ${servico.descricao}
-                  </div>
-              </div>
-
-              <div class="queue-solicite">
-                  <div class="queue">
-                      <span>Fila de espera</span>
-                      <div class="notifications">${servico.filaEspera}</div>
-                  </div>
-
-                  <button class="btn outline">
-                      Solicitar
-                      <!-- Coloque o SVG aqui -->
-                  </button>
-              </div>
+          <div class="time-slots">
+            ${timeSlotsHTML}
           </div>
+          <div class="description-service">
+            ${servico.descricao}
+          </div>
+        </div>
+        <div class="queue-solicite">
+          <div class="queue">
+            <span>Fila de espera</span>
+            <div class="notifications">${servico.filaEspera}</div>
+          </div>
+          <button class="btn outline">
+            Solicitar
+            <!-- Coloque o SVG aqui -->
+          </button>
+        </div>
       </div>
+    </div>
   </div>`;
+
+  return serviceCardHTML;
 };
 
 const buildAllServicesHTML = () => {
@@ -133,6 +137,27 @@ const handleAboutServiceClick = (event) => {
   moreInfos.classList.toggle("active");
 };
 
+const handleWeekdayClick = (event) => {
+  const weekdayBtns = document.querySelectorAll(".weekday-btn");
+
+  weekdayBtns.forEach((btn) => {
+    btn.classList.remove("active");
+  });
+
+  event.target.classList.add("active");
+
+  const selectedWeekday = event.target.textContent;
+  console.log(`Dia da semana selecionado: ${selectedWeekday}`);
+
+  const serviceCard = event.target.closest(".service-card");
+  const timeSlotsContainer = serviceCard.querySelector(".time-slots");
+  const servicoIndex = Array.from(allServices.children).indexOf(serviceCard);
+  const servico = servicos[servicoIndex];
+
+  const timeSlotsHTML = buildTimeSlotsHTML(servico.diasSemana[selectedWeekday]);
+  timeSlotsContainer.innerHTML = timeSlotsHTML;
+};
+
 const addRequestButtonEvents = () => {
   const requestButtons = document.querySelectorAll(".service-card .btn");
   requestButtons.forEach((button) => {
@@ -149,9 +174,18 @@ const addServiceCardEvents = () => {
   });
 };
 
+const addWeekdayButtonEvents = () => {
+  const weekdayBtns = document.querySelectorAll(".weekday-btn");
+  weekdayBtns.forEach((btn) => {
+    btn.addEventListener("click", handleWeekdayClick);
+  });
+};
+
 buildAllServicesHTML();
 addRequestButtonEvents();
 addServiceCardEvents();
+addWeekdayButtonEvents();
+
 
 // // services-type__search 01 - botões
 // const typesServicesBtn = document.querySelectorAll(".types-services__btn");
