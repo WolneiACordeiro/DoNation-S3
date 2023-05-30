@@ -188,7 +188,7 @@
 /* criarconta.php */
 .register-form {
   width: min(100%, 515px);
-  height: min(630px, 862px);
+  min-height: min(630px, 862px);
   background-color: var(--branco);
   flex-shrink: 0;
   overflow-y: auto;
@@ -423,7 +423,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 5px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -735,7 +735,7 @@
   position: relative;
 }
 
-.community-participants > div {
+.community-participants>div {
   width: 27px;
   height: 27px;
   border-radius: 5px;
@@ -744,19 +744,19 @@
   z-index: 1;
 }
 
-.community-participants > div img {
+.community-participants>div img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.community-participants > div:nth-child(2n) {
+.community-participants>div:nth-child(2n) {
   position: absolute;
   left: 15px;
   z-index: 2;
 }
 
-.community-participants > div:nth-child(3n) {
+.community-participants>div:nth-child(3n) {
   z-index: 3;
 }
 
@@ -843,7 +843,7 @@
 }
 
 .infos-list.active {
-  height: 115px;
+  height: 150px;
 }
 
 .infos-list li {
@@ -853,8 +853,9 @@
 }
 
 .link {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .notifications {
@@ -912,4 +913,187 @@
   font-weight: 400;
   font-size: 16px;
   color: var(--preto);
+}
+
+/* solicite.php / solicitar.php */
+.solicite {
+  width: 100%;
+  height: 451px;
+  background-color: var(--branco);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.solicite-title {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px 24px;
+  background: var(--vermelho-linear);
+}
+
+.solicite-title p {
+  color: var(--branco);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.solicite-about {
+  width: 100%;
+  height: calc(100% - 50px);
+  background-color: var(--branco);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.solicite-users__imgs {
+  height: min-content;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.solicite-users__imgs svg {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.user__img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.user__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 100% 0;
+}
+
+.who-solicites {
+  justify-content: center;
+}
+
+.who-solicites p {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--preto80);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+}
+
+.who-solicites p span {
+  font-weight: 700;
+}
+
+.message-user {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom__text-area {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: hidden auto;
+  padding: 10px;
+  border: 1px solid var(--vermelho);
+  font-size: 14px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+}
+
+.custom__text-area::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom__text-area::-webkit-scrollbar-track {
+  background: var(--cinza);
+}
+
+.custom__text-area::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  border: 3px solid var(--preto80);
+}
+
+.calendar-input {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid var(--vermelho);
+  transition: .5s ease all;
+}
+
+.calendar-input.active {
+  background: var(--vermelho-linear);
+  border: none;
+}
+
+.calendar-input.active span,
+.calendar-date.active input::placeholder {
+  color: var(--branco);
+  background-image: none;
+  background-clip: initial;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+}
+
+.calendar-input span,
+.calendar-date input::placeholder {
+  background-image: var(--vermelho-linear);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.calendar-date {
+  position: relative;
+}
+
+.calendar-input.active .calendar-date input {
+  color: var(--branco);
+  font-weight: 700;
+}
+
+.calendar-date input {
+  position: absolute;
+  padding: 5px 0 5px 115px;
+}
+
+.calendar-input i {
+  pointer-events: none;
+  background-clip: text;
+  padding: 5px;
+  background: var(--vermelho-linear);
+  color: var(--branco);
+  border-radius: 5px;
+}
+
+.calendar-input.active i {
+  background: var(--branco);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
