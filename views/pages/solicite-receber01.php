@@ -22,7 +22,7 @@
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services">
-                    <?php include('../blades/solicitar.php'); ?>
+                    <?php include('../blades/solicitar-receber01.php'); ?>
                 </section>
             </div>
         </section>

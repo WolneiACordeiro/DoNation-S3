@@ -100,7 +100,7 @@ body::-webkit-scrollbar-thumb {
 
 .outline {
   color: var(--preto80);
-  border: 2px solid var(--vermelho);
+  border: 1px solid var(--vermelho);
   background: var(--branco);
   transition: 0.2s ease all;
 }
@@ -111,11 +111,19 @@ body::-webkit-scrollbar-thumb {
   border: none;
 }
 
-.outline:hover .svg-path {
+.outline:hover .svg-path,
+.outline:hover svg path {
     fill: var(--branco);
 }
 
 .contained {
   color: var(--branco);
   background: linear-gradient(90deg, #9e005d 0.05%, #ff0000 100.01%);
+}
+
+.reject {
+  flex-direction: column;
+  opacity: 0.5;
+  gap: 8px;
+  pointer-events: none;
 }

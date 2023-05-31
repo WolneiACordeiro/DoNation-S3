@@ -232,7 +232,7 @@
   object-fit: cover;
 }
 
-/* Estilos para o botão personalizado */
+/* Estilos para o botÃ£o personalizado */
 .custom-button {
   width: 150px;
   display: flex;
@@ -414,6 +414,7 @@
   flex-direction: column;
   gap: 24px;
   justify-content: space-between;
+  overflow-y: auto;
 }
 
 /* services.php */
@@ -486,11 +487,13 @@
   overflow-x: hidden;
 }
 
-.all-services::-webkit-scrollbar {
+.all-services::-webkit-scrollbar, 
+.services::-webkit-scrollbar{
   width: 0;
 }
 
-.all-services::-webkit-scrollbar-track {
+.all-services::-webkit-scrollbar-track, 
+.services::-webkit-scrollbar-track{
   background: transparent;
 }
 
@@ -918,12 +921,13 @@
 /* solicite.php / solicitar.php */
 .solicite {
   width: 100%;
-  height: 451px;
+  min-height: 451px;
   background-color: var(--branco);
   border-radius: 5px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .solicite-title {
@@ -947,13 +951,13 @@
 }
 
 .solicite-about {
-  width: 100%;
+  width: max(545px, 100%);
   height: calc(100% - 50px);
   background-color: var(--branco);
-  padding: 22px;
+  padding: 22px 90px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 }
 
 .solicite-users__imgs {
@@ -962,7 +966,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .solicite-users__imgs svg {
@@ -989,7 +993,7 @@
   justify-content: center;
 }
 
-.who-solicites p {
+.solicite-text__about {
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -997,23 +1001,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-
 }
 
-.who-solicites p span {
+.contrast-name {
+  text-decoration: underline;
+}
+
+.contrast-service {
   font-weight: 700;
-}
-
-.message-user {
-  width: 100%;
-  height: 150px;
-  position: relative;
-  overflow: hidden;
 }
 
 .custom__text-area {
   width: 100%;
-  height: 100%;
+  height: 150px;
   resize: none;
   overflow: hidden auto;
   padding: 10px;
@@ -1037,6 +1037,7 @@
 }
 
 .calendar-input {
+  height: 36px;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -1079,7 +1080,7 @@
 
 .calendar-date input {
   position: absolute;
-  padding: 5px 0 5px 115px;
+  padding: 5px 0 5px calc(100% + 15px);
 }
 
 .calendar-input i {
@@ -1096,4 +1097,61 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.solicite-service__container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  transition: .5s ease all;
+}
+
+.solicite-service__container button {
+  width: 233px;
+  display: flex;
+  justify-content: center;
+  transition: .5s ease all;
+}
+
+.solicite-service__container button:hover {
+  padding-left: 120px;
+}
+
+.process-solicite {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-top: 1px solid var(--vermelho);
+  padding-top: 5px;
+}
+
+.process {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.process-message {
+  width: 100%;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid var(--vermelho);
+
+  border-radius: 5px;
+  color: var(--preto80);
+
+}
+
+.process-message.active {
+  background: var(--vermelho-linear);
+  color: var(--branco);
 }
