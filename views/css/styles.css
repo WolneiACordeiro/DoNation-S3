@@ -1154,4 +1154,5 @@
 .process-message.active {
   background: var(--vermelho-linear);
   color: var(--branco);
+  border: none;
 }
