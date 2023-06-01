@@ -20,7 +20,7 @@
 <body>
     <main class="login">
         <div class="login-container">
-            <form class="login-form animate-apper" action="php/valida_login.php" method="POST">
+            <form class="login-form animate-apper" action="../controllers/valida_login.php" method="POST">
                 <div class="login-form__title">
                     <h1>Login</zh1>
                 </div>
