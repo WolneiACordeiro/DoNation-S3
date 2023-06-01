@@ -18,7 +18,7 @@
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services">
-                    petshop arquivo
+                    <?php include('../blades/contribuir.php'); ?>
                 </section>
             </div>
         </section>
@@ -29,6 +29,7 @@
     </footer>
 </main>
 
+<script src="../js/app.js"></script>
 <script src="../js/profile.js"></script>
 <script src="../js/services.js"></script>
 
