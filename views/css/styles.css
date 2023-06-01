@@ -18,7 +18,7 @@
 
 .login-form {
   width: min(100%, 515px);
-  height: min(630px, 850px);
+  min-height: 630px;
   background-color: var(--branco);
   flex-shrink: 0;
   overflow-y: auto;
@@ -471,13 +471,13 @@
   overflow-x: hidden;
 }
 
-.all-services::-webkit-scrollbar, 
-.services::-webkit-scrollbar{
+.all-services::-webkit-scrollbar,
+.services::-webkit-scrollbar {
   width: 0;
 }
 
-.all-services::-webkit-scrollbar-track, 
-.services::-webkit-scrollbar-track{
+.all-services::-webkit-scrollbar-track,
+.services::-webkit-scrollbar-track {
   background: transparent;
 }
 
@@ -1139,53 +1139,4 @@
   background: var(--vermelho-linear);
   color: var(--branco);
   border: none;
-}
-
-/* contribuir.php */
-.form-service {
-  width: 100%;
-  height: min-content;
-  background-color: var(--branco);
-  border-radius: 5px;
-  padding: 15px;
-}
-
-.title-service {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--cinza);
-  padding: 20px 0;
-}
-
-.title-service h1 {
-  font-size: 30px;
-  color: var(--preto80);
-}
-
-.title-service span {
-  font-size: 22px;
-  color: var(--cinza);
-  font-weight: 700;
-}
-
-.infos-services {
-  display: flex;
-  flex-direction: column;
-  padding: 20px 0;
-  gap: 10px;
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-direction: column;
-}
-
-.col-info {
-  width: 100%;
-  flex-direction: column;
-  gap: 5px;
 }
