@@ -1,6 +1,6 @@
 {
     "require": {
-        "mongodb/mongodb": "^1.12",
-        "twbs/bootstrap": "^5.2"
+        "twbs/bootstrap": "^5.2",
+        "mongodb/mongodb": "^1.12"
     }
 }

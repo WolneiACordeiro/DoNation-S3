@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../models/conexao.php';
-require_once '../vendor/autoload.php';
 
 $senha = $_POST["senha"];
 $email = $_POST["email"];

@@ -1,14 +1,17 @@
 <?php
 session_start();
+require_once '../../models/conexao.php';
 
-if(null == $_SESSION['autenticado'] || $_SESSION['autenticado'] != 'SIM'){
+if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     header('Location: ../index.php?login=erro2');
-  } else {
-    include("../conexao.php");
+    exit;
+} else {
     $id = $_SESSION['id'];
-    $query = mysqli_query($con,"SELECT * FROM contaUsuario WHERE idUsuario = '$id'");
-    $dados = mysqli_fetch_array($query);
-  }
+    $objectId = new \MongoDB\BSON\ObjectID($id);
+    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
+    $registroContribuicao = $colecaoContribuicao->findOne(['idContribuidor' => $id]);
+}
+
 ?>
 
 <!DOCTYPE html>

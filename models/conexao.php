@@ -1,6 +1,6 @@
 <?php
 // Arquivo de conexão com o banco
-require_once 'vendor/autoload.php'; // Dependência do MongoDB
+require_once '../../vendor/autoload.php'; // Dependência do MongoDB
 // Importa as classes necessárias do MongoDB
 use MongoDB\Client;
 use MongoDB\Database;

@@ -1,7 +1,6 @@
 <?php include('../blades/header.php'); 
 session_start();
 require_once '../../models/conexao.php';
-require_once '../../vendor/autoload.php';
 
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     header('Location: ../index.php?login=erro2');
