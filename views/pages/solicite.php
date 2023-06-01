@@ -18,7 +18,7 @@
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services">
-                    <?php include('../blades/contribuir.php'); ?>
+                    <?php include('../blades/solicitar.php'); ?>
                 </section>
             </div>
         </section>
@@ -29,7 +29,6 @@
     </footer>
 </main>
 
-<script src="../js/app.js"></script>
 <script src="../js/profile.js"></script>
 <script src="../js/services.js"></script>
 
