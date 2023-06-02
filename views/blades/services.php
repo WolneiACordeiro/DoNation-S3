@@ -1,4 +1,4 @@
-
+<?php include("session_info.php"); ?>
 <!-- services-type__search 01 - botões -->
 <div class="services-type__search">
     <div class="types-services">
@@ -14,10 +14,7 @@
 
 <!-- all-services 02 -->
 <div class="all-services">
-    <!-- codigo injetado via javascript -->
-</div>
-
-    <!-- <div class="service-card">
+<div class="service-card">
         <div class="service-card__img">
             <img src="../imgs/contribuicoes/mecanico.png" alt="Foto do serviço">
         </div>
@@ -84,4 +81,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
+</div>
+
+    <!--  -->

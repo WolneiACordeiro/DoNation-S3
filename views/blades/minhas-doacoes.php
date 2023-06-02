@@ -1,3 +1,4 @@
+<?php include("session_info.php"); ?>
 <section class="container-requests">
     <div class="requests-products">
         <div class="view-requests">

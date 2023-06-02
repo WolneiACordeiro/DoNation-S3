@@ -1,4 +1,7 @@
-<?php include('../blades/header.php'); ?>
+<?php 
+session_start();
+include('../blades/header.php'); 
+?>
 
 <main class="donation">
     <header class="donation-home">

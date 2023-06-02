@@ -1,6 +1,7 @@
 <?php 
-include('../blades/header.php'); 
 session_start();
+include('../blades/header.php'); 
+
 ?>
 
 <main class="donation">

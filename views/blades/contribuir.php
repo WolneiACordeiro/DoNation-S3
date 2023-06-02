@@ -1,4 +1,5 @@
-<form class="form-service" action="../php/alterar.php" enctype="multipart/form-data" method="POST">
+<?php include("session_info.php"); ?>
+<form class="form-service" action="../../controllers/contribuir.php" enctype="multipart/form-data" method="POST">
     <div class="title-service">
         <h1>Sua Contribuição</h1>
         <span>CMD São Marcos</span>
@@ -7,7 +8,7 @@
     <div class="infos-services">
         <div class="col-info">
             <label class="label-g">Atividade</label>
-            <input class="input-g" type="text" name="atividade" required> <!-- value="< ?php echo $exibe[1] ?>" -->
+            <input class="input-g" type="text" name="atividade" required>
         </div>
 
         <div class="row">
@@ -19,12 +20,12 @@
                     Foto do Serviço
                     <?php include('../svgs/fotoPerfil.svg'); ?>
                 </label>
-                <input type="file" id="upload-input" style="display: none;">
+                <input type="file" id="upload-input" name="file" accept="image/*" style="display: none;" required>
             </div>
             <div class="col-info">
                 <label class="label-g">Categoria</label>
                 <select id="inputState" class="input-g" name="categoria" required>
-                    <option selected></option> <!-- < ?php echo $exibe[4] ?> -->
+                    <option selected></option>
                     <option>#Livros</option>
                     <option>#Serviços Gerais</option>
                     <option>#Serviços Domésticos</option>
@@ -34,7 +35,7 @@
 
         <div class="row">
             <label class="label-g">Descrição</label>
-            <textarea class="input-g desc-textarea" name="descricao" required></textarea> <!-- < ?php echo $exibe[3] ?>  -->
+            <textarea class="input-g desc-textarea" name="descricao" required></textarea>
         </div>
     </div>
 
@@ -45,7 +46,7 @@
             <div class="option">
                 <label class="label-g">Dia da semana</label>
                 <select id="inputState" class="input-g" name="dia" required>
-                    <option selected class="option-neuter"></option> <!-- < ?php echo $exibe[5] ?> -->
+                    <option selected class="option-neuter"></option>
                     <option>Segunda-feira</option>
                     <option>Terça-feira</option>
                     <option>Quarta-feira</option>
@@ -59,12 +60,12 @@
             <div class="container-hours">
                 <div class="option">
                     <label class="label-g">Das</label>
-                    <input type="time" class="input-g" name="das" /> <!-- value="< ?php echo $exibe[6] ?>" -->
+                    <input type="time" class="input-g" name="das" />
                 </div>
 
                 <div class="option">
                     <label class="label-g">Até</label>
-                    <input type="time" class="input-g" name="ate" /> <!-- value="< ?php echo $exibe[7] ?>" -->
+                    <input type="time" class="input-g" name="ate" />
                 </div>
             </div>
         </div>
@@ -95,6 +96,5 @@
             <p>Importante! <br> Preencha todos os dados.</p>
         </div>
 
-        <a class="btn contained" style="height: 45px">Finalizar</a>
-    </div>
+        <input type="submit" class="btn contained" style="height: 45px" value="Finalizar">
 </form>

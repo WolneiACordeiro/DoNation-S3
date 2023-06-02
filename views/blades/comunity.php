@@ -1,3 +1,4 @@
+<?php include("session_info.php"); ?>
 <div class="comunity">
     <a href="donation.php" class="logo-comunity">
         <?php include('../svgs/logo-donation.svg'); ?>

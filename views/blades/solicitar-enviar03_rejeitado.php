@@ -1,3 +1,4 @@
+<?php include("session_info.php"); ?>
 <form class="solicite">
     <div class="solicite-title">
         <p>Solicitar - Manutenção Geral - (Rejeitado)</p>

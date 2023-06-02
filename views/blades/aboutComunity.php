@@ -1,3 +1,4 @@
+<?php include("session_info.php"); ?>
 <div class="about">
     <div>
         <img class="img-comunity selected" src="../imgs/comunidades/comunidade01.png" alt="Comunidade" />
