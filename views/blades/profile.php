@@ -1,6 +1,21 @@
+<?php
+require_once 'conexao_blades.php';
+
+if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
+    header('Location: ../index.php?login=erro2');
+    exit;
+} else {
+    $id = $_SESSION['id'];
+    $objectId = new \MongoDB\BSON\ObjectID($id);
+    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
+    $contribuicao = $colecaoContribuicao->find();
+}
+?>
+
+
 <div class="avatar">
-    <img src="../imgs/avatars/photouser04.png" alt="Foto usuário">
-    <span class="name-user">Santiago Dias</span>
+    <img src="../imgs/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="Foto usuário">
+    <span class="name-user"><?php echo $registroUsuario['nomeUsuario']; ?></span>
 </div>
 
 <div class="my-infos">

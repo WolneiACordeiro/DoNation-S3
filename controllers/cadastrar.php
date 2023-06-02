@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../models/conexao.php'; // conexão com o banco MongoDB
-require_once '../vendor/autoload.php';
 
 $email = $_POST["email"]; 
 $senha = $_POST["senha"]; 
