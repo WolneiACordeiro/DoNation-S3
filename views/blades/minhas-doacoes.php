@@ -36,7 +36,7 @@
                                     <span>19:00h às 20:00h</span>
                                 </div>
 
-                                <a href="#" class="btn contained" style="width: 212px">Visualizar Solicitação</a>
+                                <a href="#" class="btn contained" style="flex: 1 0 auto">Visualizar Solicitação</a>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                                     <span>19:00h às 20:00h</span>
                                 </div>
 
-                                <a href="#" class="btn contained" style="width: 212px">Visualizar Solicitação</a>
+                                <a href="#" class="btn contained" style="flex: 1 0 auto">Visualizar Solicitação</a>
                             </div>
                         </div>
 
@@ -76,7 +76,6 @@
                                             </linearGradient>
                                         </defs>
                                     </svg>
-                                </p>
                                 <p>Você ainda não tem nenhuma solicitação cancelada.</p>
                             </div>
                         </div>
@@ -105,8 +104,8 @@
                         </div>
 
                         <div class="edit-delete__buttons">
-                            <button class="btn outline">Editar </button>
-                            <button class="btn outline">Excluir</button>
+                            <a href="../pages/alterar-contribuir.php" class="btn outline">Editar </a>
+                            <button class="btn outline" id="delete-modal__button">Excluir</button>
                         </div>
                     </div>
                 </div>

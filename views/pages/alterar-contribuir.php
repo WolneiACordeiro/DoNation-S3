@@ -1,22 +1,16 @@
 <?php include('../blades/header.php'); ?>
 
-<div class="shadow">
-    <div class="modal">
-
-    </div>
-</div>
-
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
             <?php
-            include('../blades/comunity.php')
+                include('../blades/comunity.php')
             ?>
         </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
-                include('../blades/aboutComunity.php')
+                    include('../blades/aboutComunity.php')
                 ?>
             </div>
             <div class="profile-services">
@@ -24,7 +18,7 @@
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services">
-                    <?php include('../blades/minhas-doacoes.php'); ?>
+                    <?php include('../blades/alterar-contribuir.php'); ?>
                 </section>
             </div>
         </section>
@@ -35,7 +29,8 @@
     </footer>
 </main>
 
+<script src="../js/app.js"></script>
 <script src="../js/profile.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="../js/services.js"></script>
 
 <?php include('../blades/footer.php'); ?>

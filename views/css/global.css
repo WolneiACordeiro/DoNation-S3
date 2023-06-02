@@ -144,3 +144,32 @@ body::-webkit-scrollbar-thumb {
   gap: 8px;
   pointer-events: none;
 }
+
+.shadow {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000067; 
+  display: none;
+  transition: .5s ease all;
+
+}
+
+.shadow.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+
+.modal {
+  width: 500px;
+  height: 350px;
+  background-color: var(--branco);
+  border-radius: 5px;
+}

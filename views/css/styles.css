@@ -264,6 +264,8 @@
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
 }
 
 .donation-home {
@@ -1339,7 +1341,7 @@
 }
 
 .view-request__process {
-  padding: 48px 70px;
+  padding: 48px 66px;
 }
 
 .nothing-request {
@@ -1369,7 +1371,7 @@
 }
 
 .view-card__edit {
-  padding: 48px 44px;
+  padding: 48px 66px;
 }
 
 .buttons__update-delete {
@@ -1413,9 +1415,8 @@
 }
 
 .view-solicite__about {
-  width: 100%;
+  width: 940px;
   align-items: center;
-  justify-content: unset;
   padding: 10px;
   border-radius: 5px;
   background-color: #d3d3d344;
@@ -1441,10 +1442,10 @@
 }
 
 .edit-delete__buttons {
-  width: auto;
   gap: 8px;
 }
 
-.edit-delete__buttons button {
-  flex: 1 0 auto;
+.edit-delete__buttons button,
+.edit-delete__buttons a {
+  width: 146px;
 }
