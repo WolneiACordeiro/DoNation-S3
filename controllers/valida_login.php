@@ -18,7 +18,13 @@ if ($usuario !== null) {
   $_SESSION['id'] = (string) $usuario['_id'];
   header('Location: ../views/pages/donation.php');
 } else {
-  $_SESSION['autenticado'] = 'NAO';
-  header('Location: ../index.php?login=erro');
-}
+    $_SESSION['autenticado'] = 'NAO';
+    
+    if (empty($email) || empty($senha)) {
+      header('Location: ../views/index.php?login=erro2');
+    } else {
+      header('Location: ../views/index.php?login=erro');
+    }
+  }
+  
 ?>
