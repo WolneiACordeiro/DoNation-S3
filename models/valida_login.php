@@ -18,7 +18,7 @@ $usuario_autenticado = false;
 if ($usuario_autenticado == true) {
   $_SESSION['autenticado'] = 'SIM';
   $_SESSION['id'] = $dados[0];
-  header('Location: ../pages/dandelion.php');
+  header('Location: ../pages/donation.php');
 } else {
   $_SESSION['autenticado'] = 'NAO';
   header('Location: ../index.php?login=erro');

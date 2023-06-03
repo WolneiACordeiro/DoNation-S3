@@ -1,5 +1,18 @@
 <?php include('../blades/header.php'); ?>
 
+<div class="shadow"></div>
+<div class="modal-confirm">
+    <div class="confirm-title">
+        <h2>Atenção</h2>
+        <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>
+    </div>
+
+    <div class="confirm-buttons">
+        <a class="btn outline">Sim, alterar</a>
+        <a class="btn contained" id="cancel-button">Cancelar</a>
+    </div>
+</div>
+
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
@@ -31,6 +44,6 @@
 
 <script src="../js/app.js"></script>
 <script src="../js/profile.js"></script>
-<script src="../js/services.js"></script>
+<script src="../js/modalConfirm.js"></script>
 
 <?php include('../blades/footer.php'); ?>
