@@ -1440,7 +1440,7 @@
 
 .view-solicite__about span {
   color: var(--preto80);
-  font-size: 20px;
+  font-size: 1vw;
 }
 
 .edit-delete__buttons {
@@ -1451,6 +1451,6 @@
 .edit-delete__buttons button,
 .edit-delete__buttons a {
   width: 100%;
-  min-width: 146px;
+  min-width: 85px;
   height: 34px;
 }

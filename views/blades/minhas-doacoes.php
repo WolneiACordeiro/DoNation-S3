@@ -36,7 +36,7 @@
                                     <span>19:00h às 20:00h</span>
                                 </div>
 
-                                <a href="#" class="btn contained" style="flex: 1 0 auto">Visualizar Solicitação</a>
+                                <a href="#" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar Solicitação</a>
                             </div>
                         </div>
 
@@ -59,7 +59,7 @@
                                     <span>19:00h às 20:00h</span>
                                 </div>
 
-                                <a href="#" class="btn contained" style="flex: 1 0 auto">Visualizar Solicitação</a>
+                                <a href="#" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar Solicitação</a>
                             </div>
                         </div>
 
