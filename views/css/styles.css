@@ -473,18 +473,6 @@
   overflow-x: hidden;
 }
 
-.all-services::-webkit-scrollbar,
-.services::-webkit-scrollbar,
-.availability::-webkit-scrollbar {
-  width: 0;
-}
-
-.all-services::-webkit-scrollbar-track,
-.services::-webkit-scrollbar-track,
-.availability::-webkit-scrollbar {
-  background: transparent;
-}
-
 .service-card {
   width: 270px;
   height: 296px;
@@ -1429,7 +1417,6 @@
 
 .view-solicite__about {
   width: 100%;
-  /* max-width: 988px; */
   align-items: center;
   padding: 10px;
   border-radius: 5px;
@@ -1441,7 +1428,7 @@
 .solicite__about {
   gap: 8px;
   align-items: center;
-  border-right: 5px solid var(--preto80);
+  border-right: 3px solid var(--preto80);
   padding-right: 8px;
 }
 
@@ -1458,9 +1445,12 @@
 
 .edit-delete__buttons {
   gap: 8px;
+  flex: 1 0 auto;
 }
 
 .edit-delete__buttons button,
 .edit-delete__buttons a {
-  width: 146px;
+  width: 100%;
+  min-width: 146px;
+  height: 34px;
 }
