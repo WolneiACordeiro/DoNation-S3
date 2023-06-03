@@ -2,7 +2,6 @@
 session_start();
 require_once '../models/conexao.php';
 
-
 $atividade = $_POST['atividade'];
 $descricao = $_POST["descricao"]; 
 $categoria = $_POST["categoria"];
