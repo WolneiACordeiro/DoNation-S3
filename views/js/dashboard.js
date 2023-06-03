@@ -54,17 +54,3 @@ buttons.forEach(button => {
     targetCard.classList.add('active');
   });
 });
-
-// modal de deletar contribuição:
-const deleteModalButton = document.getElementById('delete-modal__button');
-const shadowBackground = document.querySelector('.shadow');
-
-deleteModalButton.addEventListener('click', () => {
-
-  
-  shadowBackground.classList.add('active');
-});
-
-shadowBackground.addEventListener('click', () => {
-  shadowBackground.classList.remove('active');
-});

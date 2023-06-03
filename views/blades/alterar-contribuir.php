@@ -1,6 +1,6 @@
 <form class="form-service" action="../php/alterar.php" enctype="multipart/form-data" method="POST">
     <div class="title-service">
-        <h1>Sua Contribuição</h1>
+        <h1>Alterar contribuição</h1>
         <span>CMD São Marcos</span>
     </div>
 
@@ -19,7 +19,7 @@
                     Foto do Serviço
                     <?php include('../svgs/fotoPerfil.svg'); ?>
                 </label>
-                <input type="file" id="upload-input" style="display: none;">
+                <input type="file" id="upload-input" accept=".jpg, .png, .jpeg" style="display: none;">
             </div>
             <div class="col-info">
                 <label class="label-g">Categoria</label>
@@ -95,6 +95,6 @@
             <p>Importante! <br> Preencha todos os dados.</p>
         </div>
 
-        <a class="btn contained" style="height: 45px">Finalizar</a>
+        <a class="btn contained" style="height: 45px" onclick="confirmModal()">Alterar</a>
     </div>
 </form>

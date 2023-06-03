@@ -105,7 +105,7 @@
 
                         <div class="edit-delete__buttons">
                             <a href="../pages/alterar-contribuir.php" class="btn outline">Editar </a>
-                            <button class="btn outline" id="delete-modal__button">Excluir</button>
+                            <button class="btn outline" onclick="confirmModal()">Excluir</button>
                         </div>
                     </div>
                 </div>

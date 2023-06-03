@@ -1,8 +1,15 @@
 <?php include('../blades/header.php'); ?>
 
-<div class="shadow">
-    <div class="modal">
+<div class="shadow"></div>
+<div class="modal-confirm">
+    <div class="confirm-title">
+        <h2>Atenção</h2>
+        <p>Você está prestes a deletar essa contribuição. Você tem certeza disso?</p>
+    </div>
 
+    <div class="confirm-buttons">
+        <a class="btn outline">Sim, deletar</a>
+        <a class="btn contained" id="cancel-button">Cancelar</a>
     </div>
 </div>
 
@@ -37,5 +44,6 @@
 
 <script src="../js/profile.js"></script>
 <script src="../js/dashboard.js"></script>
+<script src="../js/modalConfirm.js"></script>
 
 <?php include('../blades/footer.php'); ?>

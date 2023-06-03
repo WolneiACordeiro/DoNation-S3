@@ -203,8 +203,8 @@
 }
 
 .upload-preview {
-  width: 150px;
-  height: 150px;
+  width: 350px;
+  height: 350px;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -215,9 +215,9 @@
   object-fit: cover;
 }
 
-/* Estilos para o botÃ£o personalizado */
+/* Estilos para o botÃƒÆ’Ã‚Â£o personalizado */
 .custom-button {
-  width: 150px;
+  width: 350px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1291,6 +1291,7 @@
 
 .user-solicites__button,
 .user-solicited__button {
+  min-width: 240px;
   flex: 1;
   border: 0;
   outline: 0;
@@ -1337,7 +1338,9 @@
   flex-direction: column;
   gap: 25px;
   background-color: var(--branco);
-  border-radius: 0 0 5px 5px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
 .view-request__process {
@@ -1351,13 +1354,14 @@
   justify-content: center;
   flex-direction: column;
   gap: 10px;
+  text-align: center;
 }
 
 .request-products__solicited {
   display: none;
 }
 
-/* informações do usuario */
+/* informaÃƒÂ§ÃƒÂµes do usuario */
 .view-card__info {
   width: 100%;
   min-height: 200px;
@@ -1421,6 +1425,7 @@
   border-radius: 5px;
   background-color: #d3d3d344;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .solicite__about {
