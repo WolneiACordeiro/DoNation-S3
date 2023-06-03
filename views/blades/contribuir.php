@@ -20,7 +20,11 @@
                     Foto do Serviço
                     <?php include('../svgs/fotoPerfil.svg'); ?>
                 </label>
+<<<<<<< HEAD
+                <input type="file" id="upload-input" name="file" accept="image/*" style="display: none;" required>
+=======
                 <input type="file" id="upload-input" accept=".jpg, .png, .jpeg" style="display: none;">
+>>>>>>> origin/frontEnd
             </div>
             <div class="col-info">
                 <label class="label-g">Categoria</label>
