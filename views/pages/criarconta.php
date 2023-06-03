@@ -3,7 +3,7 @@
 <body class="animate-apper">
     <main class="login">
         <div class="login-container">
-            <form class="register-form animate-apper" action="../../controllers/valida_login.php" method="POST">
+            <form class="register-form animate-apper" action="../../controllers/cadastrar.php" method="POST">
                 <div class="login-form__title">
                     <h1>Cadastrar</h1>
                 </div>
