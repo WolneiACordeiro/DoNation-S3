@@ -3,7 +3,7 @@
 <body class="animate-apper">
     <main class="login">
         <div class="login-container">
-            <form class="register-form animate-apper" action="../../controllers/cadastrar.php" method="POST">
+            <form class="register-form animate-apper" action="../../controllers/cadastrar.php" enctype="multipart/form-data" method="POST">
                 <div class="login-form__title">
                     <h1>Cadastrar</h1>
                 </div>
@@ -19,7 +19,7 @@
                                     Foto de perfil
                                     <?php include('../svgs/fotoPerfil.svg'); ?>
                                 </label>
-                                <input type="file" id="upload-input" style="display: none;">
+                                <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;">
                             </div>
 
                             <div class="login-input">
@@ -64,7 +64,7 @@
 
                     <div class="button-links">
                         <a class="btn outline" href="../index.php">Voltar</a>
-                        <button class="btn contained">Finalizar</button>
+                        <button type="submit" class="btn contained">Finalizar</button>
                     </div>
 
                     <div class="alert-fill">
