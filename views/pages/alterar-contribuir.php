@@ -1,4 +1,5 @@
-<?php include('../blades/header.php'); ?>
+<?php include('../blades/header.php'); 
+session_start();?>
 
 <div class="shadow"></div>
 <div class="modal-confirm">
