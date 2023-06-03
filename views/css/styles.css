@@ -205,6 +205,8 @@
 .upload-preview {
   width: 350px;
   height: 350px;
+  width: 350px;
+  height: 350px;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -1441,7 +1443,7 @@
 .solicite__about {
   gap: 8px;
   align-items: center;
-  border-right: 5px solid var(--preto80);
+  border-right: 3px solid var(--preto80);
   padding-right: 8px;
 }
 
@@ -1453,14 +1455,17 @@
 
 .view-solicite__about span {
   color: var(--preto80);
-  font-size: 20px;
+  font-size: 1vw;
 }
 
 .edit-delete__buttons {
   gap: 8px;
+  flex: 1 0 auto;
 }
 
 .edit-delete__buttons button,
 .edit-delete__buttons a {
-  width: 146px;
+  width: 100%;
+  min-width: 85px;
+  height: 34px;
 }

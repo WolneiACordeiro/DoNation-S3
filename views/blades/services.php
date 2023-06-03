@@ -44,16 +44,62 @@
                 <div class="availability">
                     Disponibilidade
                     <div class="weekdays">
-                        <button class="weekday-btn active">Seg</button>
-                        <button class="weekday-btn">Ter</button>
-                        <button class="weekday-btn">Qua</button>
-                        <button class="weekday-btn">Qui</button>
-                        <button class="weekday-btn">Sex</button>
-                        <button class="weekday-btn">Sab</button>
-                        <button class="weekday-btn">Dom</button>
+                        <button class="weekday-btn active" data-target="seg">Seg</button>
+                        <button class="weekday-btn" data-target="ter">Ter</button>
+                        <button class="weekday-btn" data-target="qua">Qua</button>
+                        <button class="weekday-btn" data-target="qui">Qui</button>
+                        <button class="weekday-btn" data-target="sex">Sex</button>
+                        <button class="weekday-btn" data-target="sab">Sab</button>
+                        <button class="weekday-btn" data-target="dom">Dom</button>
                     </div>
 
-                    <div class="time-slots"></div>
+                    <div class="hour-service active" id="seg">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:00</span>
+                            <span class="time-range">08:00 ás 12:00</span>
+                            <span class="time-range">08:00 ás 12:00</span>
+                            <span class="time-range">08:00 ás 12:00</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="ter">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:01</span>
+                            <span class="time-range">08:00 ás 12:01</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="qua">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:02</span>
+                            <span class="time-range">08:00 ás 12:02</span>
+                            <span class="time-range">08:00 ás 12:02</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="qui">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:03</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="sex">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:04</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="sab">
+                        <div class="time-slots">
+                            <span class="time-range">08:00 ás 12:05</span>
+                        </div>
+                    </div>
+
+                    <div class="hour-service" id="dom">
+                        <div class="time-slots">
+                            Sem horários disponíveis.
+                        </div>
+                    </div>
 
                     <div class="description-service">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime commodi adipisci animi possimus, natus laudantium ab quaerat sed qui neque, aliquid iure porro labore voluptatibus atque a ducimus pariatur ut!

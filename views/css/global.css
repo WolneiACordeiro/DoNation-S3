@@ -52,23 +52,18 @@ a {
   --transition: 0.5s ease all;
 }
 
-body::-webkit-scrollbar {
-  width: 12px;
-  /* width of the entire scrollbar */
+body::-webkit-scrollbar,
+.all-services::-webkit-scrollbar,
+.services::-webkit-scrollbar,
+.availability::-webkit-scrollbar {
+  width: 0;
 }
 
-body::-webkit-scrollbar-track {
-  background: var(--branco);
-  /* color of the tracking area */
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: var(--preto80);
-  /* color of the scroll thumb */
-  border-radius: 20px;
-  /* roundness of the scroll thumb */
-  /* creates padding around scroll thumb */
-  border: 3px solid var(--cinza);
+body::-webkit-scrollbar-track,
+.all-services::-webkit-scrollbar-track,
+.services::-webkit-scrollbar-track,
+.availability::-webkit-scrollbar {
+  background: transparent;
 }
 
 .label-g {
