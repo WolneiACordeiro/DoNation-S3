@@ -19,7 +19,7 @@
                                     Foto de perfil
                                     <?php include('../svgs/fotoPerfil.svg'); ?>
                                 </label>
-                                <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;">
+                                <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;" required>
                             </div>
 
                             <div class="login-input">
