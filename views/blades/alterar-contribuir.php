@@ -1,14 +1,13 @@
-<?php include("session_info.php"); ?>
-<form class="form-service" action="../../controllers/contribuir.php" enctype="multipart/form-data" method="POST">
+<form class="form-service" action="../php/alterar.php" enctype="multipart/form-data" method="POST">
     <div class="title-service">
-        <h1>Sua Contribuição</h1>
+        <h1>Alterar contribuição</h1>
         <span>CMD São Marcos</span>
     </div>
 
     <div class="infos-services">
         <div class="col-info">
             <label class="label-g">Atividade</label>
-            <input class="input-g" type="text" name="atividade" required>
+            <input class="input-g" type="text" name="atividade" required> <!-- value="< ?php echo $exibe[1] ?>" -->
         </div>
 
         <div class="row">
@@ -25,7 +24,7 @@
             <div class="col-info">
                 <label class="label-g">Categoria</label>
                 <select id="inputState" class="input-g" name="categoria" required>
-                    <option selected></option>
+                    <option selected></option> <!-- < ?php echo $exibe[4] ?> -->
                     <option>#Livros</option>
                     <option>#Serviços Gerais</option>
                     <option>#Serviços Domésticos</option>
@@ -35,7 +34,7 @@
 
         <div class="row">
             <label class="label-g">Descrição</label>
-            <textarea class="input-g desc-textarea" name="descricao" required></textarea>
+            <textarea class="input-g desc-textarea" name="descricao" required></textarea> <!-- < ?php echo $exibe[3] ?>  -->
         </div>
     </div>
 
@@ -46,7 +45,7 @@
             <div class="option">
                 <label class="label-g">Dia da semana</label>
                 <select id="inputState" class="input-g" name="dia" required>
-                    <option selected class="option-neuter"></option>
+                    <option selected class="option-neuter"></option> <!-- < ?php echo $exibe[5] ?> -->
                     <option>Segunda-feira</option>
                     <option>Terça-feira</option>
                     <option>Quarta-feira</option>
@@ -60,12 +59,12 @@
             <div class="container-hours">
                 <div class="option">
                     <label class="label-g">Das</label>
-                    <input type="time" class="input-g" name="das" />
+                    <input type="time" class="input-g" name="das" /> <!-- value="< ?php echo $exibe[6] ?>" -->
                 </div>
 
                 <div class="option">
                     <label class="label-g">Até</label>
-                    <input type="time" class="input-g" name="ate" />
+                    <input type="time" class="input-g" name="ate" /> <!-- value="< ?php echo $exibe[7] ?>" -->
                 </div>
             </div>
         </div>
@@ -96,5 +95,6 @@
             <p>Importante! <br> Preencha todos os dados.</p>
         </div>
 
-        <input type="submit" class="btn contained" style="height: 45px" value="Finalizar">
+        <a class="btn contained" style="height: 45px" onclick="confirmModal()">Alterar</a>
+    </div>
 </form>

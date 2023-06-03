@@ -1,17 +1,14 @@
-<?php 
-session_start();
-include('../blades/header.php'); 
-?>
+<?php include('../blades/header.php'); ?>
 
 <div class="shadow"></div>
 <div class="modal-confirm">
     <div class="confirm-title">
         <h2>Atenção</h2>
-        <p>Você está prestes a deletar essa contribuição. Você tem certeza disso?</p>
+        <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>
     </div>
 
     <div class="confirm-buttons">
-        <a class="btn outline">Sim, deletar</a>
+        <a class="btn outline">Sim, alterar</a>
         <a class="btn contained" id="cancel-button">Cancelar</a>
     </div>
 </div>
@@ -20,13 +17,13 @@ include('../blades/header.php');
     <header class="donation-home">
         <nav class="comunitys">
             <?php
-            include('../blades/comunity.php')
+                include('../blades/comunity.php')
             ?>
         </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
-                include('../blades/aboutComunity.php')
+                    include('../blades/aboutComunity.php')
                 ?>
             </div>
             <div class="profile-services">
@@ -34,7 +31,7 @@ include('../blades/header.php');
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services">
-                    <?php include('../blades/minhas-doacoes.php'); ?>
+                    <?php include('../blades/alterar-contribuir.php'); ?>
                 </section>
             </div>
         </section>
@@ -45,8 +42,8 @@ include('../blades/header.php');
     </footer>
 </main>
 
+<script src="../js/app.js"></script>
 <script src="../js/profile.js"></script>
-<script src="../js/dashboard.js"></script>
 <script src="../js/modalConfirm.js"></script>
 
 <?php include('../blades/footer.php'); ?>

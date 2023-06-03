@@ -130,7 +130,7 @@ body::-webkit-scrollbar-thumb {
 
 .outline:hover .svg-path,
 .outline:hover svg path {
-    fill: var(--branco);
+  fill: var(--branco);
 }
 
 .contained {
@@ -143,4 +143,71 @@ body::-webkit-scrollbar-thumb {
   opacity: 0.5;
   gap: 8px;
   pointer-events: none;
+}
+
+.shadow {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000067;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  transition: 0.5s ease all;
+}
+
+.shadow.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-confirm {
+  width: 500px;
+  background-color: var(--branco);
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 6;
+  overflow: hidden;
+}
+
+.modal-confirm.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 6;
+}
+
+.confirm-title {
+  flex-direction: column;
+  padding: 30px;
+  border-bottom: 1px solid var(--cinza);
+  border-radius: 0 0 5px 5px;
+  background: var(--vermelho-linear);
+  color: var(--branco);
+}
+
+.confirm-title h2 {
+  font-size: 32px;
+}
+
+.confirm-buttons {
+  width: 100%;
+  height: 60%;
+  padding: 30px;
+  gap: 12px;
+  align-items: center;
+}
+
+.confirm-buttons a {
+  flex: 1 0 auto;
+  height: 50px;
 }

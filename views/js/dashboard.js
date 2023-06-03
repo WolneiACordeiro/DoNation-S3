@@ -54,4 +54,3 @@ buttons.forEach(button => {
     targetCard.classList.add('active');
   });
 });
-

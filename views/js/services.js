@@ -1,4 +1,4 @@
-// // services-type__search 01 - botões
+// services-type__search 01 - botões
 const typesServicesBtn = document.querySelectorAll(".types-services__btn");
 
 typesServicesBtn.forEach((typeServiceBtn) => {

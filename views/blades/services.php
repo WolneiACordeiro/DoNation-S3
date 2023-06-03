@@ -14,7 +14,10 @@
 
 <!-- all-services 02 -->
 <div class="all-services">
-<div class="service-card">
+    <!-- codigo injetado via javascript -->
+</div>
+
+    <!-- <div class="service-card">
         <div class="service-card__img">
             <img src="../imgs/contribuicoes/mecanico.png" alt="Foto do serviço">
         </div>
