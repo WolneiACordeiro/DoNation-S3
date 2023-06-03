@@ -14,6 +14,19 @@ session_start();?>
     </div>
 </div>
 
+<div class="shadow"></div>
+<div class="modal-confirm">
+    <div class="confirm-title">
+        <h2>Atenção</h2>
+        <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>
+    </div>
+
+    <div class="confirm-buttons">
+        <a class="btn outline">Sim, alterar</a>
+        <a class="btn contained" id="cancel-button">Cancelar</a>
+    </div>
+</div>
+
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">

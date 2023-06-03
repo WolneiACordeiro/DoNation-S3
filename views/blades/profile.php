@@ -32,10 +32,8 @@
             </a>
         </li>
         <li><a href="donation.php">Comunidades</a>
-            <div class="notifications">2</div>
         </li>
         <li><a href="#">Informações</a>
-            <div class="notifications">2</div>
         </li>
         <li><a href="../">Sair</a>
         </li>
