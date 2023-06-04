@@ -62,12 +62,12 @@
             <div class="container-hours">
                 <div class="option">
                     <label class="label-g">Das</label>
-                    <input type="time" class="input-g" name="das" />
+                    <input type="time" class="input-g" name="das" required />
                 </div>
 
                 <div class="option">
                     <label class="label-g">Até</label>
-                    <input type="time" class="input-g" name="ate" />
+                    <input type="time" class="input-g" name="ate" required />
                 </div>
             </div>
         </div>

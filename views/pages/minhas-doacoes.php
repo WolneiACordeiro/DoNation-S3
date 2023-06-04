@@ -4,17 +4,17 @@ include('../blades/header.php');
 ?>
 
 <div class="shadow"></div>
-<div class="modal-confirm">
+<form class="modal-confirm" id="modalExcluir">
     <div class="confirm-title">
         <h2>Atenção</h2>
         <p>Você está prestes a deletar essa contribuição. Você tem certeza disso?</p>
     </div>
 
     <div class="confirm-buttons">
-        <a class="btn outline">Sim, deletar</a>
-        <a class="btn contained" id="cancel-button">Cancelar</a>
+        <button type="submit" class="btn outline">Sim, deletar</button>
+        <a class="btn contained cancel-button">Cancelar</a>
     </div>
-</div>
+</form>
 
 <main class="donation">
     <header class="donation-home">
@@ -22,7 +22,7 @@ include('../blades/header.php');
             <?php
             include('../blades/comunity.php')
             ?>
-        </nav>
+    </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
