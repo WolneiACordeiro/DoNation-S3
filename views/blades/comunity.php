@@ -17,3 +17,5 @@
         </button>
     </div>
 </div>
+
+<script src="../js/comunity.js"></script>
