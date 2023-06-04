@@ -20,7 +20,7 @@ include('../blades/header.php');
                 <sidebar class="profile">
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
-                <section class="services">
+                <section class="services" style="padding: 28px 25px;">
                     <?php include('../blades/contribuir.php'); ?>
                 </section>
             </div>
