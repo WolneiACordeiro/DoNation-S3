@@ -1,4 +1,4 @@
-<?php include('../blades/header.php');?>
+<?php include('../blades/header.php'); ?>
 
 <body class="animate-apper">
     <main class="login">
@@ -11,15 +11,17 @@
                 <section class="login-form__login">
                     <div class="login-form__inputs">
                         <div class="login-inputs">
-                            <div class="upload-container">
-                                <div class="upload-preview">
-                                    <img src="../imgs/avatars/padrao.png" alt="Imagem Padrão" id="default-image">
+                            <div class="image-avatar">
+                                <div class="upload-container" style="width: 120px; height: 157px;">
+                                    <div class="upload-preview" style="width: 120px; height: 120px;">
+                                        <img src="../imgs/avatars/padrao.png" alt="Imagem Padrão" id="default-image">
+                                    </div>
+                                    <label for="upload-input" class="custom-button" style="font-size: 14px;">
+                                        Foto de perfil
+                                        <?php include('../svgs/fotoPerfil.svg'); ?>
+                                    </label>
+                                    <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;" required>
                                 </div>
-                                <label for="upload-input" class="custom-button">
-                                    Foto de perfil
-                                    <?php include('../svgs/fotoPerfil.svg'); ?>
-                                </label>
-                                <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;" required>
                             </div>
 
                             <div class="login-input">

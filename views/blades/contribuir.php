@@ -11,9 +11,9 @@
             <input class="input-g" type="text" name="atividade" required>
         </div>
 
-        <div class="row">
-            <div class="upload-container">
-                <div class="upload-preview">
+        <div class="image-contribution">
+            <div class="upload-container" style="width: 270px; height: 297px;">
+                <div class="upload-preview" style="width: 270px; height: 257px;">
                     <img src="../imgs/avatars/padrao.png" alt="Imagem Padrão" id="default-image">
                 </div>
                 <label for="upload-input" class="custom-button">
@@ -22,6 +22,9 @@
                 </label>
                 <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;">
             </div>
+        </div>
+
+        <div class="row">
             <div class="col-info">
                 <label class="label-g">Categoria</label>
                 <select id="inputState" class="input-g" name="categoria" required>
@@ -96,4 +99,5 @@
         </div>
 
         <input type="submit" class="btn contained" style="height: 45px" value="Finalizar">
+    </div>
 </form>

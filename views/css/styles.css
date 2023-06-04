@@ -203,8 +203,8 @@
 }
 
 .upload-preview {
-  width: 350px;
-  height: 350px;
+  width: 100%;
+  height: 100%;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -217,7 +217,7 @@
 
 /* Estilos para o botÃƒÆ’Ã‚Â£o personalizado */
 .custom-button {
-  width: 350px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1048,6 +1048,39 @@
   border: none;
 }
 
+.calendar-input__selected {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 5px;
+  border-radius: 5px;
+  background: var(--vermelho-linear);
+  border: none;
+  transition: 0.5s ease all;
+  color: var(--branco);
+}
+
+.selected-date__show {
+  width: auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.calendar-input__selected .bg-calendar {
+  width: 26px;
+  height: 28px;
+  background-color: var(--branco);
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-date.active .calendar-date__selected {
+  align-items: center;
+}
+
 .calendar-input.active span,
 .calendar-date.active input::placeholder {
   color: var(--branco);
@@ -1192,6 +1225,13 @@
   color: var(--preto80);
   font-size: 30px;
   padding: 20px 0;
+}
+
+.image-contribution,
+.image-avatar {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .row {
@@ -1353,7 +1393,7 @@
 }
 
 .view-request__process {
-  padding: 48px 66px;
+  padding: 30px;
 }
 
 .nothing-request {
@@ -1384,7 +1424,7 @@
 }
 
 .view-card__edit {
-  padding: 48px 66px;
+  padding: 30px;
 }
 
 .buttons__update-delete {
@@ -1453,7 +1493,7 @@
 
 .view-solicite__about span {
   color: var(--preto80);
-  font-size: 1vw;
+  font-size: 18px;
 }
 
 .edit-delete__buttons {

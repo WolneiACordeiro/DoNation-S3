@@ -133,7 +133,7 @@ body::-webkit-scrollbar-track,
   background: linear-gradient(90deg, #9e005d 0.05%, #ff0000 100.01%);
 }
 
-.reject {
+.disabled {
   flex-direction: column;
   opacity: 0.5;
   gap: 8px;
