@@ -48,7 +48,7 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
             <span>No dia/hora</span>
             <div class="calendar-date">
                 <i class="fa-solid fa-calendar-days"></i>
-                <input type="text" id="datetime-input"  name="dataHora" placeholder="__/__/____ às __h__m" readonly>
+                <input type="text" id="datetime-input" required name="dataHora" placeholder="__/__/____ às __h__m" readonly>
             </div>
         </div>
 
@@ -57,8 +57,6 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
             </a>
-
         </div>
-
     </div>
 </form>

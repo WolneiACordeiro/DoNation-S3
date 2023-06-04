@@ -10,7 +10,7 @@ session_start();
 <form class="modal-confirm" id="modalCancelar">
     <div class="confirm-title">
         <h2>Atenção</h2>
-        <p>Você está prestes a cancelar essa doação. Você tem certeza disso?</p>
+        <p>Você está prestes a cancelar essa contribuição. Você tem certeza disso?</p>
     </div>
 
     <div class="confirm-buttons">
@@ -22,7 +22,7 @@ session_start();
 <form class="modal-confirm" id="modalConcluir">
     <div class="confirm-title" >
         <h2>Atenção</h2>
-        <p>Você está prestes a completar essa doação. Você tem certeza disso?</p>
+        <p>Você está prestes a completar essa contribuição. Você tem certeza disso?</p>
     </div>
 
     <div class="confirm-buttons">

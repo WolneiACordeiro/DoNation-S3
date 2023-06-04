@@ -133,11 +133,14 @@ body::-webkit-scrollbar-track,
   background: linear-gradient(90deg, #9e005d 0.05%, #ff0000 100.01%);
 }
 
-.disabled {
-  flex-direction: column;
-  opacity: 0.5;
-  gap: 8px;
+.disabled, .opacity {
   pointer-events: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opacity {
+  opacity: 0.5;
 }
 
 .shadow {

@@ -23,25 +23,30 @@
             </div>
         </div>
 
-        <div class="reject">
+        <div class="disabled opacity">
             <div class="who-solicites">
                 <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> está solicitando <span class="contrast-service">Manutenção Geral</span></p>
             </div>
 
-            <textarea class="custom__text-area"></textarea>
+            <textarea class="custom__text-area" style="height: 80px; font-size: 12px;">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed, minus.</textarea>
 
-            <div class="calendar-input">
-                <span>No dia/hora</span>
-                <div class="calendar-date">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <input type="text" id="datetime-input" placeholder="__/__/____ às __h__m" readonly>
+            <div class="calendar-input__selected">
+                <div class="selected-date__show">
+                    <span>No dia/hora</span>
+                    <div class="bg-calendar">
+                        <?php include('../svgs/calendarInput.svg'); ?>
+                    </div>
+                </div>
+
+                <div class="calendar-date__selected">
+                    <span>11/05/2023 às 19h30m</span>
                 </div>
             </div>
 
             <div class="process">
                 <div class="process-solicite">
                     <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> aprovou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
-                    <textarea class="custom__text-area" name="response-message"></textarea>
+                    <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, eius!</textarea>
                 </div>
 
                 <div class="process-message active">
@@ -53,10 +58,10 @@
             </div>
         </div>
 
-        <div class="process">
+        <div class="process disabled">
             <div class="process-solicite">
                 <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> cancelou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
-                <textarea class="custom__text-area" name="response-message"></textarea>
+                <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil, iusto.</textarea>
             </div>
 
             <div class="process-message active">

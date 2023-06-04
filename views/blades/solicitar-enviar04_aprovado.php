@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="disabled">
+        <div class="opacity disabled">
             <div class="who-solicites">
                 <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> está solicitando <span class="contrast-service">Manutenção Geral</span></p>
             </div>

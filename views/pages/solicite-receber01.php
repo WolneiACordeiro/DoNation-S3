@@ -14,7 +14,7 @@ session_start();
     </div>
 
     <div class="confirm-buttons">
-        <a href="solicite-receber03_rejeitado.php" class="btn outline">Sim, rejeitar</a>
+        <a href="solicite-receber05_rejeitado.php" class="btn outline">Sim, rejeitar</a>
         <a class="btn contained cancel-button">Canelar</a>
     </div>
 </form>
