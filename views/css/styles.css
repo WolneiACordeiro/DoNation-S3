@@ -477,7 +477,6 @@
   grid-template-columns: repeat(auto-fit, minmax(270px, 0fr));
   grid-template-rows: repeat(auto-fit, minmax(296px, 0fr));
   grid-gap: 24px;
-  justify-content: center;
 }
 
 .all-services::-webkit-scrollbar,
@@ -1416,6 +1415,7 @@
   flex-direction: column;
   gap: 10px;
   text-align: center;
+  padding: 10px;
 }
 
 .request-products__solicited {
@@ -1530,7 +1530,6 @@
 }
 
 .solicite__about__date {
-  gap: 8px;
   align-items: center;
   justify-content: flex-end;
   flex: 1;
