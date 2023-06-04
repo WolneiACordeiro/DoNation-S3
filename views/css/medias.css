@@ -1,3 +1,11 @@
+@media (max-width: 851px) {
+    .all-services {
+        justify-items: center;
+        justify-content: center;
+    }
+}
+
+/* tablet */
 @media (min-width: 768px) {
     .login-container {
         margin: 0 auto;
@@ -23,5 +31,41 @@
 
     .register-form {
         width: 515px;
+    }
+}
+
+@media (max-width: 650px) {
+    .comunitys {
+        display: none;
+    }
+
+    .profile {
+        display: none;
+    }
+
+    .donation-global {
+        width: 100%;
+    }
+
+    .services {
+        width: 100%;
+        padding: 5%;
+    }
+
+    .all-services {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        grid-gap: 24px;
+
+    }
+}
+
+@media (max-width: 430px) {
+    .services {
+        padding: 0;
+    }
+
+    .services-type__search {
+        padding: 5% 5% 0;
     }
 }

@@ -13,7 +13,7 @@ $donatorId = new \MongoDB\BSON\ObjectID($doadorId);
 $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
 
 ?>
-<form class="solicite" action="../../controllers/enviarSolicitacao.php" method="post">
+<div class="solicite">
 <input type="hidden" name="idDoacao" value="<?php echo $doacaoId ?>">
     <div class="solicite-title">
         <p>Solicitar - <?php echo $registroDoacao['atividadeContribuicao']; ?></p>
@@ -53,15 +53,10 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
         </div>
 
         <div class="solicite-service__container">
-            <button type="submit" class="btn outline">
+            <button class="btn outline" onclick="confirmModal('modalSolicitar')">
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
-<<<<<<< HEAD
             </button>
-
-=======
-            </a>
->>>>>>> 6f408f78186ae38e96bc7fe1195ef6718d11098f
         </div>
     </div>
-</form>
+</div>

@@ -284,12 +284,14 @@
   z-index: 3;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  padding: 25px 0;
 }
 
 /* COMUNITY.PHP */
 .comunity {
   height: 100%;
-  padding: 25px 10px;
+  padding: 0 10px 25px 10px;
   flex-direction: column;
   gap: 24px;
 }
@@ -388,6 +390,8 @@
   display: flex;
   flex-direction: column;
   gap: 11px;
+  overflow-y: auto;
+  padding: 25px 0;
 }
 
 .services {
@@ -406,7 +410,6 @@
 /* services.php */
 .services-type__search {
   width: 100%;
-  min-height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -462,15 +465,13 @@
 .all-services {
   width: 100%;
   height: 100%;
-  display: flex;
   gap: 24px;
   overflow-y: auto;
-  align-content: flex-start;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
   overflow-x: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 0fr));
+  grid-template-rows: repeat(auto-fit, minmax(296px, 0fr));
+  grid-gap: 24px;
 }
 
 .all-services::-webkit-scrollbar,
@@ -518,7 +519,8 @@
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: absolute;
+  bottom: 0;
 }
 
 .infos {
@@ -616,6 +618,7 @@
   display: flex;
   flex-wrap: wrap;
   padding: 5px 0;
+  font-size: 12px;
 }
 
 .time-slots .time-range:nth-child(odd)::after {
@@ -767,7 +770,7 @@
 /* profile.php */
 .avatar {
   flex-direction: column;
-  padding: 25px 25px 0 25px;
+  padding: 0 25px 0 25px;
   align-items: center;
   gap: 12px;
 }
@@ -1138,14 +1141,14 @@
   transition: 0.5s ease all;
 }
 
-.solicite-service__container a {
+.solicite-service__container button {
   width: 233px;
   display: flex;
   justify-content: center;
   transition: 0.5s ease all;
 }
 
-.solicite-service__container a:hover {
+.solicite-service__container button:hover {
   padding-left: 120px;
 }
 
@@ -1377,6 +1380,8 @@
   display: flex;
   border-radius: 5px;
   gap: 8px;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .view-request__solicited,
