@@ -1,4 +1,12 @@
-<?php session_start(); ?>
+<?php
+session_start();
+
+// Verifica se uma sessão está ativa
+if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
+    // Destroi a sessão atual
+    session_destroy();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -14,7 +22,7 @@
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/medias.css" />
 
-    
+
     <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
