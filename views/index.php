@@ -1,11 +1,12 @@
 <?php
 session_start();
-
 // Verifica se uma sessão está ativa
 if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
-    // Destroi a sessão atual
+    header("Location: pages/donation.php");
+} else  {
     session_destroy();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -76,7 +77,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
 
                     <div class="login-form__check">
                         <div>
-                            <input type="checkbox" />
+                            <input type="checkbox" <?php if (isset($_COOKIE['lembrar_usuario'])) echo 'checked'; ?>/>
                             <label>Lembrar de mim</label>
                         </div>
 
