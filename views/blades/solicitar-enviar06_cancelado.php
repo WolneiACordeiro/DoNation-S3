@@ -23,21 +23,25 @@
             </div>
         </div>
 
-        <div class="reject">
+        <div class="disabled">
             <div class="who-solicites">
                 <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> está solicitando <span class="contrast-service">Manutenção Geral</span></p>
             </div>
 
             <textarea class="custom__text-area">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores quod vel beatae voluptatem velit at assumenda libero cupiditate error quidem laborum iusto voluptas, aliquid praesentium deserunt totam rerum ullam est sit quaerat facilis. Iusto nobis ratione voluptates doloribus! Atque, labore voluptates officiis, nam dignissimos aliquam provident necessitatibus aspernatur eaque natus suscipit fuga quod. Tempora saepe magni facere sit provident, sunt, impedit quae doloribus quaerat voluptatum dicta quia et dolor fugiat optio nesciunt molestias aperiam, dolores quo. Saepe, vel esse culpa voluptates molestiae corrupti laboriosam! Soluta, odio corrupti? Molestiae voluptas itaque adipisci modi ipsam earum aperiam sint omnis beatae, ducimus temporibus quis rerum praesentium tenetur officiis dolores reiciendis natus? Delectus, obcaecati dolorem possimus voluptatem nemo officiis beatae hic laboriosam aut voluptate quis atque, ducimus temporibus a eveniet ipsam optio molestias magni id eum cum? Mollitia, cum. Sed soluta placeat ut odit corrupti repellendus incidunt enim porro! Minus sit illum laboriosam modi.</textarea>
 
-            <div class="calendar-input">
-                <span>No dia/hora</span>
-                <div class="calendar-date">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <input type="text" id="datetime-input" placeholder="__/__/____ às __h__m" readonly>
+            <div class="calendar-input__selected">
+                <div class="selected-date__show">
+                    <span>No dia/hora</span>
+                    <div class="bg-calendar">
+                        <?php include('../svgs/calendarInput.svg'); ?>
+                    </div>
+                </div>
+
+                <div class="calendar-date__selected">
+                    <span>11/05/2023 às 19h30m</span>
                 </div>
             </div>
-
 
             <div class="process">
                 <div class="process-solicite">
@@ -52,20 +56,20 @@
                     </svg>
                 </div>
             </div>
-        </div>
 
-        <div class="process">
-            <div class="process-solicite">
-                <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> cancelou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
-                <textarea class="custom__text-area" name="response-message"></textarea>
-            </div>
+            <div class="process">
+                <div class="process-solicite">
+                    <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> cancelou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
+                    <textarea class="custom__text-area" name="response-message"></textarea>
+                </div>
 
-            <div class="process-message active">
-                Cancelado
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.27 0L0 5.27V12.73L5.27 18H12.73L18 12.73V5.27L12.73 0M5.41 4L9 7.59L12.59 4L14 5.41L10.41 9L14 12.59L12.59 14L9 10.41L5.41 14L4 12.59L7.59 9L4 5.41" fill="white" />
-                </svg>
+                <div class="process-message active">
+                    Cancelado
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.27 0L0 5.27V12.73L5.27 18H12.73L18 12.73V5.27L12.73 0M5.41 4L9 7.59L12.59 4L14 5.41L10.41 9L14 12.59L12.59 14L9 10.41L5.41 14L4 12.59L7.59 9L4 5.41" fill="white" />
+                    </svg>
 
+                </div>
             </div>
         </div>
     </div>

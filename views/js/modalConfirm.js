@@ -1,8 +1,8 @@
-function confirmModal() {
+function confirmModal(target) {
   // modal de deletar contribuição:
   const shadowBackground = document.querySelector(".shadow");
-  const modalConfirm = document.querySelector(".modal-confirm");
-  const cancelButton = document.getElementById("cancel-button");
+  const modalConfirm = document.querySelector(`#${target}`);
+  const cancelButtons = document.querySelectorAll(".cancel-button");
 
   shadowBackground.classList.add("active");
   modalConfirm.classList.add("active");
@@ -12,8 +12,10 @@ function confirmModal() {
     modalConfirm.classList.remove("active");
   });
 
-  cancelButton.addEventListener("click", () => {
-    shadowBackground.classList.remove("active");
-    modalConfirm.classList.remove("active");
+  cancelButtons.forEach(cancelButton => {
+    cancelButton.addEventListener('click', () => {
+      shadowBackground.classList.remove("active");
+      modalConfirm.classList.remove("active");
+    });
   });
 }

@@ -6,6 +6,31 @@ session_start();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+<div class="shadow"></div>
+<form class="modal-confirm" id="modalRejeitar">
+    <div class="confirm-title">
+        <h2>Atenção</h2>
+        <p>Você está prestes a rejeitar essa contribuição. Você tem certeza disso?</p>
+    </div>
+
+    <div class="confirm-buttons">
+        <a href="solicite-receber03_rejeitado.php" class="btn outline">Sim, rejeitar</a>
+        <a class="btn contained cancel-button">Canelar</a>
+    </div>
+</form>
+
+<form class="modal-confirm" id="modalAprovar">
+    <div class="confirm-title">
+        <h2>Atenção</h2>
+        <p>Você está prestes a aprovar essa doação. Você tem certeza disso?</p>
+    </div>
+
+    <div class="confirm-buttons">
+        <a href="solicite-receber02_aprovado.php" class="btn outline">Sim, aprovar</a>
+        <a class="btn contained cancel-button">Cancelar</a>
+    </div>
+</form>
+
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
@@ -37,6 +62,6 @@ session_start();
 
 <script src="../js/profile.js"></script>
 <script src="../js/calendar.js"></script>
-<!-- <script src="../js/services.js"></script> -->
+<script src="../js/modalConfirm.js"></script>
 
 <?php include('../blades/footer.php'); ?>
