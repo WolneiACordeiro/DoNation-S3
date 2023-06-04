@@ -1,4 +1,4 @@
-<?php include('../blades/header.php'); 
+<?php include('../blades/header.php');
 session_start();
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -7,15 +7,15 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <div class="shadow"></div>
+
 <form class="modal-confirm" id="modalRejeitar">
     <div class="confirm-title">
         <h2>Atenção</h2>
         <p>Você está prestes a rejeitar essa contribuição. Você tem certeza disso?</p>
     </div>
-
     <div class="confirm-buttons">
         <a href="solicite-receber05_rejeitado.php" class="btn outline">Sim, rejeitar</a>
-        <a class="btn contained cancel-button">Canelar</a>
+        <a class="btn contained cancel-button" onclick="bindCancelButtonClickEvent()">Cancelar</a>
     </div>
 </form>
 
@@ -24,25 +24,33 @@ session_start();
         <h2>Atenção</h2>
         <p>Você está prestes a aprovar essa doação. Você tem certeza disso?</p>
     </div>
-
     <div class="confirm-buttons">
         <a href="solicite-receber02_aprovado.php" class="btn outline">Sim, aprovar</a>
-        <a class="btn contained cancel-button">Cancelar</a>
+        <a class="btn contained cancel-button" onclick="bindCancelButtonClickEvent()">Cancelar</a>
     </div>
 </form>
+
+<script>
+    // Função para vincular o evento de clique para os botões "Cancelar" das modais
+    function bindCancelButtonClickEvent() {
+        $('.cancel-button').on('click', function () {
+            closeModal();
+        });
+    }
+</script>
 
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
             <?php
             include('../blades/comunity.php')
-            ?>
+                ?>
         </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
                 include('../blades/aboutComunity.php')
-                ?>
+                    ?>
             </div>
             <div class="profile-services">
                 <sidebar class="profile">
