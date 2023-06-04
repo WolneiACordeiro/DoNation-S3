@@ -20,14 +20,14 @@
                     Foto do Serviço
                     <?php include('../svgs/fotoPerfil.svg'); ?>
                 </label>
-                <input type="file" id="upload-input" accept=".jpg, .png, .jpeg" style="display: none;">
+                <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;">
             </div>
             <div class="col-info">
                 <label class="label-g">Categoria</label>
                 <select id="inputState" class="input-g" name="categoria" required>
-                    <option selected></option>
+                    <option selected>#Serviços Gerais</option>
+                    <option>#Alimentos</option>
                     <option>#Livros</option>
-                    <option>#Serviços Gerais</option>
                     <option>#Serviços Domésticos</option>
                 </select>
             </div>
@@ -46,8 +46,7 @@
             <div class="option">
                 <label class="label-g">Dia da semana</label>
                 <select id="inputState" class="input-g" name="dia" required>
-                    <option selected class="option-neuter"></option>
-                    <option>Segunda-feira</option>
+                    <option selected class="option-neuter">Segunda-feira</option>
                     <option>Terça-feira</option>
                     <option>Quarta-feira</option>
                     <option>Quinta-feira</option>
