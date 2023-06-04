@@ -10,12 +10,16 @@ function confirmModal(target) {
   shadowBackground.addEventListener("click", () => {
     shadowBackground.classList.remove("active");
     modalConfirm.classList.remove("active");
+    localStorage.setItem('modalOpen', 'false'); // Define o modal como fechado
   });
 
   cancelButtons.forEach(cancelButton => {
     cancelButton.addEventListener('click', () => {
       shadowBackground.classList.remove("active");
       modalConfirm.classList.remove("active");
+      localStorage.setItem('modalOpen', 'false'); // Define o modal como fechado
     });
   });
+
+  localStorage.setItem('modalOpen', 'true'); // Define o modal como aberto
 }
