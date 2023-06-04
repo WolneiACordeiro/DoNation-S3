@@ -47,7 +47,7 @@
 
         <div class="process-solicite disabled">
             <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> rejeitou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
-            <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Architecto, distinctio?</textarea>
+            <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message"></textarea>
         </div>
 
         <div class="process">

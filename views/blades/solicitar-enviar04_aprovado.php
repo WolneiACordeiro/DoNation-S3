@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <div class="disabled">
+        <div class="opacity disabled">
             <div class="who-solicites">
                 <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> está solicitando <span class="contrast-service">Manutenção Geral</span></p>
             </div>
@@ -61,7 +61,7 @@
         <textarea class="custom__text-area" name="response-message"></textarea>
 
         <div class="solicite-service__container">
-            <button class="btn outline" style="flex: 205px 0 1;" onClick="confirmModal()">
+            <button class="btn outline" style="flex: 205px 0 1;" onClick="confirmModal('modalCancelar')">
                 Cancelar doação
                 <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M5.77 0L0.5 5.27V12.73L5.77 18H13.23L18.5 12.73V5.27L13.23 0M5.91 4L9.5 7.59L13.09 4L14.5 5.41L10.91 9L14.5 12.59L13.09 14L9.5 10.41L5.91 14L4.5 12.59L8.09 9L4.5 5.41" fill="url(#paint0_linear_401_3312)" />
@@ -74,7 +74,7 @@
                 </svg>
             </button>
 
-            <button class="btn contained" style="flex: 205px 0 1;">
+            <button class="btn contained" style="flex: 205px 0 1;" onclick="confirmModal('modalConcluir')">
                 Concluir doação
                 <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6.1368 13.5C5.98135 13.5 5.83561 13.4756 5.69958 13.4267C5.56356 13.3778 5.43725 13.2956 5.32066 13.1801L0.307221 8.17784C0.0934697 7.96457 -0.00874234 7.68809 0.000584989 7.3484C0.00991232 7.00871 0.12184 6.73262 0.336368 6.52012C0.55012 6.30685 0.822167 6.20022 1.15251 6.20022C1.48285 6.20022 1.7549 6.30685 1.96865 6.52012L6.1368 10.679L16.0179 0.81991C16.2317 0.606637 16.5088 0.5 16.8492 0.5C17.1897 0.5 17.4664 0.606637 17.6794 0.81991C17.8931 1.03318 18 1.30966 18 1.64935C18 1.98904 17.8931 2.26513 17.6794 2.47763L6.95294 13.1801C6.83635 13.2964 6.71004 13.379 6.57402 13.4279C6.438 13.4767 6.29226 13.5008 6.1368 13.5Z" fill="white" />

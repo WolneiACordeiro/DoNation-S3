@@ -7,17 +7,29 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <div class="shadow"></div>
-<div class="modal-confirm">
+<form class="modal-confirm" id="modalCancelar">
     <div class="confirm-title">
         <h2>Atenção</h2>
-        <p>Você está prestes a cancelar essa doação. Você tem certeza disso?</p>
+        <p>Você está prestes a cancelar essa contribuição. Você tem certeza disso?</p>
     </div>
 
     <div class="confirm-buttons">
-        <a class="btn outline">Sim, cancelar</a>
-        <a class="btn contained" id="cancel-button">Não</a>
+        <a href="solicite-enviar06_cancelado.php" class="btn outline">Sim, cancelar</a>
+        <a class="btn contained cancel-button">Não</a>
     </div>
-</div>
+</form>
+
+<form class="modal-confirm" id="modalConcluir">
+    <div class="confirm-title" >
+        <h2>Atenção</h2>
+        <p>Você está prestes a completar essa contribuição. Você tem certeza disso?</p>
+    </div>
+
+    <div class="confirm-buttons">
+        <a href="solicite-enviar05_concluido.php" class="btn outline">Sim, concluir</a>
+        <a class="btn contained cancel-button">Cancelar</a>
+    </div>
+</form>
 
 <main class="donation">
     <header class="donation-home">
