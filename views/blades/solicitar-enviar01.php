@@ -53,10 +53,10 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
         </div>
 
         <div class="solicite-service__container">
-            <a href="../pages/solicite-enviar02_pendente.php" class="btn outline">
+            <button type="submit" class="btn outline">
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
-            </a>
+            </button>
 
         </div>
 

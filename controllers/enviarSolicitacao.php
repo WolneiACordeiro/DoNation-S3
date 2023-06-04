@@ -24,6 +24,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     'idSolicitante' => $registroUsuario['_id'],
     'idDoador' => $registroDoador['_id'],
     'idDoacao' => $doacaoId,
+    'nomeDoacao' => $registroDoacao['atividadeContribuicao'],
     'mensagemSolicitacao' => $_POST['resposta-1'],
     'dataHorario' => $_POST['dataHora'],
     'status' => 'pendente'
