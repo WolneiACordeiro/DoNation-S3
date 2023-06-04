@@ -205,8 +205,6 @@
 .upload-preview {
   width: 350px;
   height: 350px;
-  width: 350px;
-  height: 350px;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -1107,14 +1105,14 @@
   transition: 0.5s ease all;
 }
 
-.solicite-service__container button {
+.solicite-service__container a {
   width: 233px;
   display: flex;
   justify-content: center;
   transition: 0.5s ease all;
 }
 
-.solicite-service__container button:hover {
+.solicite-service__container a:hover {
   padding-left: 120px;
 }
 

@@ -85,6 +85,6 @@ if ($uploadOk == 0) {
 
 } else {
     session_destroy();
-    header("location:../index.php");
+    header("location:../views/index.php");
 }
 ?>

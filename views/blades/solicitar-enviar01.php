@@ -38,10 +38,10 @@
         </div>
 
         <div class="solicite-service__container">
-            <button class="btn outline">
+            <a href="../pages/solicite-enviar02_pendente.php" class="btn outline">
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
-            </button>
+            </a>
 
         </div>
 
