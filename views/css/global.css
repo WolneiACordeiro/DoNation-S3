@@ -53,7 +53,7 @@ a {
 }
 
 body::-webkit-scrollbar,
-.all-services::-webkit-scrollbar,
+.services-complete::-webkit-scrollbar,
 .services::-webkit-scrollbar,
 .availability::-webkit-scrollbar,
 .comunitys::-webkit-scrollbar,
@@ -62,7 +62,7 @@ body::-webkit-scrollbar,
 }
 
 body::-webkit-scrollbar-track,
-.all-services::-webkit-scrollbar-track,
+.services-complete::-webkit-scrollbar-track,
 .services::-webkit-scrollbar-track,
 .availability::-webkit-scrollbar,
 .comunitys::-webkit-scrollbar-track,
@@ -214,4 +214,28 @@ body::-webkit-scrollbar-track,
 .confirm-buttons button {
   flex: 1 0 auto;
   height: 50px;
+}
+
+.show-more-container {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+}
+
+.show-more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  color: var(--preto80);
+  transition: .2s ease all;
+  border-radius: 5px;
+}
+
+.show-more-btn:hover,
+.show-more-btn:hover svg path {
+  background-color: var(--preto80);
+  color: var(--branco);
+  fill: var(--branco);
 }

@@ -3,6 +3,10 @@
         justify-items: center;
         justify-content: center;
     }
+
+    .view-solicite__about {
+        grid-template-columns: repeat(auto-fill, minmax(275px, auto));
+    }
 }
 
 /* tablet */
@@ -56,7 +60,11 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
         grid-gap: 24px;
+    }
 
+    .view-request__process,
+    .view-card__edit {
+        padding: 0;
     }
 }
 

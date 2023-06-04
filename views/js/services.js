@@ -60,3 +60,35 @@ servicesCardsAboutServices.forEach((serviceCard) => {
     timeSlotsContainer.innerHTML = html;
   }
 });
+
+// FUNÇÃO DO BOTÃO "MOSTRAR MAIS" SÓ É ATIVADO QUANDO TEM MAIS DE 12 CARDS NA PÁGINA.
+document.addEventListener("DOMContentLoaded", function() {
+  const showMoreButton = document.getElementById("showMoreButton");
+  const serviceCards = document.querySelectorAll(".service-card");
+  const visibleCards = 12;
+  let currentVisible = visibleCards;
+
+  function showCards() {
+    for (let i = 0; i < serviceCards.length; i++) {
+      if (i < currentVisible) {
+        serviceCards[i].style.display = "flex";
+      } else {
+        serviceCards[i].style.display = "none";
+      }
+    }
+
+    if (currentVisible < serviceCards.length) {
+      showMoreButton.style.display = "flex";
+    } else {
+      showMoreButton.style.display = "none";
+    }
+  }
+
+  showCards();
+
+  showMoreButton.addEventListener("click", function() {
+    currentVisible += visibleCards;
+    showCards();
+  });
+});
+
