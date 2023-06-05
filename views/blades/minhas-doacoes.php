@@ -98,6 +98,7 @@ $resultados = $colecaoSolicitacao->find();
                                 <?php
                                 } else if ($id == $registroSolicitacao['idSolicitante']) {
                                 ?>
+                                
                                     <div class="view-solicite__about">
                                         <span>Manutenção Geral</span>
                                         <div class="solicite__about">
@@ -173,20 +174,26 @@ $resultados = $colecaoSolicitacao->find();
                     </div>
                 </div>
             </div>
-
+            
+            <?php
+                foreach($contribuicao as $exibir) {
+            ?>
             <div class="view-card__info" id="my-cards">
                 <div class="view-card__edit">
                     <div class="view-solicite__about">
                         <div class="infos-solicite">
-                            <span>Manutenção Geral</span>
+                            <span><?php echo $exibir['atividadeContribuicao']; ?></span>
                             <div class="solicite__about__date">
-                                <span class="border-divisory">19/03/2023</span>
-                                <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">19:00h às 20:00h</span>
+                                <span class="border-divisory"><?php echo $exibir['diaContribuicao']; ?></span>
+                                <span style="border-right: 3px solid var(--preto80); padding: 0 8px;"><?php echo $exibir['dasContribuicao'];  ?> às <?php echo $exibir['ateContribuicao']; ?></span>
                             </div>
                         </div>
+                        <?php
+                            }
+                        ?>
 
                         <div class="edit-delete__buttons">
-                            <a href="../pages/alterar-contribuir.php" class="btn outline">Editar
+                            <a href="../pages/alterar-contribuir.php?ida=<?php echo $exibir['_id']; ?>" class="btn outline">Editar
                                 <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M7.25 17.013L11.663 16.998L21.295 7.45802C21.673 7.08003 21.881 6.57802 21.881 6.04402C21.881 5.51002 21.673 5.00802 21.295 4.63002L19.709 3.04402C18.953 2.28802 17.634 2.29202 16.884 3.04102L7.25 12.583V17.013ZM18.295 4.45802L19.884 6.04102L18.287 7.62302L16.701 6.03802L18.295 4.45802ZM9.25 13.417L15.28 7.44402L16.866 9.03002L10.837 15.001L9.25 15.006V13.417Z" fill="#232323" />
                                     <path d="M5.25 21H19.25C20.353 21 21.25 20.103 21.25 19V10.332L19.25 12.332V19H8.408C8.382 19 8.355 19.01 8.329 19.01C8.296 19.01 8.263 19.001 8.229 19H5.25V5H12.097L14.097 3H5.25C4.147 3 3.25 3.897 3.25 5V19C3.25 20.103 4.147 21 5.25 21Z" fill="#232323" />

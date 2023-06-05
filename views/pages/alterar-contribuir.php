@@ -2,7 +2,7 @@
 session_start();?>
 
 <div class="shadow"></div>
-<div class="modal-confirm">
+<div class="modal-confirm" id="confirmAlterar">
     <div class="confirm-title">
         <h2>Atenção</h2>
         <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>

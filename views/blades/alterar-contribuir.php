@@ -1,3 +1,12 @@
+<?php include('session_info.php'); 
+
+$id = $_GET['ida'];
+$objectId = new \MongoDB\BSON\ObjectID($id);
+$buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
+
+?>
+    
+
 <form class="form-service" action="../php/alterar.php" enctype="multipart/form-data" method="POST">
     <div class="title-service">
         <h1>Alterar contribuição</h1>
@@ -7,17 +16,14 @@
     <div class="infos-services">
         <div class="col-info">
             <label class="label-g">Atividade</label>
-            <input class="input-g" type="text" name="atividade" required> <!-- value="< ?php echo $exibe[1] ?>" -->
+            <input class="input-g" type="text" name="atividade" value="<?php echo $buscaDoacao['atividadeContribuicao']; ?>"required>
         </div>
 
         <div class="row">
             <div class="upload-container">
-                <div class="upload-preview">
-                    <?php foreach ($contribuicao as $dadosContribuicao) { ?>
-
-                        <img src="../imgs/contribuicoes/<?php echo $dadosContribuicao['imagemContribuicao']; ?>"
-                            alt="Imagem Padrão" id="default-image">
-                    <?php } ?>
+                <div class="upload-preview" style="width: 270px; height: 297px;">
+                        <img src="../imgs/contribuicoes/<?php echo $buscaDoacao['fotoContribuicao'];?>"
+                            alt="Imagem Padrão" id="default-image" >
                 </div>
                 <label for="upload-input" class="custom-button">
                     Foto do Serviço
@@ -28,7 +34,7 @@
             <div class="col-info">
                 <label class="label-g">Categoria</label>
                 <select id="inputState" class="input-g" name="categoria" required>
-                    <option selected></option> <!-- < ?php echo $exibe[4] ?> -->
+                    <option selected><?php echo $buscaDoacao['categoriaContribuicao']; ?></option>
                     <option>#Livros</option>
                     <option>#Serviços Gerais</option>
                     <option>#Serviços Domésticos</option>
@@ -38,8 +44,8 @@
 
         <div class="row">
             <label class="label-g">Descrição</label>
-            <textarea class="input-g desc-textarea" name="descricao" required></textarea>
-            <!-- < ?php echo $exibe[3] ?>  -->
+            <textarea class="input-g desc-textarea" name="descricao" required>  <?php echo $buscaDoacao['descricaoContribuicao']; ?>
+            </textarea>
         </div>
     </div>
 
@@ -50,7 +56,7 @@
             <div class="option">
                 <label class="label-g">Dia da semana</label>
                 <select id="inputState" class="input-g" name="dia" required>
-                    <option selected class="option-neuter"></option> <!-- < ?php echo $exibe[5] ?> -->
+                    <option selected class="option-neuter"><?php echo $buscaDoacao['diaContribuicao']; ?></option>
                     <option>Segunda-feira</option>
                     <option>Terça-feira</option>
                     <option>Quarta-feira</option>
@@ -64,12 +70,12 @@
             <div class="container-hours">
                 <div class="option">
                     <label class="label-g">Das</label>
-                    <input type="time" class="input-g" name="das" /> <!-- value="< ?php echo $exibe[6] ?>" -->
+                    <input type="time" class="input-g" name="das" value="<?php echo $buscaDoacao['dasContribuicao']; ?>"/> 
                 </div>
 
                 <div class="option">
                     <label class="label-g">Até</label>
-                    <input type="time" class="input-g" name="ate" /> <!-- value="< ?php echo $exibe[7] ?>" -->
+                    <input type="time" class="input-g" name="ate" value="<?php echo $buscaDoacao['ateContribuicao']; ?>"/> 
                 </div>
             </div>
         </div>
@@ -108,6 +114,6 @@
             <p>Importante! <br> Preencha todos os dados.</p>
         </div>
 
-        <a class="btn contained" style="height: 45px" onclick="confirmModal()">Alterar</a>
+        <a class="btn contained" style="height: 45px" onclick="confirmModal('confirmAlterar')">Alterar</a>
     </div>
 </form>
