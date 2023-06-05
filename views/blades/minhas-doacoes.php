@@ -134,19 +134,20 @@ $resultados = $colecaoSolicitacao->find();
                                 <div class="infos-solicite">
                                     <div class="solicite__about">
                                         <span>
-                                            <?php echo $registroSolicitacao['nomeDoacao'] ?>
+                                            Título
                                         </span>
                                         <div>
-                                            <img src="../imgs/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="Foto usuário">
+                                            <img src="../imgs/avatars/53e8c7c5995be145543b5a5ba76bd268.jpg" alt="Foto usuário">
                                             <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M20.1589 7.70944C21.4089 6.45944 20.8389 4.99944 20.1589 4.28944L17.1589 1.28944C15.8989 0.0394408 14.4489 0.609441 13.7389 1.28944L12.0389 2.99944H9.4489C7.5489 2.99944 6.4489 3.99944 5.8889 5.14944L1.4489 9.58944V13.5894L0.738904 14.2894C-0.511096 15.5494 0.0589036 16.9994 0.738904 17.7094L3.7389 20.7094C4.2789 21.2494 4.8589 21.4494 5.4089 21.4494C6.1189 21.4494 6.7689 21.0994 7.1589 20.7094L9.8589 17.9994H13.4489C15.1489 17.9994 16.0089 16.9394 16.3189 15.8994C17.4489 15.5994 18.0689 14.7394 18.3189 13.8994C19.8689 13.4994 20.4489 12.0294 20.4489 10.9994V7.99944H19.8589L20.1589 7.70944ZM18.4489 10.9994C18.4489 11.4494 18.2589 11.9994 17.4489 11.9994H16.4489V12.9994C16.4489 13.4494 16.2589 13.9994 15.4489 13.9994H14.4489V14.9994C14.4489 15.4494 14.2589 15.9994 13.4489 15.9994H9.0389L5.7589 19.2794C5.4489 19.5694 5.2689 19.3994 5.1589 19.2894L2.1689 16.3094C1.8789 15.9994 2.0489 15.8194 2.1589 15.7094L3.4489 14.4094V10.4094L5.4489 8.40944V9.99944C5.4489 11.2094 6.2489 12.9994 8.4489 12.9994C10.6489 12.9994 11.4489 11.2094 11.4489 9.99944H18.4489V10.9994ZM18.7389 6.28944L17.0389 7.99944H9.4489V9.99944C9.4489 10.4494 9.2589 10.9994 8.4489 10.9994C7.6389 10.9994 7.4489 10.4494 7.4489 9.99944V6.99944C7.4489 6.53944 7.6189 4.99944 9.4489 4.99944H12.8589L15.1389 2.71944C15.4489 2.42944 15.6289 2.59944 15.7389 2.70944L18.7289 5.68944C19.0189 5.99944 18.8489 6.17944 18.7389 6.28944Z" fill="#232323" />
                                             </svg>
-                                            <img src="../imgs/avatars/<?php echo $registroSolicitador['fotoUsuario']; ?>" alt="Foto usuário">
+                                            <img src="../imgs/avatars/bee6cf7c41d010822f3be0708b7616c3.png" alt="Foto usuário">
                                         </div>
                                     </div>
 
                                     <div class="solicite__about__date">
-                                        <span class="border-divisory"><?php echo $registroSolicitacao['dataHorario']; ?></span>
+                                        <span class="border-divisory">19/11/2023</span>
+                                        <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">19:00h às 20:00h</span>
                                     </div>
                                 </div>
 
@@ -184,15 +185,17 @@ $resultados = $colecaoSolicitacao->find();
                             <span>Manutenção Geral</span>
                             <div class="solicite__about__date">
                                 <span class="border-divisory">19/03/2023</span>
-                                <span style="border-right: 3px solid var(--preto80); padding-right: 8px;">19:00h às 20:00h</span>
+                                <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">19:00h às 20:00h</span>
                             </div>
                         </div>
 
                         <div class="edit-delete__buttons">
                             <a href="../pages/alterar-contribuir.php" class="btn outline">Editar
-                                <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M2.25 18H16.25C17.353 18 18.25 17.103 18.25 16V7.332L16.25 9.332V16H5.408C5.382 16 5.355 16.01 5.329 16.01C5.296 16.01 5.263 16.001 5.229 16H2.25V2H9.097L11.097 0H2.25C1.147 0 0.25 0.897 0.25 2V16C0.25 17.103 1.147 18 2.25 18Z" fill="#232323" />
+                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.25 17.013L11.663 16.998L21.295 7.45802C21.673 7.08003 21.881 6.57802 21.881 6.04402C21.881 5.51002 21.673 5.00802 21.295 4.63002L19.709 3.04402C18.953 2.28802 17.634 2.29202 16.884 3.04102L7.25 12.583V17.013ZM18.295 4.45802L19.884 6.04102L18.287 7.62302L16.701 6.03802L18.295 4.45802ZM9.25 13.417L15.28 7.44402L16.866 9.03002L10.837 15.001L9.25 15.006V13.417Z" fill="#232323" />
+                                    <path d="M5.25 21H19.25C20.353 21 21.25 20.103 21.25 19V10.332L19.25 12.332V19H8.408C8.382 19 8.355 19.01 8.329 19.01C8.296 19.01 8.263 19.001 8.229 19H5.25V5H12.097L14.097 3H5.25C4.147 3 3.25 3.897 3.25 5V19C3.25 20.103 4.147 21 5.25 21Z" fill="#232323" />
                                 </svg>
+
                             </a>
                             <button class="btn outline" onclick="confirmModal('modalExcluir')">Excluir
                                 <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
