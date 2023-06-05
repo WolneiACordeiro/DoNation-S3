@@ -6,35 +6,36 @@ session_start();
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-<div class="shadow"></div>
-<form class="modal-confirm" action="../../controllers/enviarSolicitacao.php" method="post" id="modalSolicitar">
-    <div class="confirm-title">
-        <h2>Atenção</h2>
-        <p>Você está prestes a solicitar essa contribuição. Você tem certeza disso?</p>
-    </div>
-
-    <div class="confirm-buttons">
-        <a href="solicite-enviar06_cancelado.php" class="btn outline">Sim, solicitar</a>
-        <a class="btn contained cancel-button">Não</a>
-    </div>
-</form>
-
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
             <?php
             include('../blades/comunity.php')
-            ?>
+                ?>
         </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
                 include('../blades/aboutComunity.php')
-                ?>
+                    ?>
             </div>
             <div class="profile-services">
                 <sidebar class="profile">
-                    <?php include('../blades/profile.php') ?>
+                    <form style="display: inline-block;" method="POST" action="../../controllers/enviarSolicitacao.php">
+                        <div class="shadow"></div>
+                        <div class="modal-confirm" id="modalSolicitar">
+                            <div class="confirm-title">
+                                <h2>Atenção</h2>
+                                <p>Você está prestes a solicitar essa contribuição. Você tem certeza disso?</p>
+                            </div>
+
+                            <div class="confirm-buttons">
+                                <button type="input" class="btn outline">Sim, solicitar</button>
+                                <a class="btn contained cancel-button">Não</a>
+                            </div>
+                        </div>
+                        <?php include('../blades/profile.php') ?>
+                    </form>
                 </sidebar>
                 <section class="services">
                     <?php include('../blades/solicitar-enviar01.php'); ?>
@@ -47,7 +48,6 @@ session_start();
         donation.com © 2022-2023 donation LTDA
     </footer>
 </main>
-
 <script src="../js/profile.js"></script>
 <script src="../js/calendar.js"></script>
 <script src="../js/modalConfirm.js"></script>
