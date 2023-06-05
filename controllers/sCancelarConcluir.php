@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once '../../conexao.php';
-require_once '../../vendor/autoload.php';
+require_once '../models/conexao.php';
+require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     header('Location: ../../index.php?login=erro2');
@@ -31,7 +31,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action1'])) {
+    if (isset($_POST['action2'])) {
 
         $updateResult = $colecaoSolicitacao->updateOne(
             [
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
     }
 
-    if (isset($_POST['action2'])) {
+    if (isset($_POST['action1'])) {
 
         $updateResult = $colecaoSolicitacao->updateOne(
             [
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [
                 '$set' => [
                     'status' => 'concluido',
-                    'mensagemConclusao' => $_POST['resposta-3'],
+                    'mensagemConclusao' => $_POST['resposta-2'],
                 ]
             ]
         );
