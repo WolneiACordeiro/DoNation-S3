@@ -25,6 +25,7 @@ session_start();
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services" id="dynamic-content">
+                    <script>localStorage.removeItem('ajaxPaused');</script>
 
                 </section>
             </div>

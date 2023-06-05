@@ -64,7 +64,6 @@ $resultados = $colecaoSolicitacao->find();
                                             </div>
                                         </div>
 
-<<<<<<< HEAD
                                         <div class="solicite__about">
                                             <span><?php echo $registroSolicitacao['dataHorario']; ?></span>
                                         </div>
@@ -97,10 +96,6 @@ $resultados = $colecaoSolicitacao->find();
                                             </div>
 
                                             <a href="#" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
-=======
-                                        <div class="button-solicite">
-                                            <a href="#" class="btn contained" style="flex: 1 0 auto; height: 100%;">Visualizar
->>>>>>> ee8dd4e0f2cddd1875a1cb94b9617bb0f1c447a4
                                                 Solicitação</a>
                                         </div>
                                     </div>
