@@ -1,0 +1,241 @@
+*,
+button,
+input {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+  border: 0;
+  background: none;
+  font-family: "Uni Neue", sans-serif;
+}
+
+input::placeholder {
+  color: var(--cinzaRoxo);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+div {
+  display: flex;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--branco);
+}
+
+ul,
+li,
+a {
+  text-decoration: none;
+  list-style: none;
+  color: var(--preto80);
+}
+
+:root {
+  --vermelho-linear: linear-gradient(90deg, #9e005d 0.05%, #ff0000 100.01%);
+  --vermelho: #ff0000;
+
+  --preto80: #232323;
+
+  --branco: #ffffff;
+  --brancoGelo: #f3f7ff;
+
+  --cinza: #d3d3d3;
+  --cinzaRoxo: #9c98a6;
+  --cinzaChumbo: #2323231a;
+
+  --shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --transition: 0.5s ease all;
+}
+
+body::-webkit-scrollbar,
+.services-complete::-webkit-scrollbar,
+.services::-webkit-scrollbar,
+.availability::-webkit-scrollbar,
+.comunitys::-webkit-scrollbar,
+.profile::-webkit-scrollbar {
+  width: 0;
+}
+
+body::-webkit-scrollbar-track,
+.services-complete::-webkit-scrollbar-track,
+.services::-webkit-scrollbar-track,
+.availability::-webkit-scrollbar,
+.comunitys::-webkit-scrollbar-track,
+.profile::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.label-g {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--cinzaRoxo);
+}
+
+.input-g {
+  height: 48px;
+  background: var(--branco);
+  border: 1px solid var(--cinzaChumbo);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.text-danger {
+  padding: 8px 0;
+  color: var(--vermelho);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* background-image: var(--vermelho-linear);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+}
+
+.btn {
+  width: min(130px, 100%);
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 8px;
+  gap: 8px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.outline {
+  color: var(--preto80);
+  border: 1px solid var(--vermelho);
+  background: var(--branco);
+  transition: 0.2s ease all;
+}
+
+.outline:hover {
+  background: var(--vermelho-linear);
+  color: var(--branco);
+  border: none;
+}
+
+.outline:hover .svg-path,
+.outline:hover svg path {
+  fill: var(--branco);
+}
+
+.contained {
+  color: var(--branco);
+  background: linear-gradient(90deg, #9e005d 0.05%, #ff0000 100.01%);
+}
+
+.disabled, .opacity {
+  pointer-events: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opacity {
+  opacity: 0.5;
+}
+
+.shadow {
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000067;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  transition: 0.5s ease all;
+}
+
+.shadow.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-confirm {
+  width: 100%;
+  max-width: 405px;
+  background-color: var(--branco);
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 6;
+  overflow: hidden;
+}
+
+.modal-confirm.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 6;
+}
+
+.confirm-title {
+  flex-direction: column;
+  padding: 30px;
+  border-bottom: 1px solid var(--cinza);
+  border-radius: 0 0 5px 5px;
+  background: var(--vermelho-linear);
+  color: var(--branco);
+}
+
+.confirm-title h2 {
+  font-size: 32px;
+}
+
+.confirm-buttons {
+  width: 100%;
+  height: 60%;
+  padding: 30px;
+  gap: 12px;
+  align-items: center;
+}
+
+.confirm-buttons a,
+.confirm-buttons button {
+  flex: 1 0 auto;
+  height: 50px;
+}
+
+.show-more-container {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+}
+
+.show-more-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  color: var(--preto80);
+  transition: .2s ease all;
+  border-radius: 5px;
+}
+
+.show-more-btn:hover,
+.show-more-btn:hover svg path {
+  background-color: var(--preto80);
+  color: var(--branco);
+  fill: var(--branco);
+}
