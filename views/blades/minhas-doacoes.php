@@ -64,10 +64,6 @@ $resultados = $colecaoSolicitacao->find();
                                             </div>
                                         </div>
 
-                                        <div class="solicite__about">
-                                            <span><?php echo $registroSolicitacao['dataHorario']; ?></span>
-                                        </div>
-
                                         <a href="../pages/solicite-checar.php?idSolicitacao=<?php echo $registroSolicitacao['_id'] ?>" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
                                             Solicitação</a>
                                     </div>
@@ -120,7 +116,7 @@ $resultados = $colecaoSolicitacao->find();
                                             <span>19:00h às 20:00h</span>
                                         </div>
 
-                                        <a href="#" class="btn contained" style="flex: 1 0 auto; height: 100%;">Visualizar
+                                        <a href="../pages/solicite-checar.php?idSolicitacao=<?php echo $registroSolicitacao['_id'] ?>" class="btn contained" style="flex: 1 0 auto; height: 100%;">Visualizar
                                             Solicitação</a>
                                     </div>
                             <?php
