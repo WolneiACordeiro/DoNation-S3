@@ -57,10 +57,6 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
             </button>
-<<<<<<< HEAD
-
-=======
->>>>>>> ee8dd4e0f2cddd1875a1cb94b9617bb0f1c447a4
         </div>
     </div>
 </div>

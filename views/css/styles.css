@@ -215,7 +215,7 @@
   object-fit: cover;
 }
 
-/* Estilos para o botÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â£o personalizado */
+/* Estilos para o botÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o personalizado */
 .custom-button {
   width: 100%;
   display: flex;
@@ -1353,13 +1353,14 @@
   flex: 1;
   border: 0;
   outline: 0;
-  height: 50px;
+  height: 40px;
   background: var(--branco);
   border-radius: 5px;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 32px;
   color: var(--cinzaRoxo);
+  cursor: pointer;
 }
 
 .user-solicites__button.active,
@@ -1422,7 +1423,7 @@
   display: none;
 }
 
-/* informaÃƒÆ’Ã‚Â§ÃƒÆ’Ã‚Âµes do usuario */
+/* informaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes do usuario */
 .view-card__info {
   width: 100%;
   min-height: 200px;
