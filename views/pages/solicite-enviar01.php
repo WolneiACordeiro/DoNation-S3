@@ -21,6 +21,9 @@ session_start();
             </div>
             <div class="profile-services">
                 <sidebar class="profile">
+                    <?php include('../blades/profile.php') ?>
+                </sidebar>
+                <section class="services">
                     <form style="display: inline-block;" method="POST" action="../../controllers/enviarSolicitacao.php">
                         <div class="shadow"></div>
                         <div class="modal-confirm" id="modalSolicitar">
@@ -34,11 +37,8 @@ session_start();
                                 <a class="btn contained cancel-button">Não</a>
                             </div>
                         </div>
-                        <?php include('../blades/profile.php') ?>
+                        <?php include('../blades/solicitar-enviar01.php'); ?>
                     </form>
-                </sidebar>
-                <section class="services">
-                    <?php include('../blades/solicitar-enviar01.php'); ?>
                 </section>
             </div>
         </section>
