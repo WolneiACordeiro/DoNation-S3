@@ -7,7 +7,7 @@ $buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
 ?>
     
 
-<form class="form-service" action="../php/alterar.php" enctype="multipart/form-data" method="POST">
+<form class="form-service" action="../../controllers/alterar.php?ida=<?php echo $id;?>" enctype="multipart/form-data" method="POST">
     <div class="title-service">
         <h1>Alterar contribuição</h1>
         <span>CMD São Marcos</span>
@@ -116,4 +116,17 @@ $buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
 
         <a class="btn contained" style="height: 45px" onclick="confirmModal('confirmAlterar')">Alterar</a>
     </div>
+
+    <div class="shadow"></div>
+    <div class="modal-confirm" id="confirmAlterar">
+        <div class="confirm-title">
+            <h2>Atenção</h2>
+            <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>
+        </div>
+
+        <div class="confirm-buttons">
+            <button type="submit" class="btn outline">Sim, alterar</a>
+            <a class="btn contained" id="cancel-button">Cancelar</a>
+        </div>
+</div>
 </form>

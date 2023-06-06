@@ -11,7 +11,7 @@ require_once '../models/conexao.php'; // conexão com o banco MongoDB
     $contribuidorId = $_SESSION['id']; 
     $arquivo = $_FILES['file'];
 
-    $idAlterar =  $_SESSION['i'];
+    $idAlterar =  $_GET['ida'];
     
 	$resultado = $colecaoContribuicao->updateOne(
 		['_id' => new \MongoDB\BSON\ObjectID($idAlterar)], // aqui assumimos que o ID em `$idAlterar` é a representação como string hex do ObjectID do documento no MongoDB
@@ -48,6 +48,6 @@ require_once '../models/conexao.php'; // conexão com o banco MongoDB
         }
     }  
     
-header("location: ../pages/alterar.php?idc=" . $idAlterar);		          
+header("location: ../views/pages/minhas-doacoes.php");		          
 ?>
 
