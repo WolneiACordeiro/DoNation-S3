@@ -66,8 +66,10 @@ $resultados = $colecaoSolicitacao->find();
                                             </div>
                                         </div>
 
-                                        <a href="../pages/solicite-checar.php?idSolicitacao=<?php echo $registroSolicitacao['_id'] ?>" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
-                                            Solicitação</a>
+                                        <div class="edit-delete__buttons">
+                                            <a href="../pages/solicite-checar.php?idSolicitacao=<?php echo $registroSolicitacao['_id'] ?>" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
+                                                Solicitação</a>
+                                        </div>
                                     </div>
                                 <?php
                                 } else if ($id == $registroSolicitacao['idSolicitante']) {
