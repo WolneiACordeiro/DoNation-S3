@@ -1283,6 +1283,7 @@
 .options-service {
   justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .options-service .option {
@@ -1304,7 +1305,8 @@
 
 .next-page__contribuir div {
   align-items: flex-start;
-  gap: 10px;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 /* minhas-doacoes.php */
