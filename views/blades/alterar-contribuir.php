@@ -1,5 +1,4 @@
 <?php include('session_info.php'); 
-php_info();
 $id = $_POST['id'];
 $objectId = new \MongoDB\BSON\ObjectID($id);
 $buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
