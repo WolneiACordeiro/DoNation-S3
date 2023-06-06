@@ -1,4 +1,10 @@
-<?php include("session_info.php"); ?>
+<?php include("session_info.php");
+$id = $_SESSION['id'];
+$query = [
+    'idContribuidor' => $id
+];
+$count = $colecaoContribuicao->countDocuments($query);
+?>
 
 <div class="avatar">
     <img src="../imgs/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="Foto usuário">
@@ -17,7 +23,15 @@
     </button>
     <ul class="infos-list" id="infosList">
         <li><a href="../pages/minhas-doacoes.php">Minhas doações</a>
-            <div class="notifications">2</div>
+        <?php
+                    $objectId = new \MongoDB\BSON\ObjectID($id);
+                    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
+
+                    if ($count > 0) { ?>
+                    
+            <div class="notifications"><?php echo $count ?></div>
+
+            <?php }  ?>
         </li>
         <li>
             <a class="link" href="../pages/nova-doacao.php">
