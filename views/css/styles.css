@@ -1548,7 +1548,7 @@
 
 .edit-delete__buttons {
   gap: 8px;
-  flex: 1 0 auto;
+  display: flex;
 }
 
 .edit-delete__buttons button,
