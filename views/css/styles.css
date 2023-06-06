@@ -1440,6 +1440,8 @@
 
 .view-card__edit {
   padding: 30px;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .buttons__update-delete {
