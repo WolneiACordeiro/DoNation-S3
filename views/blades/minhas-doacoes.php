@@ -75,25 +75,29 @@ $resultados = $colecaoSolicitacao->find();
                                 } else if ($id == $registroSolicitacao['idSolicitante']) {
                                 ?>
                                     <div class="view-solicite__about">
-                                        <span>Manutenção Geral</span>
-                                        <div class="solicite__about">
-                                            <img src="../imgs/avatars/<?php echo $registroSolicitador['fotoUsuario']; ?>" alt="Foto usuário">
-                                            <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M13.1364 15.5695C12.8539 15.2825 12.7183 14.9357 12.7296 14.5291C12.7409 14.1226 12.8883 13.7758 13.1717 13.4888L17.1621 9.43498H1.41252C1.01231 9.43498 0.676601 9.29722 0.405398 9.0217C0.134194 8.74619 -0.000936791 8.40562 4.8876e-06 8C4.8876e-06 7.59342 0.135607 7.25238 0.40681 6.97686C0.678014 6.70134 1.01325 6.56407 1.41252 6.56502H17.1621L13.1364 2.47534C12.8539 2.18834 12.7127 1.84729 12.7127 1.4522C12.7127 1.0571 12.8539 0.716532 13.1364 0.430493C13.4189 0.143497 13.7546 0 14.1435 0C14.5325 0 14.8677 0.143497 15.1493 0.430493L21.6115 6.99552C21.7528 7.13901 21.8531 7.29447 21.9124 7.46188C21.9717 7.6293 22.0009 7.80867 22 8C22 8.19133 21.9703 8.3707 21.911 8.53812C21.8517 8.70553 21.7518 8.86099 21.6115 9.00448L15.114 15.6054C14.855 15.8685 14.5315 16 14.1435 16C13.7556 16 13.4199 15.8565 13.1364 15.5695Z" fill="#232323" />
-                                            </svg>
-                                            <img src="../imgs/avatars/photouser02.png" alt="Foto usuário">
+                                        <div class="infos-solicite">
+                                            <div class="solicite__about">
+                                                <span><?php echo $registroSolicitacao['nomeDoacao'] ?></span>
+                                                <div>
+                                                    <img src="../imgs/avatars/<?php echo $registroSolicitador['fotoUsuario']; ?>" alt="Foto usuário">
+                                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M6.44623 0.322872C6.65169 0.538118 6.75031 0.798208 6.74209 1.10314C6.73388 1.40807 6.62669 1.66816 6.42055 1.88341L3.51847 4.92377L14.9727 4.92377C15.2638 4.92377 15.5079 5.02709 15.7052 5.23372C15.9024 5.44036 16.0007 5.69579 16 6C16 6.30493 15.9014 6.56072 15.7041 6.76735C15.5069 6.97399 15.2631 7.07695 14.9727 7.07623L3.51847 7.07623L6.44624 10.1435C6.65169 10.3587 6.75442 10.6145 6.75442 10.9109C6.75442 11.2072 6.65169 11.4626 6.44624 11.6771C6.24078 11.8924 5.99663 12 5.71378 12C5.43093 12 5.18713 11.8924 4.98235 11.6771L0.28252 6.75336C0.179791 6.64574 0.106853 6.52915 0.0637069 6.40359C0.0205607 6.27803 -0.000669991 6.1435 1.47343e-05 6C1.47217e-05 5.8565 0.0215887 5.72197 0.0647349 5.59641C0.107881 5.47085 0.180476 5.35426 0.28252 5.24664L5.00803 0.295966C5.19637 0.0986566 5.43162 9.23917e-07 5.71378 8.9925e-07C5.99594 8.74583e-07 6.24009 0.107625 6.44623 0.322872Z" fill="#232323" />
+                                                    </svg>
+                                                    <img src="../imgs/avatars/photouser02.png" alt="Foto usuário">
+                                                </div>
+                                            </div>
+
+                                            <div class="solicite__about__date">
+                                                <span class="border-divisory">
+                                                    <?php echo $registroSolicitacao['dataHorario']; ?>
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class="solicite__about">
-                                            <span>19/03/2023</span>
+                                        <div class="edit-delete__buttons">
+                                            <a href="#" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
+                                                Solicitação</a>
                                         </div>
-
-                                        <div class="solicite__about">
-                                            <span>19:00h às 20:00h</span>
-                                        </div>
-
-                                        <a href="#" class="btn contained" style="flex: 1 0 auto; height: 34px;">Visualizar
-                                            Solicitação</a>
                                     </div>
                         </div>
                     <?php
