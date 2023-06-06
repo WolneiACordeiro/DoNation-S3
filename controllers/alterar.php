@@ -11,7 +11,7 @@ require_once '../models/conexao.php'; // conexão com o banco MongoDB
     $contribuidorId = $_SESSION['id']; 
     $arquivo = $_FILES['file'];
 
-    $idAlterar =  $_SESSION['i'];
+    $idAlterar =  $_POST['ida'];
     
 	$resultado = $colecaoContribuicao->updateOne(
 		['_id' => new \MongoDB\BSON\ObjectID($idAlterar)], // aqui assumimos que o ID em `$idAlterar` é a representação como string hex do ObjectID do documento no MongoDB
@@ -31,23 +31,23 @@ require_once '../models/conexao.php'; // conexão com o banco MongoDB
             exit('Arquivo muito grande. Tamanho máximo permitido 500kb. O arquivo enviado contém '.round($arquivo['size']/1024).'kb');  
         }
         $novonome = md5(mt_rand(1,10000).$arquivo['name']).'.jpg';
-        $dir = "../img/contribuicoes/";
+        $dir = "../views/imgs/contribuicoes/";
         if (!file_exists($dir)){
             mkdir($dir, 0755);  
         }
         $caminho = $dir.$novonome;
         $insere = $colecaoContribuicao->updateOne(
             ['_id' => new \MongoDB\BSON\ObjectID($idAlterar)], // aqui novamente assumimos que o ID em `$idAlterar` é a representação como string hex do ObjectID do documento no MongoDB
-            ['$set' => ['imagemContribuicao' => $novonome]]
+            ['$set' => ['fotoContribuicao' => $novonome]]
         );
         if ($insere->getModifiedCount() == 1){ // verificar se a alteração foi bem sucedida
             move_uploaded_file($_FILES['file']['tmp_name'],$caminho);
-            header("location: ../pages/alterar.php?idc=" . $idAlterar);
+            header("location: ../views/pages/donation.php");
          } else{
               echo "<script>alert('Não foi possível inserir a imagem!!');</script>";
         }
     }  
     
-header("location: ../pages/alterar.php?idc=" . $idAlterar);		          
+//header("location: ../pages/alterar.php?idc=" . $idAlterar);		          
 ?>
 
