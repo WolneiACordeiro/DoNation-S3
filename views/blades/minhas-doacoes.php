@@ -47,14 +47,15 @@ $resultados = $colecaoSolicitacao->find();
                                     <div class="view-solicite__about">
                                         <div class="infos-solicite">
                                             <div class="solicite__about">
-                                                <span>
+                                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
                                                     <?php echo $registroSolicitacao['nomeDoacao'] ?>
                                                 </span>
                                                 <div>
                                                     <img src="../imgs/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="Foto usuário">
-                                                    <svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M13.1364 15.5695C12.8539 15.2825 12.7183 14.9357 12.7296 14.5291C12.7409 14.1226 12.8883 13.7758 13.1717 13.4888L17.1621 9.43498H1.41252C1.01231 9.43498 0.676601 9.29722 0.405398 9.0217C0.134194 8.74619 -0.000936791 8.40562 4.8876e-06 8C4.8876e-06 7.59342 0.135607 7.25238 0.40681 6.97686C0.678014 6.70134 1.01325 6.56407 1.41252 6.56502H17.1621L13.1364 2.47534C12.8539 2.18834 12.7127 1.84729 12.7127 1.4522C12.7127 1.0571 12.8539 0.716532 13.1364 0.430493C13.4189 0.143497 13.7546 0 14.1435 0C14.5325 0 14.8677 0.143497 15.1493 0.430493L21.6115 6.99552C21.7528 7.13901 21.8531 7.29447 21.9124 7.46188C21.9717 7.6293 22.0009 7.80867 22 8C22 8.19133 21.9703 8.3707 21.911 8.53812C21.8517 8.70553 21.7518 8.86099 21.6115 9.00448L15.114 15.6054C14.855 15.8685 14.5315 16 14.1435 16C13.7556 16 13.4199 15.8565 13.1364 15.5695Z" fill="#232323" />
+                                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M9.55376 11.6771C9.34831 11.4619 9.24969 11.2018 9.25791 10.8969C9.26612 10.5919 9.3733 10.3318 9.57945 10.1166L12.4815 7.07623H1.02729C0.736225 7.07623 0.492074 6.97291 0.294835 6.76628C0.0975959 6.55964 -0.000681303 6.30421 3.55462e-06 6C3.55462e-06 5.69507 0.0986231 5.43928 0.295862 5.23265C0.493101 5.02601 0.73691 4.92305 1.02729 4.92377H12.4815L9.55376 1.8565C9.34831 1.64125 9.24558 1.38547 9.24558 1.08915C9.24558 0.792825 9.34831 0.537399 9.55376 0.32287C9.75922 0.107623 10.0034 0 10.2862 0C10.5691 0 10.8129 0.107623 11.0176 0.32287L15.7175 5.24664C15.8202 5.35426 15.8931 5.47085 15.9363 5.59641C15.9794 5.72197 16.0007 5.8565 16 6C16 6.1435 15.9784 6.27803 15.9353 6.40359C15.8921 6.52915 15.8195 6.64574 15.7175 6.75336L10.992 11.704C10.8036 11.9013 10.5684 12 10.2862 12C10.0041 12 9.75991 11.8924 9.55376 11.6771Z" fill="#232323" />
                                                     </svg>
+
                                                     <img src="../imgs/avatars/<?php echo $registroSolicitador['fotoUsuario']; ?>" alt="Foto usuário">
                                                 </div>
                                             </div>
@@ -79,7 +80,9 @@ $resultados = $colecaoSolicitacao->find();
                                     <div class="view-solicite__about">
                                         <div class="infos-solicite">
                                             <div class="solicite__about">
-                                                <span><?php echo $registroSolicitacao['nomeDoacao'] ?></span>
+                                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
+                                                    <?php echo $registroSolicitacao['nomeDoacao'] ?>
+                                                </span>
                                                 <div>
                                                     <img src="../imgs/avatars/<?php echo $registroUsuario['fotoUsuario']; ?>" alt="Foto usuário">
                                                     <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +115,7 @@ $resultados = $colecaoSolicitacao->find();
                     <div class="view-solicite__about">
                         <div class="infos-solicite">
                             <div class="solicite__about">
-                                <span>
+                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
                                     Título
                                 </span>
                                 <div>
