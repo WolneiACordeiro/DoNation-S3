@@ -13,6 +13,32 @@ $donatorId = new \MongoDB\BSON\ObjectID($doadorId);
 $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
 
 ?>
+
+<script>
+      function sendEmail() {
+        const destinatario = document.getElementById('destinatario').value;
+        fetch('http://localhost:5000/send_email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ destinatario })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert(data.message);
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Ocorreu um erro ao enviar o e-mail. Por favor, tente novamente.');
+        });
+      }
+    </script>
+    
 <div class="solicite">
     <input type="hidden" name="idDoacao" value="<?php echo $doacaoId ?>">
     <div class="solicite-title">
@@ -64,7 +90,7 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
         </div>
 
         <div class="solicite-service__container">
-            <a class="btn outline" onclick="confirmModal('modalSolicitar')">
+            <a class="btn outline" onclick="confirmModal('modalSolicitar'); sendEmail();">
                 Solicitar
                 <?php include('../svgs/hands.svg'); ?>
             </a>
