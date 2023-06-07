@@ -1546,14 +1546,20 @@
   border-left: 3px solid var(--preto80);
 }
 
+.edit-delete__container {
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+}
+
 .edit-delete__buttons {
-  gap: 8px;
-  display: flex;
+  height: 100%;
+  flex: 1;
 }
 
 .edit-delete__buttons button,
 .edit-delete__buttons a {
   width: 100%;
   min-width: 85px;
-  height: 34px;
+  height: 100%;
 }
