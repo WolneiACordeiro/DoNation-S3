@@ -1225,7 +1225,7 @@
 .infos-services {
   display: flex;
   flex-direction: column;
-  padding: 20px 60px;
+  padding: 20px 45px;
   gap: 10px;
   border-bottom: 1px solid var(--cinza);
 }

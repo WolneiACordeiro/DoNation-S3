@@ -18,7 +18,7 @@ session_start();?>
                 <sidebar class="profile">
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
-                <section class="services">
+                <section class="services" style="padding: 28px 25px;">
                     <?php include('../blades/alterar-contribuir.php'); ?>
                 </section>
             </div>
