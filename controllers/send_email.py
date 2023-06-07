@@ -15,7 +15,7 @@ def send_email():
     senha = '1618@@134652'
 
     assunto = 'Assunto do e-mail'
-    corpo = 'Olá,\n\nEsta é uma mensagem automática enviada por Flask.'
+    corpo = 'Olá,\n\nVocê tem uma nova solicitação dentro da DoNation.'
 
     mensagem = MIMEText(corpo, 'plain', 'utf-8')
     mensagem['Subject'] = assunto

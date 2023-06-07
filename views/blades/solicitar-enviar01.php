@@ -40,6 +40,7 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
     </script>
     
 <div class="solicite">
+    <input type="hidden" name="destinario" value="<?php echo $registroDoador['emailUsuario']; ?>">
     <input type="hidden" name="idDoacao" value="<?php echo $doacaoId ?>">
     <div class="solicite-title">
         <p>Solicitar -
