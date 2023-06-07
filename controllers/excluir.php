@@ -2,12 +2,12 @@
 session_start();
 include("../models/conexao.php");
 
-$idExcluir = $_SESSION['i']; 
+$idExcluir = $_POST['ida'];
 
 $documento = $colecaoContribuicao->findOne(['_id' => new \MongoDB\BSON\ObjectID($idExcluir)]);
-$imagem_deleta = $documento['imagemContribuicao'];
+$imagem_deleta = $documento['fotoContribuicao'];
 
-$file_pointer = "../img/contribuicoes/" . $imagem_deleta;
+$file_pointer = "../views/imgs/contribuicoes/" . $imagem_deleta;
 unlink($file_pointer);
 
 if (!unlink($file_pointer)) { 
@@ -19,5 +19,5 @@ else {
 
 $resultado = $colecaoContribuicao->deleteOne(['_id' => new \MongoDB\BSON\ObjectID($idExcluir)]);
 
-header("location:../pages/dandelion.php");
+header("location:../views/pages/donation.php");
 ?>

@@ -4,7 +4,8 @@ include('../blades/header.php');
 ?>
 
 <div class="shadow"></div>
-<form class="modal-confirm" id="modalExcluir">
+<form class="modal-confirm" id="modalExcluir" action="../../controllers/excluir.php" method="post">
+    <input type="hidden" name="ida" value="<?php echo $_SESSION['idExcluir']; ?>">
     <div class="confirm-title">
         <h2>Atenção</h2>
         <p>Você está prestes a deletar essa contribuição. Você tem certeza disso?</p>
