@@ -211,7 +211,8 @@ body::-webkit-scrollbar-track,
 }
 
 .confirm-buttons a,
-.confirm-buttons button {
+.confirm-buttons button,
+.confirm-buttons input {
   flex: 1 0 auto;
   height: 50px;
 }
