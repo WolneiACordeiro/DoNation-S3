@@ -240,6 +240,40 @@
   justify-content: flex-end;
   gap: 10px;
   padding-top: 10px;
+  transition: var(--transition);
+}
+
+.error__equal-password {
+  display: none;
+}
+
+@keyframes tremer {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(3px);
+  }
+
+  50% {
+    transform: translateX(-3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.error__equal-password.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vermelho);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px 0;
+  animation: tremer .1s ease forwards 2;
 }
 
 .alert-fill {
