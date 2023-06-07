@@ -24,7 +24,6 @@ if (!input.value) {
 }
 
 // VERIFICANDO SE AS SENHAS SÃO IGUAIS.
-// VERIFICANDO SE AS SENHAS SÃO IGUAIS.
 function validarFormulario() {
   const senha = document.getElementById("senha").value;
   const repetirSenha = document.getElementById("repetir-senha").value;
