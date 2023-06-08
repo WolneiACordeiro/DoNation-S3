@@ -162,63 +162,62 @@ $resultados = $colecaoSolicitacao->find();
 
                 </div>
             </div>
+        </div>
 
-            <div class="view-card__info" id="my-cards">
+        <div class="view-card__info" id="my-cards">
 
-                <div class="view-card__edit">
-                    <?php
-                    $contribuicoes = $colecaoContribuicao->find();
-                    // Exibir resultados usando uma estrutura HTML repetida
-                    foreach ($contribuicoes as $registroContribuicao) {
-                        $id = $_SESSION['id'];
-                        $objectId = new \MongoDB\BSON\ObjectID($id);
-                        $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
+            <div class="view-card__edit">
+                <?php
+                $contribuicoes = $colecaoContribuicao->find();
+                // Exibir resultados usando uma estrutura HTML repetida
+                foreach ($contribuicoes as $registroContribuicao) {
+                    $id = $_SESSION['id'];
+                    $objectId = new \MongoDB\BSON\ObjectID($id);
+                    $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
 
 
-                        if ($id == $registroContribuicao['idContribuidor']) {
-                    ?>
-                            <div class="view-solicite__about">
-                                <div class="infos-solicite">
-                                    <input type="hidden" name="idContribuicao" value="<?php echo $registroContribuicao['_id']; ?>">
-                                    <span>
-                                        <?php echo $registroContribuicao['atividadeContribuicao']; ?>
+                    if ($id == $registroContribuicao['idContribuidor']) {
+                ?>
+                        <div class="view-solicite__about">
+                            <div class="infos-solicite">
+                                <input type="hidden" name="idContribuicao" value="<?php echo $registroContribuicao['_id']; ?>">
+                                <span>
+                                    <?php echo $registroContribuicao['atividadeContribuicao']; ?>
+                                </span>
+                                <div class="solicite__about__date" style="flex: 0;">
+                                    <span class="border-divisory">
+                                        <?php echo $registroContribuicao['diaContribuicao']; ?>
                                     </span>
-                                    <div class="solicite__about__date" style="flex: 0;">
-                                        <span class="border-divisory">
-                                            <?php echo $registroContribuicao['diaContribuicao']; ?>
-                                        </span>
-                                        <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">
-                                            <?php echo $registroContribuicao['dasContribuicao']; ?>h às
-                                            <?php echo $registroContribuicao['ateContribuicao']; ?>h
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="edit-delete__container">
-                                    <form class="edit-delete__buttons" action="../pages/alterar-contribuir.php" method="POST">
-                                        <input type="hidden" value="<?php echo $registroContribuicao['_id']; ?>" name="id">
-                                        <button href="../pages/alterar-contribuir.php?id=<?php echo $registroContribuicao['_id']; ?>" class="btn outline">Editar
-                                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M7.25 17.013L11.663 16.998L21.295 7.45802C21.673 7.08003 21.881 6.57802 21.881 6.04402C21.881 5.51002 21.673 5.00802 21.295 4.63002L19.709 3.04402C18.953 2.28802 17.634 2.29202 16.884 3.04102L7.25 12.583V17.013ZM18.295 4.45802L19.884 6.04102L18.287 7.62302L16.701 6.03802L18.295 4.45802ZM9.25 13.417L15.28 7.44402L16.866 9.03002L10.837 15.001L9.25 15.006V13.417Z" fill="#232323" />
-                                                <path d="M5.25 21H19.25C20.353 21 21.25 20.103 21.25 19V10.332L19.25 12.332V19H8.408C8.382 19 8.355 19.01 8.329 19.01C8.296 19.01 8.263 19.001 8.229 19H5.25V5H12.097L14.097 3H5.25C4.147 3 3.25 3.897 3.25 5V19C3.25 20.103 4.147 21 5.25 21Z" fill="#232323" />
-                                            </svg>
-                                        </button>
-                                    </form>
-
-                                    <?php $_SESSION['idExcluir'] = $registroContribuicao['_id']; ?>
-                                    <button name="excluir" class="btn outline" onclick="confirmModal('modalExcluir')" style="flex: 1; height: 100%;">Excluir
-                                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.25 0C3.831 0 0.25 3.582 0.25 8C0.25 12.418 3.831 16 8.25 16C12.669 16 16.25 12.418 16.25 8C16.25 3.582 12.669 0 8.25 0ZM11.957 10.293C12.1445 10.4805 12.2498 10.7348 12.2498 11C12.2498 11.2652 12.1445 11.5195 11.957 11.707C11.7695 11.8945 11.5152 11.9998 11.25 11.9998C10.9848 11.9998 10.7305 11.8945 10.543 11.707L8.25 9.414L5.957 11.707C5.86435 11.8002 5.75419 11.8741 5.63285 11.9246C5.51152 11.9751 5.38141 12.001 5.25 12.001C5.11859 12.001 4.98848 11.9751 4.86715 11.9246C4.74581 11.8741 4.63565 11.8002 4.543 11.707C4.45005 11.6142 4.37632 11.504 4.32601 11.3827C4.2757 11.2614 4.2498 11.1313 4.2498 11C4.2498 10.8687 4.2757 10.7386 4.32601 10.6173C4.37632 10.496 4.45005 10.3858 4.543 10.293L6.836 8L4.543 5.707C4.35549 5.51949 4.25015 5.26518 4.25015 5C4.25015 4.73482 4.35549 4.48051 4.543 4.293C4.73051 4.10549 4.98482 4.00015 5.25 4.00015C5.51518 4.00015 5.76949 4.10549 5.957 4.293L8.25 6.586L10.543 4.293C10.7305 4.10549 10.9848 4.00015 11.25 4.00015C11.5152 4.00015 11.7695 4.10549 11.957 4.293C12.1445 4.48051 12.2498 4.73482 12.2498 5C12.2498 5.26518 12.1445 5.51949 11.957 5.707L9.664 8L11.957 10.293Z" fill="#232323" />
-                                        </svg>
-                                    </button>
+                                    <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">
+                                        <?php echo $registroContribuicao['dasContribuicao']; ?>h às
+                                        <?php echo $registroContribuicao['ateContribuicao']; ?>h
+                                    </span>
                                 </div>
                             </div>
 
-                    <?php }
-                    } ?>
-                </div>
-            </div>
+                            <div class="edit-delete__container">
+                                <form class="edit-delete__buttons" action="../pages/alterar-contribuir.php" method="POST">
+                                    <input type="hidden" value="<?php echo $registroContribuicao['_id']; ?>" name="id">
+                                    <button href="../pages/alterar-contribuir.php?id=<?php echo $registroContribuicao['_id']; ?>" class="btn outline">Editar
+                                        <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.25 17.013L11.663 16.998L21.295 7.45802C21.673 7.08003 21.881 6.57802 21.881 6.04402C21.881 5.51002 21.673 5.00802 21.295 4.63002L19.709 3.04402C18.953 2.28802 17.634 2.29202 16.884 3.04102L7.25 12.583V17.013ZM18.295 4.45802L19.884 6.04102L18.287 7.62302L16.701 6.03802L18.295 4.45802ZM9.25 13.417L15.28 7.44402L16.866 9.03002L10.837 15.001L9.25 15.006V13.417Z" fill="#232323" />
+                                            <path d="M5.25 21H19.25C20.353 21 21.25 20.103 21.25 19V10.332L19.25 12.332V19H8.408C8.382 19 8.355 19.01 8.329 19.01C8.296 19.01 8.263 19.001 8.229 19H5.25V5H12.097L14.097 3H5.25C4.147 3 3.25 3.897 3.25 5V19C3.25 20.103 4.147 21 5.25 21Z" fill="#232323" />
+                                        </svg>
+                                    </button>
+                                </form>
 
+                                <?php $_SESSION['idExcluir'] = $registroContribuicao['_id']; ?>
+                                <button name="excluir" class="btn outline" onclick="confirmModal('modalExcluir')" style="flex: 1; height: 100%;">Excluir
+                                    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.25 0C3.831 0 0.25 3.582 0.25 8C0.25 12.418 3.831 16 8.25 16C12.669 16 16.25 12.418 16.25 8C16.25 3.582 12.669 0 8.25 0ZM11.957 10.293C12.1445 10.4805 12.2498 10.7348 12.2498 11C12.2498 11.2652 12.1445 11.5195 11.957 11.707C11.7695 11.8945 11.5152 11.9998 11.25 11.9998C10.9848 11.9998 10.7305 11.8945 10.543 11.707L8.25 9.414L5.957 11.707C5.86435 11.8002 5.75419 11.8741 5.63285 11.9246C5.51152 11.9751 5.38141 12.001 5.25 12.001C5.11859 12.001 4.98848 11.9751 4.86715 11.9246C4.74581 11.8741 4.63565 11.8002 4.543 11.707C4.45005 11.6142 4.37632 11.504 4.32601 11.3827C4.2757 11.2614 4.2498 11.1313 4.2498 11C4.2498 10.8687 4.2757 10.7386 4.32601 10.6173C4.37632 10.496 4.45005 10.3858 4.543 10.293L6.836 8L4.543 5.707C4.35549 5.51949 4.25015 5.26518 4.25015 5C4.25015 4.73482 4.35549 4.48051 4.543 4.293C4.73051 4.10549 4.98482 4.00015 5.25 4.00015C5.51518 4.00015 5.76949 4.10549 5.957 4.293L8.25 6.586L10.543 4.293C10.7305 4.10549 10.9848 4.00015 11.25 4.00015C11.5152 4.00015 11.7695 4.10549 11.957 4.293C12.1445 4.48051 12.2498 4.73482 12.2498 5C12.2498 5.26518 12.1445 5.51949 11.957 5.707L9.664 8L11.957 10.293Z" fill="#232323" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                <?php }
+                } ?>
+            </div>
         </div>
     </div>
     </div>
