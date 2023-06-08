@@ -104,64 +104,64 @@ $resultados = $colecaoSolicitacao->find();
                                                 Solicitação</a>
                                         </div>
                                     </div>
-                        </div>
-                <?php
+                            <?php
                                 }
                             }
-                ?>
+                            ?>
+                        </div>
 
 
-                <div class="view-card__process" id="completed">
-                    <div class="view-solicite__about">
-                        <div class="infos-solicite">
-                            <div class="solicite__about">
-                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
-                                    Título
-                                </span>
-                                <div>
-                                    <img src="../imgs/avatars/53e8c7c5995be145543b5a5ba76bd268.jpg" alt="Foto usuário">
-                                    <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20.1589 7.70944C21.4089 6.45944 20.8389 4.99944 20.1589 4.28944L17.1589 1.28944C15.8989 0.0394408 14.4489 0.609441 13.7389 1.28944L12.0389 2.99944H9.4489C7.5489 2.99944 6.4489 3.99944 5.8889 5.14944L1.4489 9.58944V13.5894L0.738904 14.2894C-0.511096 15.5494 0.0589036 16.9994 0.738904 17.7094L3.7389 20.7094C4.2789 21.2494 4.8589 21.4494 5.4089 21.4494C6.1189 21.4494 6.7689 21.0994 7.1589 20.7094L9.8589 17.9994H13.4489C15.1489 17.9994 16.0089 16.9394 16.3189 15.8994C17.4489 15.5994 18.0689 14.7394 18.3189 13.8994C19.8689 13.4994 20.4489 12.0294 20.4489 10.9994V7.99944H19.8589L20.1589 7.70944ZM18.4489 10.9994C18.4489 11.4494 18.2589 11.9994 17.4489 11.9994H16.4489V12.9994C16.4489 13.4494 16.2589 13.9994 15.4489 13.9994H14.4489V14.9994C14.4489 15.4494 14.2589 15.9994 13.4489 15.9994H9.0389L5.7589 19.2794C5.4489 19.5694 5.2689 19.3994 5.1589 19.2894L2.1689 16.3094C1.8789 15.9994 2.0489 15.8194 2.1589 15.7094L3.4489 14.4094V10.4094L5.4489 8.40944V9.99944C5.4489 11.2094 6.2489 12.9994 8.4489 12.9994C10.6489 12.9994 11.4489 11.2094 11.4489 9.99944H18.4489V10.9994ZM18.7389 6.28944L17.0389 7.99944H9.4489V9.99944C9.4489 10.4494 9.2589 10.9994 8.4489 10.9994C7.6389 10.9994 7.4489 10.4494 7.4489 9.99944V6.99944C7.4489 6.53944 7.6189 4.99944 9.4489 4.99944H12.8589L15.1389 2.71944C15.4489 2.42944 15.6289 2.59944 15.7389 2.70944L18.7289 5.68944C19.0189 5.99944 18.8489 6.17944 18.7389 6.28944Z" fill="#232323" />
-                                    </svg>
-                                    <img src="../imgs/avatars/bee6cf7c41d010822f3be0708b7616c3.png" alt="Foto usuário">
+                        <div class="view-card__process" id="completed">
+                            <!-- <div class="view-solicite__about">
+                                <div class="infos-solicite">
+                                    <div class="solicite__about">
+                                        <span style="max-width: 200px; width: 100%; min-width: 155px;">
+                                            Título
+                                        </span>
+                                        <div>
+                                            <img src="../imgs/avatars/53e8c7c5995be145543b5a5ba76bd268.jpg" alt="Foto usuário">
+                                            <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M20.1589 7.70944C21.4089 6.45944 20.8389 4.99944 20.1589 4.28944L17.1589 1.28944C15.8989 0.0394408 14.4489 0.609441 13.7389 1.28944L12.0389 2.99944H9.4489C7.5489 2.99944 6.4489 3.99944 5.8889 5.14944L1.4489 9.58944V13.5894L0.738904 14.2894C-0.511096 15.5494 0.0589036 16.9994 0.738904 17.7094L3.7389 20.7094C4.2789 21.2494 4.8589 21.4494 5.4089 21.4494C6.1189 21.4494 6.7689 21.0994 7.1589 20.7094L9.8589 17.9994H13.4489C15.1489 17.9994 16.0089 16.9394 16.3189 15.8994C17.4489 15.5994 18.0689 14.7394 18.3189 13.8994C19.8689 13.4994 20.4489 12.0294 20.4489 10.9994V7.99944H19.8589L20.1589 7.70944ZM18.4489 10.9994C18.4489 11.4494 18.2589 11.9994 17.4489 11.9994H16.4489V12.9994C16.4489 13.4494 16.2589 13.9994 15.4489 13.9994H14.4489V14.9994C14.4489 15.4494 14.2589 15.9994 13.4489 15.9994H9.0389L5.7589 19.2794C5.4489 19.5694 5.2689 19.3994 5.1589 19.2894L2.1689 16.3094C1.8789 15.9994 2.0489 15.8194 2.1589 15.7094L3.4489 14.4094V10.4094L5.4489 8.40944V9.99944C5.4489 11.2094 6.2489 12.9994 8.4489 12.9994C10.6489 12.9994 11.4489 11.2094 11.4489 9.99944H18.4489V10.9994ZM18.7389 6.28944L17.0389 7.99944H9.4489V9.99944C9.4489 10.4494 9.2589 10.9994 8.4489 10.9994C7.6389 10.9994 7.4489 10.4494 7.4489 9.99944V6.99944C7.4489 6.53944 7.6189 4.99944 9.4489 4.99944H12.8589L15.1389 2.71944C15.4489 2.42944 15.6289 2.59944 15.7389 2.70944L18.7289 5.68944C19.0189 5.99944 18.8489 6.17944 18.7389 6.28944Z" fill="#232323" />
+                                            </svg>
+                                            <img src="../imgs/avatars/bee6cf7c41d010822f3be0708b7616c3.png" alt="Foto usuário">
+                                        </div>
+                                    </div>
+
+                                    <div class="solicite__about__date">
+                                        <span class="border-divisory">19/11/2023</span>
+                                        <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">19:00h às
+                                            20:00h</span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="solicite__about__date">
-                                <span class="border-divisory">19/11/2023</span>
-                                <span style="border-right: 3px solid var(--preto80); padding: 0 8px;">19:00h às
-                                    20:00h</span>
-                            </div>
+                                <div class="button-solicite">
+                                    <a href="#" class="btn contained" style="flex: 1 0 auto; height: 100%;">Visualizar
+                                        Solicitação</a>
+                                </div>
+                            </div> -->
                         </div>
 
-                        <div class="button-solicite">
-                            <a href="#" class="btn contained" style="flex: 1 0 auto; height: 100%;">Visualizar
-                                Solicitação</a>
+                        <div class="view-card__process" id="canceled">
+                            <!-- <div class="nothing-request">
+                                <p>
+                                    Ops!
+                                    <svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6.94111 0L0.5 6.44111V15.5589L6.94111 22H16.0589L22.5 15.5589V6.44111L16.0589 0M7.11222 4.88889L11.5 9.27667L15.8878 4.88889L17.6111 6.61222L13.2233 11L17.6111 15.3878L15.8878 17.1111L11.5 12.7233L7.11222 17.1111L5.38889 15.3878L9.77667 11L5.38889 6.61222" fill="url(#paint0_linear_367_1723)" />
+                                        <defs>
+                                            <linearGradient id="paint0_linear_367_1723" x1="0.511502" y1="11.0033" x2="22.5012" y2="11.0033" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#9E005D" />
+                                                <stop offset="1" stop-color="#FF0000" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                <p>Você ainda não tem nenhuma solicitação cancelada.</p>
+                            </div> -->
                         </div>
-                    </div>
-                </div>
-
-                <div class="view-card__process" id="canceled">
-                    <div class="nothing-request">
-                        <p>
-                            Ops!
-                            <svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6.94111 0L0.5 6.44111V15.5589L6.94111 22H16.0589L22.5 15.5589V6.44111L16.0589 0M7.11222 4.88889L11.5 9.27667L15.8878 4.88889L17.6111 6.61222L13.2233 11L17.6111 15.3878L15.8878 17.1111L11.5 12.7233L7.11222 17.1111L5.38889 15.3878L9.77667 11L5.38889 6.61222" fill="url(#paint0_linear_367_1723)" />
-                                <defs>
-                                    <linearGradient id="paint0_linear_367_1723" x1="0.511502" y1="11.0033" x2="22.5012" y2="11.0033" gradientUnits="userSpaceOnUse">
-                                        <stop stop-color="#9E005D" />
-                                        <stop offset="1" stop-color="#FF0000" />
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-                        <p>Você ainda não tem nenhuma solicitação cancelada.</p>
-                    </div>
-                </div>
 
                     </div>
-
                 </div>
             </div>
+        </div>
 
         <div class="view-card__info" id="my-cards">
             <div class="view-card__edit">
@@ -212,7 +212,6 @@ $resultados = $colecaoSolicitacao->find();
                 <?php }
                 } ?>
             </div>
-        </div>
         </div>
     </div>
     </div>
