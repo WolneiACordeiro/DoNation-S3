@@ -162,10 +162,8 @@ $resultados = $colecaoSolicitacao->find();
 
                 </div>
             </div>
-        </div>
 
         <div class="view-card__info" id="my-cards">
-
             <div class="view-card__edit">
                 <?php
                 $contribuicoes = $colecaoContribuicao->find();
@@ -174,8 +172,6 @@ $resultados = $colecaoSolicitacao->find();
                     $id = $_SESSION['id'];
                     $objectId = new \MongoDB\BSON\ObjectID($id);
                     $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
-
-
                     if ($id == $registroContribuicao['idContribuidor']) {
                 ?>
                         <div class="view-solicite__about">
@@ -205,7 +201,6 @@ $resultados = $colecaoSolicitacao->find();
                                         </svg>
                                     </button>
                                 </form>
-
                                 <?php $_SESSION['idExcluir'] = $registroContribuicao['_id']; ?>
                                 <button name="excluir" class="btn outline" onclick="confirmModal('modalExcluir')" style="flex: 1; height: 100%;">Excluir
                                     <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -214,10 +209,10 @@ $resultados = $colecaoSolicitacao->find();
                                 </button>
                             </div>
                         </div>
-
                 <?php }
                 } ?>
             </div>
+        </div>
         </div>
     </div>
     </div>
