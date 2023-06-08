@@ -1,14 +1,14 @@
 <?php
+
 session_start();
 // Verifica se uma sessão está ativa
 if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
     header("Location: pages/donation.php");
-} else  {
+} else {
     session_destroy();
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -22,18 +22,17 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/medias.css" />
-
+    <link rel="icon" href="imgs/logo-donation.png" type="image/png" sizes="16x16">
+    <link rel="icon" href="imgs/logo-donation.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="imgs/logo-donation.png" type="image/png" sizes="48x48">
 
     <!-- FONT AWESOME -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/brands.min.js"
-        integrity="sha512-1e+6G7fuQ5RdPcZcRTnR3++VY2mjeh0+zFdrD580Ell/XcUw/DQLgad5XSCX+y2p/dmJwboZYBPoiNn77YAL5A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/brands.min.js" integrity="sha512-1e+6G7fuQ5RdPcZcRTnR3++VY2mjeh0+zFdrD580Ell/XcUw/DQLgad5XSCX+y2p/dmJwboZYBPoiNn77YAL5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
+
     <main class="login">
         <div class="login-container">
             <form class="login-form animate-apper" action="../controllers/valida_login.php" method="POST">
@@ -77,7 +76,7 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
 
                     <div class="login-form__check">
                         <div>
-                            <input type="checkbox" <?php if (isset($_COOKIE['lembrar_usuario'])) echo 'checked'; ?>/>
+                            <input type="checkbox" <?php if (isset($_COOKIE['lembrar_usuario'])) echo 'checked'; ?> />
                             <label>Lembrar de mim</label>
                         </div>
 
@@ -117,6 +116,4 @@ if (isset($_SESSION['autenticado']) && $_SESSION['autenticado'] === 'SIM') {
             <p>donation.com © 2022-2023 donation LTDA</p>
         </footer>
     </main>
-</body>
-
-</html>
+    <?php include('blades/footer.php'); ?>
