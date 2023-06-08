@@ -145,7 +145,7 @@ $resultados = $colecaoSolicitacao->find();
                             <!-- <div class="nothing-request">
                                 <p>
                                     Ops!
-                                    <svg width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <svg width="23" height="22" viewBox="0 0 23 22"' fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6.94111 0L0.5 6.44111V15.5589L6.94111 22H16.0589L22.5 15.5589V6.44111L16.0589 0M7.11222 4.88889L11.5 9.27667L15.8878 4.88889L17.6111 6.61222L13.2233 11L17.6111 15.3878L15.8878 17.1111L11.5 12.7233L7.11222 17.1111L5.38889 15.3878L9.77667 11L5.38889 6.61222" fill="url(#paint0_linear_367_1723)" />
                                         <defs>
                                             <linearGradient id="paint0_linear_367_1723" x1="0.511502" y1="11.0033" x2="22.5012" y2="11.0033" gradientUnits="userSpaceOnUse">
