@@ -38,7 +38,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 <script>
 function pauseAjax() {
     // Armazena o estado atual do AJAX na localStorage
-    localStorage.setItem('ajaxPaused', 'true');
+    sessionStorage.setItem('ajaxPaused', 'true');
 }
 </script>
 <?php
