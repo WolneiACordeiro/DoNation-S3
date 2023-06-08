@@ -3,7 +3,7 @@
 <body class="animate-apper">
     <main class="login">
         <div class="login-container">
-            <form class="register-form animate-apper" action="../../controllers/cadastrar.php" enctype="multipart/form-data" method="POST">
+            <form class="register-form animate-apper" action="../../controllers/cadastrar.php" enctype="multipart/form-data" method="POST" onsubmit="return validarFormulario()">
                 <div class="login-form__title">
                     <h1>Cadastrar</h1>
                 </div>
@@ -20,7 +20,7 @@
                                         Foto de perfil
                                         <?php include('../svgs/fotoPerfil.svg'); ?>
                                     </label>
-                                    <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;" required>
+                                    <input type="file" id="upload-input" name="fileToUpload" accept=".jpg, .png, .jpeg" style="display: none;">
                                 </div>
                             </div>
 
@@ -36,13 +36,14 @@
 
                             <div class="login-input">
                                 <label class="label-g">Senha</label>
-                                <input class="input-g" type="password" name="senha" placeholder="Insira sua senha (Mínimo 8 caracteres)" required>
+                                <input class="input-g" type="password" id="senha" name="senha" placeholder="Insira sua senha (Mínimo 8 caracteres)" required>
                             </div>
 
                             <div class="login-input">
                                 <label class="label-g">Repetir Senha</label>
-                                <input class="input-g" type="password" name="senha" placeholder="Repita a sua senha" required>
+                                <input class="input-g" type="password" id="repetir-senha" name="repetir_senha" placeholder="Repita a sua senha" required>
                             </div>
+
                         </div>
                     </div>
 
@@ -64,6 +65,10 @@
 
                     <?php } ?>
 
+                    <div class="error__equal-password">
+                        As senhas digitadas não são iguais. Por favor, tente novamente.
+                    </div>
+
                     <div class="button-links">
                         <a class="btn outline" href="../index.php">Voltar</a>
                         <button type="submit" class="btn contained">Finalizar</button>
@@ -75,9 +80,6 @@
                             Importante! <br> Preencha todos os dados
                         </p>
                     </div>
-
-
-
                 </section>
             </form>
         </div>
@@ -86,7 +88,6 @@
             <p>donation.com © 2022-2023 donation LTDA</p>
         </footer>
     </main>
-
 
     <script src="../js/app.js"></script>
 </body>

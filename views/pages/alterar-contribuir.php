@@ -1,19 +1,6 @@
 <?php include('../blades/header.php'); 
 session_start();?>
 
-<!--<div class="shadow"></div>
-    <div class="modal-confirm" id="confirmAlterar">
-        <div class="confirm-title">
-            <h2>Atenção</h2>
-            <p>Você está prestes a alterar essa contribuição. Você tem certeza disso?</p>
-        </div>
-
-        <div class="confirm-buttons">
-            <a class="btn outline">Sim, alterar</a>
-            <a class="btn contained" id="cancel-button">Cancelar</a>
-        </div>
-</div> -->
-
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
@@ -31,7 +18,7 @@ session_start();?>
                 <sidebar class="profile">
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
-                <section class="services">
+                <section class="services" style="padding: 28px 25px;">
                     <?php include('../blades/alterar-contribuir.php'); ?>
                 </section>
             </div>
