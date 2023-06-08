@@ -83,7 +83,7 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
             <span>No dia/hora</span>
             <div class="calendar-date">
                 <i class="fa-solid fa-calendar-days"></i>
-                <input type="text" id="datetime-input" required name="dataHora" placeholder="__/__/____ às __h__m" readonly>
+                <input type="date" id="datetime-input" required name="dataHora" placeholder="__/__/____ às __h__m" readonly>
             </div>
         </div>
 

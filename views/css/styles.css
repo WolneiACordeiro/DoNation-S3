@@ -394,7 +394,7 @@
 
 .about-comunitys {
   width: 100%;
-  height: 97px;
+  min-height: 97px;
   background-color: var(--branco);
   z-index: 2;
   box-shadow: var(--shadow);
@@ -409,6 +409,13 @@
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.menu {
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
 }
 
 .profile-services {

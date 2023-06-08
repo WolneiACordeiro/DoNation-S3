@@ -68,6 +68,12 @@
     }
 }
 
+@media (max-width: 565px) {
+    .menu {
+        flex: 1;
+    }
+}
+
 @media (max-width: 430px) {
     .services {
         padding: 0 !important;
@@ -75,5 +81,14 @@
 
     .services-type__search {
         padding: 5% 5% 0;
+    }
+
+    .solicite-title p,
+    .name-comunity {
+        font-size: 18px;
+    }
+
+    .solicite {
+        border-radius: 0;
     }
 }
