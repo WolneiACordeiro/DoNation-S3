@@ -27,7 +27,7 @@ $documento = $colecaoContribuicao->findOne(['_id' => new \MongoDB\BSON\ObjectID(
 
 $updateResult = $colecaoContribuicao->updateOne(
     [
-        '_id' => $documento['_id'],
+        '_id' => new \MongoDB\BSON\ObjectID($idExcluir),
     ],
     [
         '$set' => [
