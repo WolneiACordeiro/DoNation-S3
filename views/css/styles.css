@@ -1536,12 +1536,11 @@
   background-color: #d3d3d344;
   gap: 8px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(430px, auto));
+  grid-template-columns: repeat(auto-fill, minmax(475px, auto));
 }
 
 .infos-solicite {
   display: flex;
-  /* flex-wrap: wrap; */
   gap: 8px;
   justify-content: space-between;
 }
@@ -1592,7 +1591,7 @@
 
 .edit-delete__container {
   align-items: center;
-  gap: 17px;
+  gap: 12px;
   height: 100%;
 }
 
