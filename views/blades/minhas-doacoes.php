@@ -179,7 +179,7 @@ $resultados = $colecaoSolicitacao->find();
                                 <span style="max-width: 190px;width: 100%;min-width: 115px;">
                                     <?php echo $registroContribuicao['atividadeContribuicao']; ?>
                                 </span>
-                                <div class="solicite__about__date" style="flex: 0;">
+                                <div class="solicite__about__date" style="flex: 1 0 250px;">
                                     <span class="border-divisory">
                                         <?php echo $registroContribuicao['diaContribuicao']; ?>
                                     </span>
