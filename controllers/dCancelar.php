@@ -31,7 +31,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action1'])) {
+    if (isset($_POST['action2'])) {
 
         $updateResult = $colecaoSolicitacao->updateOne(
             [

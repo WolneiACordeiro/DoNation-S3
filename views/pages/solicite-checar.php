@@ -25,7 +25,9 @@ session_start();
                     <?php include('../blades/profile.php') ?>
                 </sidebar>
                 <section class="services" id="dynamic-content">
-                    <script>localStorage.removeItem('ajaxPaused');</script>
+                    <script>
+                    sessionStorage.removeItem('ajaxPaused');
+                    </script>
 
                 </section>
             </div>
@@ -44,8 +46,8 @@ session_start();
 
 <script>
     $(document).on('click', 'a.cancel-button', function () {
-        // Remove o estado de pausa do AJAX da localStorage
-        localStorage.removeItem('ajaxPaused');
+        // Remove o estado de pausa do AJAX da sessionStorage
+        sessionStorage.removeItem('ajaxPaused');
     });
 
     $(document).ready(function () {
@@ -57,8 +59,8 @@ session_start();
 
         // Função para carregar o conteúdo dinâmico
         function loadDynamicContent() {
-            // Verifica se o AJAX está pausado com base no valor em localStorage
-            var ajaxPaused = localStorage.getItem('ajaxPaused') === 'true';
+            // Verifica se o AJAX está pausado com base no valor em sessionStorage
+            var ajaxPaused = sessionStorage.getItem('ajaxPaused') === 'true';
 
             if (ajaxPaused) {
                 return; // Se o AJAX estiver pausado, interrompa a execução
@@ -142,8 +144,8 @@ session_start();
 
         // Manipula o clique no botão "Cancelar" para retomar o AJAX
         $(document).on('click', 'a.cancel-button', function () {
-            // Remove o estado de pausa do AJAX da localStorage
-            localStorage.removeItem('ajaxPaused');
+            // Remove o estado de pausa do AJAX da sessionStorage
+            sessionStorage.removeItem('ajaxPaused');
         });
     });
 </script>
