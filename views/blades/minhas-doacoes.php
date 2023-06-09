@@ -47,7 +47,7 @@ $resultados = $colecaoSolicitacao->find();
                                     <div class="view-solicite__about">
                                         <div class="infos-solicite">
                                             <div class="solicite__about">
-                                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
+                                                <span style="max-width: 190px;width: 100%;min-width: 115px;">
                                                     <?php echo $registroSolicitacao['nomeDoacao'] ?>
                                                 </span>
                                                 <div>
@@ -80,7 +80,7 @@ $resultados = $colecaoSolicitacao->find();
                                     <div class="view-solicite__about">
                                         <div class="infos-solicite">
                                             <div class="solicite__about">
-                                                <span style="max-width: 200px; width: 100%; min-width: 155px;">
+                                                <span style="max-width: 190px;width: 100%;min-width: 115px;">
                                                     <?php echo $registroSolicitacao['nomeDoacao'] ?>
                                                 </span>
                                                 <div>
@@ -176,9 +176,9 @@ $resultados = $colecaoSolicitacao->find();
                         <div class="view-solicite__about">
                             <div class="infos-solicite">
                                 <input type="hidden" name="idContribuicao" value="<?php echo $registroContribuicao['_id']; ?>">
-                                <span>
+                                <span style="max-width: 190px;width: 100%;min-width: 115px;">
                                     <?php echo $registroContribuicao['atividadeContribuicao']; ?>
-                            </span>
+                                </span>
                                 <div class="solicite__about__date" style="flex: 0;">
                                     <span class="border-divisory">
                                         <?php echo $registroContribuicao['diaContribuicao']; ?>

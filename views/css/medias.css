@@ -7,6 +7,10 @@
     .view-solicite__about {
         grid-template-columns: repeat(auto-fill, minmax(275px, auto));
     }
+
+    .view-solicite__about span {
+        font-size: 15px;
+    }
 }
 
 /* tablet */
@@ -35,6 +39,12 @@
 
     .register-form {
         width: 515px;
+    }
+}
+
+@media (max-width: 768px) {
+    .infos-solicite {
+        flex-wrap: wrap;
     }
 }
 
