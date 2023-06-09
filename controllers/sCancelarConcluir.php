@@ -48,6 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ]
         );
+        ?>
+            <script>
+                location.reload();
+            </script>
+        <?php
     }
 
     if (isset($_POST['action1'])) {
@@ -66,6 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]
             ]
         );
+        ?>
+            <script>
+                location.reload();
+            </script>
+        <?php
     }
 }
 

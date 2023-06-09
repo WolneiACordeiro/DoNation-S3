@@ -726,7 +726,7 @@ function reloadPage() {
 
         <div class="disabeld opacity">
             <div class="who-solicites">
-                <p class="solicite-text__about"><span class="contrast-name"><?php echo $registroSolicitador['nomeUsuario']; ?></span> está solicitando <span class="contrast-service">Manutenção Geral</span></p>
+                <p class="solicite-text__about"><span class="contrast-name"><?php echo $registroSolicitador['nomeUsuario']; ?></span> está solicitando <span class="contrast-service"><?php echo $registroDoacao['atividadeContribuicao']; ?></span></p>
             </div>
 
             <textarea class="custom__text-area" style="height: 80px; font-size: 12px;"><?php echo $registroSolicitacao['mensagemSolicitacao']; ?></textarea>
@@ -740,13 +740,13 @@ function reloadPage() {
                 </div>
 
                 <div class="calendar-date__selected">
-                    <span>11/05/2023 às 19h30m</span>
+                    <span><?php echo $registroSolicitacao['dataHorario']; ?></span>
                 </div>
             </div>
 
             <div class="process">
                 <div class="process-solicite">
-                    <p class="solicite-text__about"><span class="contrast-name">Edgar Rios</span> aprovou a solicitação <span class="contrast-service">Manutenção Geral</span></p>
+                    <p class="solicite-text__about"><span class="contrast-name"><?php echo $registroDoador['nomeUsuario']; ?></span> aprovou a solicitação <span class="contrast-service"><?php echo $registroDoacao['atividadeContribuicao']; ?></span></p>
                     <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message"><?php echo $registroSolicitacao['mensagemRetorno']; ?></textarea>
                 </div>
 
@@ -761,7 +761,7 @@ function reloadPage() {
 
         <div class="process disabled">
             <div class="process-solicite">
-                <p class="solicite-text__about"><span class="contrast-name"><?php echo $registroSolicitador['nomeUsuario']; ?></span> concluiu a solicitação <span class="contrast-service">Manutenção Geral</span></p>
+                <p class="solicite-text__about"><span class="contrast-name"><?php echo $registroSolicitador['nomeUsuario']; ?></span> concluiu a solicitação <span class="contrast-service"><?php echo $registroDoacao['atividadeContribuicao']; ?></span></p>
                 <textarea class="custom__text-area" style="height: 80px; font-size: 12px;" name="response-message"><?php echo $registroSolicitacao['mensagemConclusao']; ?></textarea>
             </div>
 
