@@ -1,7 +1,8 @@
 <?php include("session_info.php");
 $id = $_SESSION['id'];
 $query = [
-    'idContribuidor' => $id
+    'idContribuidor' => $id,
+    'disponibilidadeContribuicao' => 'ativada'
 ];
 $count = $colecaoContribuicao->countDocuments($query);
 ?>

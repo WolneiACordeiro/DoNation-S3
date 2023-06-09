@@ -64,6 +64,7 @@ $caminho = $novonome . "." . $imageFileType;
 
           $insertOneResult = $colecaoContribuicao->insertOne([
             'atividadeContribuicao' => $atividade,
+            'disponibilidadeContribuicao' => 'ativada',
             'descricaoContribuicao' => $descricao,
             'categoriaContribuicao' => $categoria,
             'diaContribuicao' => $dia,

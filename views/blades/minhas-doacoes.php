@@ -171,7 +171,7 @@ $resultados = $colecaoSolicitacao->find();
                         $id = $_SESSION['id'];
                         $objectId = new \MongoDB\BSON\ObjectID($id);
                         $registroUsuario = $colecaoUsuario->findOne(['_id' => $objectId]);
-                        if ($id == $registroContribuicao['idContribuidor']) {
+                        if ($id == $registroContribuicao['idContribuidor'] && $registroContribuicao['disponibilidadeContribuicao'] == 'ativada') {
                     ?>
                         <div class="view-solicite__about">
                             <div class="infos-solicite">
