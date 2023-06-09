@@ -8,7 +8,8 @@ Status do Projeto: Em desenvolvimento...
     <li>MongoDB Community Server - https://mongodb.com/try/download/community <span>Baixar como .zip ou .msi a versão mais recente</span></li>
     <li>Tutorial de Instalação MONGODB + PHP - https://www.youtube.com/watch?v=JHZ3LMOp-s4</li>
     <li>Composer - https://getcomposer.org/download/</li>
-    <li>Flask - pip install flask</li>
+    <li>Flask - </li>
+    <li>pip install flask</li>
     <li>pip install flask-cors</li>
     <li>python send_email.py</li>  
   </ul>
