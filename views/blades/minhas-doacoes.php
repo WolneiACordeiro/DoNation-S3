@@ -42,7 +42,7 @@ $resultados = $colecaoSolicitacao->find();
                                 $soliId = new \MongoDB\BSON\ObjectID($solicitadorId);
                                 $registroSolicitador = $colecaoUsuario->findOne(['_id' => $soliId]);
 
-                                if ($id == $registroSolicitacao['idDoador']) {
+                                if ($id == $registroSolicitacao['idDoador'] && ($registroSolicitacao['status'] == 'pendente' || $registroSolicitacao['status'] == 'aprovado')) {
                             ?>
                                     <div class="view-solicite__about">
                                         <div class="infos-solicite">
@@ -74,7 +74,7 @@ $resultados = $colecaoSolicitacao->find();
                                     </div>
 
                                 <?php
-                                } else if ($id == $registroSolicitacao['idSolicitante']) {
+                                } else if ($id == $registroSolicitacao['idSolicitante'] && ($registroSolicitacao['status'] == 'pendente' || $registroSolicitacao['status'] == 'aprovado')) {
                                 ?>
 
                                     <div class="view-solicite__about">
