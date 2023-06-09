@@ -29,7 +29,7 @@
             $donatorId = new \MongoDB\BSON\ObjectID($doadorId);
             $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
 
-            if ($registroContribuicaoRet['disponibilidadeContribuicao'] == 'ativada') {
+            if ($registroContribuicaoRet['disponibilidadeContribuicao'] == 'ativada' && $registroContribuicaoRet['idContribuidor'] != $id) {
 
                 $idCount = json_encode($registroContribuicaoRet['_id']);
                 $idObject = json_decode($idCount);
