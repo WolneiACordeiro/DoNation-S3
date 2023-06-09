@@ -20,6 +20,10 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
     $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
 }
 
+// if (empty($_POST['dataHora'])) {
+//     echo "<div class='custom-alert'>Por favor, preencha o campo dataHora.</div>";
+// }
+
   $insertOneResult = $colecaoSolicitacao->insertOne([
     'idSolicitante' => $registroUsuario['_id'],
     'idDoador' => $registroDoador['_id'],
@@ -34,7 +38,5 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 if ($insertOneResult->getInsertedCount() > 0) {
     header("location: ../views/pages/donation.php");
 } else {
-    // Falha na inserção
+    // caminho para erro
 }
-?>
-

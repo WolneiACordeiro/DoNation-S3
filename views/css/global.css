@@ -167,21 +167,19 @@ body::-webkit-scrollbar-track,
   justify-content: center;
 }
 
-.modal-confirm {
+.modal-confirm,
+.modal-error {
   width: 100%;
   max-width: 405px;
-  background-color: var(--branco);
-  border-radius: 5px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: none;
-  z-index: 6;
-  overflow: hidden;
 }
 
-.modal-confirm.active {
+.modal-confirm.active,
+.modal-error.active {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,13 +187,27 @@ body::-webkit-scrollbar-track,
   z-index: 6;
 }
 
+.modal-error.active .close-button {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: -35px;
+  top: -35px;
+  background-color: var(--branco);
+  border-radius: 50%;
+  z-index: 5;
+}
+
 .confirm-title {
+  width: 100%;
   flex-direction: column;
   padding: 30px;
-  border-bottom: 1px solid var(--cinza);
-  border-radius: 0 0 5px 5px;
   background: var(--vermelho-linear);
   color: var(--branco);
+  border-radius: 5px 5px 0 0;
 }
 
 .confirm-title h2 {
@@ -208,6 +220,8 @@ body::-webkit-scrollbar-track,
   padding: 30px;
   gap: 12px;
   align-items: center;
+  background-color: var(--branco);
+  border-radius: 0 0 5px 5px;
 }
 
 .confirm-buttons a,
@@ -216,6 +230,8 @@ body::-webkit-scrollbar-track,
   flex: 1 0 auto;
   height: 50px;
 }
+
+
 
 .show-more-container {
   width: 100%;

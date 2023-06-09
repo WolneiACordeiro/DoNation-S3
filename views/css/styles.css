@@ -215,7 +215,7 @@
   object-fit: cover;
 }
 
-/* Estilos para o botÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o personalizado */
+/* Estilos para o botÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â£o personalizado */
 .custom-button {
   width: 100%;
   display: flex;
@@ -394,7 +394,7 @@
 
 .about-comunitys {
   width: 100%;
-  min-height: 97px;
+  max-height: 130px;
   background-color: var(--branco);
   z-index: 2;
   box-shadow: var(--shadow);
@@ -996,7 +996,7 @@
 }
 
 .solicite-about {
-  width: max(360px, 100%);
+  width: max(310px, 100%);
   height: calc(100% - 50px);
   background-color: var(--branco);
   padding: 22px 3%;
@@ -1341,13 +1341,16 @@
 
 .next-page__contribuir {
   justify-content: space-between;
-  padding: 20px 60px;
+  padding: 20px 45px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .next-page__contribuir div {
   align-items: flex-start;
   gap: 15px;
   flex-wrap: wrap;
+  flex: 1 0 auto;
 }
 
 /* minhas-doacoes.php */
@@ -1466,7 +1469,7 @@
   display: none;
 }
 
-/* informaÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âµes do usuario */
+/* informaÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âµes do usuario */
 .view-card__info {
   width: 100%;
   min-height: 200px;

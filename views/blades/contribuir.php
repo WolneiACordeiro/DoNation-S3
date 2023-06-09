@@ -98,6 +98,6 @@
             <p>Importante! <br> Preencha todos os dados.</p>
         </div>
 
-        <input type="submit" class="btn contained" style="height: 45px" value="Finalizar">
+        <input type="submit" class="btn contained" style="height: 45px; flex: 1 0 230px;" value="Finalizar">
     </div>
 </form>
