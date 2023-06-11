@@ -36,12 +36,14 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    console.log("");
 function pauseAjax() {
     // Armazena o estado atual do AJAX na localStorage
     sessionStorage.setItem('ajaxPaused', 'true');
 }
 function endModal() {
-    sessionStorage.setItem("modalOpen", "false");
+    // sessionStorage.setItem("modalOpen", "false");
+    // sessionStorage.setItem("ajaxPaused", "false");
 }
 </script>
 <?php

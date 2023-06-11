@@ -19,8 +19,10 @@ function confirmModal(target) {
       modalConfirm.classList.remove("active");
 
       sessionStorage.setItem("modalOpen", "false"); // Define o modal como fechado
+      sessionStorage.setItem("ajaxPaused", "false");
     });
   });
 
   sessionStorage.setItem("modalOpen", "true"); // Define o modal como aberto
+  sessionStorage.setItem('ajaxPaused', 'true');
 }

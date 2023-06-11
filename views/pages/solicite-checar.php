@@ -46,72 +46,72 @@ session_start();
 
 <script>
     $(document).on('click', 'a.cancel-button', function () {
-        // Remove o estado de pausa do AJAX da sessionStorage
+        // Remove the AJAX pause state from sessionStorage
         sessionStorage.removeItem('ajaxPaused');
     });
 
     $(document).ready(function () {
-        // Variável para armazenar o valor da textarea
+        // Variable to store the textarea value
         var textareaValue = '';
 
-        // Variável para armazenar o status de foco da textarea
+        // Variable to store the textarea focus status
         var textareaFocused = false;
 
-        // Função para carregar o conteúdo dinâmico
+        // Function to load dynamic content
         function loadDynamicContent() {
-            // Verifica se o AJAX está pausado com base no valor em sessionStorage
-            var ajaxPaused = sessionStorage.getItem('ajaxPaused') === 'true';
+            // Check if AJAX is paused based on the value in sessionStorage
+            var ajaxPaused = sessionStorage.getItem('ajaxPaused') ?? 'false';
 
-            if (ajaxPaused) {
-                return; // Se o AJAX estiver pausado, interrompa a execução
+            if (ajaxPaused !== 'false') {
+                return; // If AJAX is paused, stop execution
             }
 
             $.ajax({
-                url: '../../controllers/ajax_script.php?idSolicitacao=<?php echo $_GET['idSolicitacao'] ?>', // Substitua pela URL do seu script PHP que gera o conteúdo dinâmico
+                url: '../../controllers/ajax_script.php?idSolicitacao=<?php echo $_GET['idSolicitacao'] ?>', // Replace with the URL of your PHP script that generates the dynamic content
                 type: 'GET',
                 success: function (response) {
-                    // Armazena o valor da textarea antes da atualização
+                    // Store the textarea value before the update
                     textareaValue = $('#r-2').val();
 
-                    // Verifica se a textarea está focada antes da atualização
+                    // Check if the textarea is focused before the update
                     textareaFocused = $('#r-2').is(':focus');
 
-                    // Atualiza o conteúdo do contêiner HTML
+                    // Update the HTML container with the new content
                     $('#dynamic-content').html(response);
 
-                    // Restaura o valor da textarea após a atualização
+                    // Restore the textarea value after the update
                     $('#r-2').val(textareaValue);
 
-                    // Verifica se a textarea estava focada antes da atualização
+                    // Check if the textarea was focused before the update
                     if (textareaFocused) {
-                        $('#r-2').focus(); // Restaura o foco na textarea
+                        $('#r-2').focus(); // Restore focus to the textarea
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.log(error); // Lida com quaisquer erros
+                    console.log(error); // Handle any errors
                 }
             });
         }
 
-        // Chama a função inicialmente
+        // Call the function initially
         loadDynamicContent();
 
-        // Atualiza o conteúdo dinâmico periodicamente (opcional)
-        setInterval(loadDynamicContent, 3000); // Ajuste o intervalo conforme necessário
+        // Update the dynamic content periodically (optional)
+        setInterval(loadDynamicContent, 1000); // Adjust the interval as needed
 
-        // Manipula o clique dos botões de submit
+        // Handle submit button clicks
         $(document).on('click', 'button[type="submit"]', function () {
-            // Salva o valor atual da textarea
+            // Save the current textarea value
             textareaValue = $('#r-2').val();
         });
 
-        // Manipula o envio do formulário dentro do ajax_script.php
+        // Handle form submission within ajax_script.php
         $(document).on('submit', 'form', function (event) {
-            // Verifica se o formulário não possui o atributo 'data-ajax-ignore'
+            // Check if the form doesn't have the 'data-ajax-ignore' attribute
             if (!$(this).attr('data-ajax-ignore')) {
-                // Verifica se o valor da textarea foi alterado
+                // Check if the textarea value has changed
                 if ($('#r-2').val() !== textareaValue) {
-                    event.preventDefault(); // Impede o comportamento padrão do formulário
+                    event.preventDefault(); // Prevent the default form behavior
 
                     var formData = $(this).serialize();
 
@@ -120,32 +120,37 @@ session_start();
                         type: 'POST',
                         data: formData,
                         success: function (response) {
-                            // Salva o valor atual da textarea
+                            // Save the current textarea value
                             textareaValue = $('#r-2').val();
 
-                            // Verifica se a textarea estava focada antes do envio do formulário
+                            // Check if the textarea was focused before form submission
                             textareaFocused = $('#r-2').is(':focus');
 
-                            // Atualiza o conteúdo dinâmico após o envio do formulário
+                            // Update the dynamic content after form submission
                             loadDynamicContent();
 
-                            // Verifica se a textarea estava focada antes do envio do formulário
+                            // Check if the textarea was focused before form submission
                             if (textareaFocused) {
-                                $('#r-2').focus(); // Restaura o foco na textarea
+                                $('#r-2').focus(); // Restore focus to the textarea
                             }
                         },
                         error: function (xhr, status, error) {
-                            console.log(error); // Lida com quaisquer erros
+                            console.log(error); // Handle any errors
                         }
                     });
                 }
             }
         });
 
-        // Manipula o clique no botão "Cancelar" para retomar o AJAX
+        // Handle click on "Cancel" button to resume AJAX
         $(document).on('click', 'a.cancel-button', function () {
-            // Remove o estado de pausa do AJAX da sessionStorage
+            // Remove the AJAX pause state from sessionStorage
             sessionStorage.removeItem('ajaxPaused');
+        });
+
+        // Pause AJAX on window/tab close
+        $(window).on('beforeunload', function () {
+            sessionStorage.setItem('ajaxPaused', 'true');
         });
     });
 </script>
