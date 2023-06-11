@@ -36,7 +36,7 @@ if (!isset($_SESSION['autenticado']) || $_SESSION['autenticado'] !== 'SIM') {
 
 // Verificar o resultado
 if ($insertOneResult->getInsertedCount() > 0) {
-    header("location: ../views/pages/donation.php");
+    header("location: ../views/pages/minhas-doacoes.php");
 } else {
     // caminho para erro
 }

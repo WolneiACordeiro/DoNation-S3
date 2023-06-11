@@ -5,6 +5,11 @@ $buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
 
 ?>
 
+<script>
+    function endModal() {
+        sessionStorage.setItem("modalOpen", "false");
+    }
+</script>
 
 <form class="form-service" action="../../controllers/alterar.php" enctype="multipart/form-data" method="POST">
     <input type="hidden" name="ida" value="<?php echo $id; ?>">
@@ -118,7 +123,7 @@ $buscaDoacao = $colecaoContribuicao->findOne(['_id' => $objectId]);
         </div>
 
         <div class="confirm-buttons">
-            <button type="submit" class="btn outline">Sim, alterar</button>
+            <button type="submit" class="btn outline" onclick="endModal()">Sim, alterar</button>
             <a class="btn contained" id="cancel-button">Cancelar</a>
         </div>
     </div>

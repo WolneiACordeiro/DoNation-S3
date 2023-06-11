@@ -3,7 +3,11 @@ session_start();
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+<script>
+function endModal() {
+    sessionStorage.setItem("modalOpen", "false");
+}
+</script>
 <main class="donation">
     <header class="donation-home">
         <nav class="comunitys">
@@ -55,7 +59,7 @@ session_start();
                             </div>
 
                             <div class="confirm-buttons">
-                                <button type="input" class="btn outline">Sim, solicitar</button>
+                                <button type="input" class="btn outline" onclick="endModal()">Sim, solicitar</button>
                                 <a class="btn contained cancel-button">Não</a>
                             </div>
                         </div>

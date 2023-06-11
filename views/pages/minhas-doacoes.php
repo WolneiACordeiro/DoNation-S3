@@ -1,8 +1,12 @@
-<?php 
+<?php
 session_start();
-include('../blades/header.php'); 
+include('../blades/header.php');
 ?>
-
+<script>
+    function endModal() {
+        sessionStorage.setItem("modalOpen", "false");
+    }
+</script>
 <div class="shadow"></div>
 <form class="modal-confirm" id="modalExcluir" action="../../controllers/excluir.php" method="post">
     <input type="hidden" name="ida" value="<?php echo $_SESSION['idExcluir']; ?>">
@@ -12,7 +16,7 @@ include('../blades/header.php');
     </div>
 
     <div class="confirm-buttons">
-        <button type="submit" class="btn outline">Sim, deletar</button>
+        <button type="submit" class="btn outline" onclick="endModal()">Sim, deletar</button>
         <a class="btn contained cancel-button">Cancelar</a>
     </div>
 </form>
@@ -22,13 +26,13 @@ include('../blades/header.php');
         <nav class="comunitys">
             <?php
             include('../blades/comunity.php')
-            ?>
-    </nav>
+                ?>
+        </nav>
         <section class="donation-global">
             <div class="about-comunitys">
                 <?php
                 include('../blades/aboutComunity.php')
-                ?>
+                    ?>
             </div>
             <div class="profile-services">
                 <sidebar class="profile">

@@ -40,6 +40,9 @@ function pauseAjax() {
     // Armazena o estado atual do AJAX na localStorage
     sessionStorage.setItem('ajaxPaused', 'true');
 }
+function endModal() {
+    sessionStorage.setItem("modalOpen", "false");
+}
 </script>
 <?php
 if ($checkStatus === 'pendente' && $registroSolicitacao['idSolicitante'] == $id) {
@@ -174,7 +177,7 @@ if ($checkStatus === 'pendente' && $registroSolicitacao['idSolicitante'] == $id)
 
         <div class="confirm-buttons">
             <!-- <a href="solicite-receber05_rejeitado.php" class="btn outline">Sim, rejeitar</a> -->
-            <input type="submit" class="btn outline" name="action2" value="Sim, Rejeitar">
+            <input type="submit" class="btn outline" name="action2" value="Sim, Rejeitar" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
@@ -187,7 +190,7 @@ if ($checkStatus === 'pendente' && $registroSolicitacao['idSolicitante'] == $id)
         </div>
 
         <div class="confirm-buttons">
-            <input type="submit" class="btn outline" name="action1" value="Sim, Aprovar">
+            <input type="submit" class="btn outline" name="action1" value="Sim, Aprovar" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
@@ -415,7 +418,7 @@ function reloadPage() {
 
         <div class="confirm-buttons">
             <!-- <a href="solicite-receber05_rejeitado.php" class="btn outline">Sim, rejeitar</a> -->
-            <input type="submit" class="btn outline" name="action2" value="Sim, Cancelar">
+            <input type="submit" class="btn outline" name="action2" value="Sim, Cancelar" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
@@ -427,7 +430,7 @@ function reloadPage() {
         </div>
 
         <div class="confirm-buttons">
-            <input type="submit" class="btn outline" name="action1" value="Sim, Concluir">
+            <input type="submit" class="btn outline" name="action1" value="Sim, Concluir" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
@@ -557,7 +560,7 @@ function reloadPage() {
 
         <div class="confirm-buttons">
 
-            <input type="submit" class="btn outline" name="action2" value="Sim, Cancelar">
+            <input type="submit" class="btn outline" name="action2" value="Sim, Cancelar" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
@@ -570,7 +573,7 @@ function reloadPage() {
         </div>
 
         <div class="confirm-buttons">
-            <input type="submit" class="btn outline" name="action1" value="Sim, Concluir">
+            <input type="submit" class="btn outline" name="action1" value="Sim, Concluir" onclick="endModal()">
             <a class="btn contained cancel-button">Cancelar</a>
         </div>
     </div>
