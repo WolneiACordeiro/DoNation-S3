@@ -10,12 +10,13 @@ CORS(app)  # Habilita o CORS para todas as rotas
 def send_email():
     data = request.get_json()
     destinatario = data['destinatario']
+    servico = data['servico']
 
     remetente = '1618mymail@zohomail.com'
     senha = '1618@@134652'
 
-    assunto = 'Assunto do e-mail'
-    corpo = 'Olá,\n\nVocê tem uma nova solicitação dentro da DoNation.'
+    assunto = 'DoNation'
+    corpo = 'Olá,\n\nVocê tem uma nova solicitação de {} dentro da DoNation.'.format(servico)
 
     mensagem = MIMEText(corpo, 'plain', 'utf-8')
     mensagem['Subject'] = assunto
