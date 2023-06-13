@@ -16,6 +16,7 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
 
 <script>
     function sendEmail() {
+        console.log(document.getElementById('destinatario').value);
         const destinatario = document.getElementById('destinatario').value;
         fetch('http://localhost:5000/send_email', {
             method: 'POST',
@@ -41,9 +42,10 @@ $registroDoador = $colecaoUsuario->findOne(['_id' => $donatorId]);
     }
 </script>
 
+<input type="hidden" name="destinario" id="destinatario" value="<?php echo $registroDoador['emailUsuario']; ?>">
+
 <?php if ($registroDoacao['idContribuidor'] != $id): ?>
     <div class="solicite">
-        <input type="hidden" name="destinario" value="<?php echo $registroDoador['emailUsuario']; ?>">
         <input type="hidden" name="idDoacao" value="<?php echo $doacaoId ?>">
         <div class="solicite-title">
             <p>Solicitar - <?php echo $registroDoacao['atividadeContribuicao']; ?></p>
